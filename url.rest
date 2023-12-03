@@ -1,0 +1,5 @@
+Get http://localhost:4306/lenderDetailesOf/123
+
+###
+
+GET http://localhost:4306/retrivestatus

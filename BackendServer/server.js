@@ -4,7 +4,6 @@ import cors from "cors";
 import lenders from "./models/lenders.js";
 import borrowers from "./models/borrower.js";
 import teammembers from "./models/teammembers.js";
-import { JSON, Op, json, where } from "sequelize";
 import Approval_table from "./models/Aproval.js";
 import { EventEmitter } from 'events';
 import Status_updates from "./models/Status_updates.js";
@@ -18,6 +17,13 @@ import { error, info } from "console";
 import BorrowerContactDetails from "./models/BorrowerContactDetails.js";
 import LenderContactDetailes from "./models/LenderContactDetailes.js";
 import partiallyDisbersedTable from "./models/Partiallydispersed.js";
+import LenderClassification from './models/LenderClassified.js'
+import LenderClassified from "./models/LenderClassified.js";
+import EmailReminder from "./models/ReminderModel.js";
+import { DATE, where } from "sequelize";
+import { isDate } from "util/types";
+import cron from 'node-cron'
+
 
 
 const bus = new EventEmitter();
@@ -30,11 +36,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-// app.use(cors({
-//     origin: 'http://localhost:3000'
-// }));
-
-app.use(express.json());
 
 
 const db = mysql.createPool({
@@ -45,17 +46,17 @@ const db = mysql.createPool({
 
 })
 
-//defien assocition for lenders and borrowers one to one maping
-lenders.belongsTo(teammembers, { foreignKey: "Teammember_id" });
-borrowers.belongsTo(teammembers, { foreignKey: "Teammember_id" });
+// //defien assocition for lenders and borrowers one to one maping
+// lenders.belongsTo(teammembers, { foreignKey: "Teammember_id" });
+// borrowers.belongsTo(teammembers, { foreignKey: "Teammember_id" });
 
-//defien assocition for teammember to lenders and borrowers one to many maping
-teammembers.hasMany(lenders, { foreignKey: "Teammember_id" });
-teammembers.hasMany(borrowers, { foreignKey: "Teammember_id" });
+// //defien assocition for teammember to lenders and borrowers one to many maping
+// teammembers.hasMany(lenders, { foreignKey: "Teammember_id" });
+// teammembers.hasMany(borrowers, { foreignKey: "Teammember_id" });
 
 
 app.post('/insertborrowerdetailes', async (req, res) => {
-    const { name, region, state, city, loanTypes, entityType, cin, owner, productType, products, creditRating, aum, maxInterestRate, minLoanAmount, mfiGrading, quarterAUM, financialYearAUM } = req.body;
+    const { name, region, state, city, loanTypes, entityType, cin, owner, productType, products, creditRating, creditRatingAgency, aum, maxInterestRate, minLoanAmount, mfiGrading, quarterAUM, financialYearAUM } = req.body;
     try {
         await borrowers.create({
             name: name,
@@ -69,6 +70,7 @@ app.post('/insertborrowerdetailes', async (req, res) => {
             productType: productType,
             products: products,
             creditRating: creditRating,
+            creditRatingAgency: creditRatingAgency,
             aum: aum,
             maxInterestRate: maxInterestRate,
             minLoanAmount: minLoanAmount,
@@ -88,7 +90,6 @@ app.post('/insertborrowerdetailes', async (req, res) => {
 
 app.post('/insertlenderdetailes', async (req, res) => {
     const { name, region, state, city, loanTypes, mincreditRating, owner, productType, products, aum, minInterestRate, minLoanAmount, mfiGrading, maxLoanAmount, Borrowerregion } = req.body;
-    console.log(minInterestRate)
     try {
         await lenders.create({
             name: name,
@@ -112,7 +113,6 @@ app.post('/insertlenderdetailes', async (req, res) => {
     } catch (error) {
         console.error('Error querying team members:', error);
         return res.json({ error: 'An error occurred while querying team members.' });
-
     }
 })
 
@@ -142,118 +142,78 @@ app.get('/List_borrowers', (req, res) => {
 });
 
 
-app.put('/lenders/:id', (req, res) => {
+app.put('/lenders/:id', async (req, res) => {
     const lenderId = req.params.id;
     const updatedLender = req.body;
-
-    // Perform the database update
-    const updateQuery = `
-      UPDATE lenders
-      SET
-        name = ?,
-        region = ?,
-        state = ?,
-        city = ?,
-        loanTypes = ?,
-        owner = ?,
-        productType = ?,
-        products = ?,
-        minCreditRating = ?,
-        minInterestRate = ?,
-        aum=?,
-        minLoanAmount = ?,
-        maxLoanAmount = ?,
-        Borrowerregion = ?
-      WHERE id = ?
-    `;
-
-    const queryParams = [
-        updatedLender.name,
-        updatedLender.region,
-        updatedLender.state,
-        updatedLender.city,
-        updatedLender.loanTypes,
-        updatedLender.owner,
-        updatedLender.productType,
-        updatedLender.products,
-        updatedLender.minCreditRating,
-        updatedLender.minInterestRate,
-        updatedLender.aum,
-        updatedLender.minLoanAmount,
-        updatedLender.maxLoanAmount,
-        updatedLender.Borrowerregion,
-        lenderId, // Lender ID is used as the last parameter in the query
-    ];
-
-    db.query(updateQuery, queryParams, (err, result) => {
-        if (err) {
-            console.error('Error updating lender:', err);
-            res.status(500).json({ error: 'Error updating lender' });
-        } else {
-            console.log('Lender updated successfully');
-            res.status(200).json({ message: 'Lender Detailes updated successfully' });
+    console.log(lenderId, updatedLender)
+    try {
+        const lender = await lenders.findByPk(lenderId)
+        if (!lender) {
+            return res.status(404).json({ error: 'Borrower not found' });
         }
-    });
+
+        lender.name = updatedLender.editname,
+            lender.region = updatedLender.editregion,
+            lender.state = updatedLender.editstate,
+            lender.city = updatedLender.editcity,
+            lender.Borrowerregion = updatedLender.editborrowerregion.map((item) => (item.value)).join(', '),
+            lender.loanTypes = updatedLender.editloanTypes.map(item => item.value).join(', '),
+            lender.owner = JSON.stringify(updatedLender.editowner.value),
+            lender.productType = updatedLender.editproductType.value,
+            lender.products = updatedLender.editproducts.map(item => item.value).join(', '),
+            lender.minCreditRating = updatedLender.editmincreditRating.value,
+            lender.aum = updatedLender.editminaum,
+            lender.minInterestRate = updatedLender.editminInterestRate,
+            lender.minLoanAmount = updatedLender.editminLoanAmount,
+            lender.maxLoanAmount = updatedLender.editmaxLoanAmount,
+
+            await lender.save()
+        console.log('Borrower Details updated successfully');
+        res.status(200).json({ message: 'Lender Details updated successfully' });
+    } catch (error) {
+        console.log('Error updating borrower:', error);
+        res.status(500).json({ error: 'Error updating borrower' });
+    }
 });
 
-app.put('/borrowers/:id', (req, res) => {
+app.put('/borrowers/:id', async (req, res) => {
     const borrowerId = req.params.id;
     const updatedBorrower = req.body;
+    console.log(updatedBorrower)
 
-    // Perform the database update
-    const updateQuery = `
-      UPDATE borrowers
-      SET
-        name = ?,
-        region = ?,
-        state = ?,
-        city = ?,
-        entityType = ?,
-        cin = ?,
-        loanTypes = ?,
-        owner = ?,
-        productType = ?,
-        products = ?,
-        creditRating = ?,
-        aum = ?,
-        maxInterestRate = ?,
-        minLoanAmount = ?,
-        mfiGrading = ?,
-        quarterAUM = ?,
-        financialYearAUM = ?
-      WHERE id = ?
-    `;
+    try {
+        const borrower = await borrowers.findByPk(borrowerId)
 
-    const queryParams = [
-        updatedBorrower.name,
-        updatedBorrower.region,
-        updatedBorrower.state,
-        updatedBorrower.city,
-        updatedBorrower.entityType,
-        updatedBorrower.cin,
-        updatedBorrower.loanTypes,
-        updatedBorrower.owner,
-        updatedBorrower.productType,
-        updatedBorrower.products,
-        updatedBorrower.creditRating,
-        updatedBorrower.aum,
-        updatedBorrower.maxInterestRate,
-        updatedBorrower.minLoanAmount,
-        updatedBorrower.mfiGrading,
-        updatedBorrower.QuarterAUM,
-        updatedBorrower.financialYearAUM,
-        borrowerId, // Borrower ID is used as the last parameter in the query
-    ];
-
-    db.query(updateQuery, queryParams, (err, result) => {
-        if (err) {
-            console.error('Error updating borrower:', err);
-            res.status(500).json({ error: 'Error updating borrower' });
-        } else {
-            console.log('Borrower Detailes updated successfully');
-            res.status(200).json({ message: 'Borrower Detailes updated successfully' });
+        if (!borrower) {
+            return res.status(404).json({ error: 'Borrower not found' });
         }
-    });
+
+        borrower.name = updatedBorrower.editname,
+            borrower.region = updatedBorrower.editregion,
+            borrower.state = updatedBorrower.editstate,
+            borrower.city = updatedBorrower.editcity,
+            borrower.entityType = updatedBorrower.editentityType,
+            borrower.cin = updatedBorrower.editcin,
+            borrower.loanTypes = updatedBorrower.editloanTypes.map(item => item.value).join(', '),
+            borrower.owner = updatedBorrower.editowner.label,
+            borrower.productType = updatedBorrower.editproductType.map(item => item.value).join(', '),
+            borrower.products = updatedBorrower.editproducts.map(item => item.value).join(', '),
+            borrower.creditRating = updatedBorrower.editcreditRating.value,
+            borrower.creditRatingAgency = JSON.stringify(updatedBorrower.editcreditRatingAgency.value),
+            borrower.aum = updatedBorrower.editaum,
+            borrower.maxInterestRate = updatedBorrower.editmaxInterestRate,
+            borrower.minLoanAmount = updatedBorrower.editminLoanAmount,
+            // updatedBorrower.editmfiGrading,
+            borrower.quarterAUM = updatedBorrower.editquarterAUM,
+            borrower.financialYearAUM = JSON.stringify(updatedBorrower.editfinancialYearAUM.value),
+
+            await borrower.save()
+        console.log('Borrower Details updated successfully');
+        res.status(200).json({ message: 'Borrower Details updated successfully' });
+    } catch (err) {
+        console.error('Error updating borrower:', err);
+        res.status(500).json({ error: 'Error updating borrower' });
+    }
 });
 
 app.get('/List_Lenders', (req, res) => {
@@ -280,7 +240,19 @@ app.get('/List_Lenders', (req, res) => {
     });
 });
 
+app.get('/lenderDetailesOf/:id', async (req, res) => {
 
+    const id = req.params.id;
+    //get detailes of lender of id
+    try {
+        const lenderDetails = await lenders.findByPk(id);
+        res.json(lenderDetails);
+    } catch (error) {
+        console.error('Error fetching lender details:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+
+})
 
 app.post('/contactsborrower', async (req, res) => {
     const { id, name, emailAddress, mailType, designation, mobileNumber, region } = req.body;
@@ -377,12 +349,12 @@ app.get('/contact-details-lender/:selectedlender', (req, res) => {
     });
 });
 
-app.delete('/contactdetailslender/:phone', (req, res) => {
+app.delete('/contactdetailslender/:id', (req, res) => {
     // const name = req.params.id;
-    const phone = req.params.phone;
+    const phone = req.params.id;
 
     // Perform the database delete operation
-    const deleteQuery = 'DELETE FROM lendercontactdetailes WHERE  mobileNumber = ?';
+    const deleteQuery = 'DELETE FROM lendercontactdetailes WHERE  id = ?';
     db.query(deleteQuery, [phone], (err, result) => {
         if (err) {
             console.error('Error deleting contact detail:', err);
@@ -401,7 +373,6 @@ app.get('/teammembers', (req, res) => {
         if (err) {
             console.error('Error connecting to the database:', err);
             return res.status(500).json({ error: 'An error occurred while connecting to the database.' });
-
         }
         connection.query(sql, (err, result) => {
             connection.release();
@@ -417,13 +388,15 @@ app.get('/teammembers', (req, res) => {
 app.put('/attachPassword/:id', (req, res) => {
     const id = req.params.id;
     const password = req.body.password;
-    const sqlQuery = "update teammembers set password=? where TeamM_id=?";
+    const region = req.body.region
+    const userType = req.body.userType
+    const sqlQuery = "update teammembers set password=?,region=? where TeamM_id=?";
     db.getConnection((err, connection) => {
         if (err) {
             console.error('Error connecting to the database:', err);
             return res.status(500).json({ error: 'An error occurred while connecting to the database.' });
         }
-        connection.query(sqlQuery, [password, id], (err, result) => {
+        connection.query(sqlQuery, [password, region, userType, id], (err, result) => {
             connection.release();
             if (err) {
                 return res.status(500).json({ message: "no such team member found" })
@@ -678,12 +651,8 @@ app.post('/assign', async (req, res) => {
                 lender_approval: option
             }, {
                 where: { lender_id: lenderId, borrower_id: borrowerId }
-            }
-            )
-            connection.commit();
-            connection.release();
+            })
             return res.json({ message: "Assignment updated" })
-
         } else {
             // Assignment does not exist, create a new entry
 
@@ -699,15 +668,10 @@ app.post('/assign', async (req, res) => {
                 updated_by: teammemberName,
                 lender_approval: option
             });
-            connection.commit();
-            connection.release();
             return res.json({ message: "New assignment created" });
         }
     } catch (error) {
-
         console.error('Error while creating assignment:', error);
-        connection.rollback();
-        connection.release();
         return res.status(500).json({ error: 'Something went wrong' });
     }
 })
@@ -804,6 +768,8 @@ app.post('/assignStatusupdate', async (req, res) => {
                 where: { lender_id: lenderId, borrower_id: borrowerId }
             }
             )
+
+
             return res.json({ message: "Assignment updated" })
         } else {
             // Assignment does not exist, create a new entry
@@ -836,7 +802,7 @@ app.get('/retrivestatus', async (req, res) => {
             include: [
                 {
                     model: teammembers,
-                    attributes: ['FirstName', 'LastName', 'Email_address']
+                    attributes: ['TeamM_id', 'FirstName', 'LastName', 'Email_address']
                 }
             ]
         });
@@ -874,16 +840,169 @@ app.post('/statusupdateData/:id', async (req, res) => {
                 }
             );
 
-            res.json("Status updated successfully")
+            const existingstatus_id = await EmailReminder.findOne({
+                where: { Status_id: id, }
+            })
+            console.log(existingstatus_id)
+            if (existingstatus_id) {
+                await EmailReminder.update({
+                    nextFollowUpdate: Next_followup_Date
+                }, {
+                    where: { Status_id: id }
+                })
+                return res.json({ "message": "Status arlerdy updated updated successfully" })
+            } else {
+                await EmailReminder.create({
+                    Status_id: id,
+                    nextFollowUpdate: Next_followup_Date,
+                    teamMember: updated_by,
+                })
+                res.json({ "message": "Status updated successfully" })
+            }
         }
         else {
-            res.json("date not found")
+            res.json({ "message": "date not found" })
         }
     } catch (error) {
         console.log("error while updateing data", error)
-        res.json("Error while updateing status")
+        res.json({ "error": "Error while updateing status" })
     }
 })
+
+app.get('/getreminderdetails', async (req, res) => {
+    try {
+        const reminderdetails = await EmailReminder.findAll({
+            include: Status_updates,
+        })
+        res.status(200).json(reminderdetails)
+    } catch (error) {
+        console.log(error)
+    }
+})
+
+const updatedStatusData = await Status_updates.findAll({
+    include: [
+        {
+            model: teammembers,
+            attributes: ['TeamM_id', 'FirstName', 'LastName', 'Email_address']
+        }
+    ]
+})
+console.log(updatedStatusData)
+// console.log('filter', filterteammemberData)
+
+const sentEmailreminderToTeamMember = (teamMember) => {
+
+    const filterteammemberData = updatedStatusData.filter((status) => (
+        status.updated_by === teamMember
+    ));
+
+    console.log('fi;', filterteammemberData)
+
+    var table = `
+    <table border="1" style='border-collapse: collapse;'>
+        <thead style='background-color: aquamarine; border: 2px solid rgb(0, 204, 255);'>
+            <tr>
+                <th style='padding: 5px;'>Date of creation</th>
+                <th style='padding: 5px;'>Last update</th>
+                <th style='padding: 5px;'>Borrower Name</th>
+                <th style='padding: 5px;'>Lender Name</th>
+                <th style='padding: 5px;'>Action Taken</th>
+                <th style='padding: 5px;'>Pending with</th>
+                <th style='padding: 5px;'>Proposal Status</th>
+                <th style='padding: 5px;'>Comment/Query</th>
+                <th style='padding: 5px;'>Updated By</th>
+                <th style='padding: 5px;'>Next Follow-up Date</th>
+            </tr>
+        </thead>
+        <tbody style='border: 2px solid rgb(0, 204, 255); padding: 5px;'>`;
+
+    filterteammemberData.map((statusdetailes) => {
+        return (
+            table += `<tr key=${statusdetailes.St_id}>
+            <td style='padding: 5px;'>${statusdetailes.Date_of_Creation}</td>
+            <td style='padding: 5px;'>${statusdetailes.lastupdate}</td>
+            <td style='padding: 5px;'>${statusdetailes.borrower_name}</td>
+            <td style='padding: 5px;'>${statusdetailes.lender_name}</td>
+            <td style='padding: 5px;'>${statusdetailes.action_Taken}</td>
+            <td style='padding: 5px;'>${statusdetailes.Pending_with}</td>
+            <td style='padding: 5px;'>${statusdetailes.Praposal_status}</td>
+            <td style='padding: 5px;'>please refer status table</td>
+            <td style='padding: 5px;'>${statusdetailes.updated_by}</td>
+            <td style='padding: 5px;'>${statusdetailes.Next_followup_Date}</td>
+        </tr>`
+        );
+    });
+
+    table += `</tbody></table>`;
+
+    // console.log(table);
+    const toEmailAddress = filterteammemberData.map((member) => member.teammember.Email_address)
+    const transport = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+            user: process.env.EMAIL,
+            pass: process.env.PASSWORD
+        }
+    })
+    const to = filterteammemberData.map((email) => email.teammember.Email_address)
+    console.log(to)
+    const mailOptions = {
+        from: process.env.EMAIL,
+        to: toEmailAddress,
+        cc: ['statusexpressrupya@gmail.com', 'Vinaysp254@gmail.com', 'expressrupya@gmail.com'],
+        subject: 'Follow-Up the Lenders/Borrowers',
+        html: table,
+    }
+
+    console.log(mailOptions);
+    transport.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            console.log("error while sending", error)
+            res.json("error while sending", error);
+        } else {
+            console.log("email sent successfully" + info.response);
+            res.json(info);
+        }
+    })
+}
+
+const filteringNextFollwupDate = async () => {
+    //from filtering to nextfollupdate using curent date
+    const emailReminder = await EmailReminder.findAll()
+    const datewiseEmailReminder = emailReminder.filter((reminder) => {
+        // Define your conditions to filter 'updatedStatusData' based on EmailReminder data
+        const curentDate = new Date();
+        curentDate.setHours(0, 0, 0, 0)
+        const reminderDate = new Date(reminder.nextFollowUpdate);
+        reminderDate.setHours(0, 0, 0, 0); // Set time part to midnight for comparison
+        console.log(reminderDate)
+        return (
+            reminderDate.getFullYear() <= curentDate.getFullYear() &&
+            reminderDate.getMonth() <= curentDate.getMonth() &&
+            reminderDate.getDate() <= curentDate.getDate()
+        );
+    });
+
+    console.log('dataes', datewiseEmailReminder)
+
+    // identifying uniqe team member and send reminder
+    const uniqeTeamMember = new Set()
+    const formatedDatewiseEmailReminder = datewiseEmailReminder.map((data) => {
+        const teammember = data.teamMember
+        const status_id = data.Status_id
+
+        uniqeTeamMember.add(teammember)
+    })
+
+    uniqeTeamMember.forEach((member) => {
+        sentEmailreminderToTeamMember(member)
+    })
+    console.log('date', uniqeTeamMember)
+    console.log('Email sent.........')
+}
+
+cron.schedule('0 6 * * *', filteringNextFollwupDate)
 
 var to;
 var cc;
@@ -910,7 +1029,6 @@ var upload = multer({
 app.post("/sendemail", (req, res) => {
     // const { email, CC, subject, message, attachments } = req.body;
     // console.log(email, CC, subject, message)
-
     try {
         upload(req, res, async function (err) {
             if (err instanceof multer.MulterError) {
@@ -979,8 +1097,10 @@ app.post("/sendemail", (req, res) => {
     }
 })
 
+// const sendEmailReminderToTeam = () => {
 app.post("/sendEmailreminder", (req, res) => {
     const { emaillist, cclist, subject, message } = req.body;
+
     const transport = nodemailer.createTransport({
         service: "gmail",
         auth: {
@@ -994,7 +1114,7 @@ app.post("/sendEmailreminder", (req, res) => {
         to: emaillist,
         cc: cclist,
         subject: subject,
-        html: message,
+        html: table,
     }
 
     console.log(mailOptions);
@@ -1008,7 +1128,6 @@ app.post("/sendEmailreminder", (req, res) => {
         }
     })
 })
-
 
 app.post("/partiallydisbursed", async (req, res) => {
     const { borrowerId, borrowerName, lenderId, lenderName, typeOfSanction, sactionDate, sactionAmount,
@@ -1099,6 +1218,42 @@ app.get("/retrivepartiallydispursed", async (req, res) => {
     }
 })
 
+app.post('/add_lender_classification', async (req, res) => {
+    try {
+        const lenderclassificationData = req.body
+        const lenderClassification = lenderclassificationData.lenderClassificationData
+        const borrower_id = lenderclassificationData.borrower_id
+
+        for (const data of lenderClassification) {
+            await LenderClassified.create({
+                borrower_id: borrower_id,
+                lender_id: data.lender_id,
+                classification: data.classification
+            })
+        }
+        return res.json({ 'message': 'Data inserted' })
+    } catch (error) {
+        console.log(error)
+        return res.json({ 'error': 'error occuerd and data not created' })
+    }
+})
+
+app.put('/update_lender_classification', async (req, res) => {
+    try {
+
+    } catch (error) {
+        console.log(error)
+    }
+})
+
+app.get('/retrivelenderclassification', async (req, res) => {
+    try {
+        const result = await LenderClassification.findAll()
+        return res.json(result);
+    } catch (error) {
+        return res.json({ message: "Error while retrivieng data", error })
+    }
+})
 app.listen(4306, () => {
     console.log("listening..............", 4306);
 });

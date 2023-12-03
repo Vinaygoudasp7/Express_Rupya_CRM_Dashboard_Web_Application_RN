@@ -14,6 +14,7 @@ const lenders = sequelize.define('lenders', {
     name: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: true
     },
     region: {
         type: DataTypes.STRING,

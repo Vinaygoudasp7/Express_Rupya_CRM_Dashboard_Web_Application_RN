@@ -24,6 +24,18 @@ const teammembers = sequelize.define('teammembers', {
     password:{
         type:DataTypes.STRING,
         allowNull:false
+    },
+    region:{
+        type:DataTypes.STRING,
+        allowNull:false
+    },
+    secret_key:{
+        type:DataTypes.STRING,
+        allowNull:false
+    },
+    userType:{
+        type:DataTypes.STRING,
+        allowNull:false
     }
 
 });
