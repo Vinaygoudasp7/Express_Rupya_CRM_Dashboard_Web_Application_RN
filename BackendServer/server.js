@@ -1218,11 +1218,11 @@ app.get("/retrivepartiallydispursed", async (req, res) => {
     }
 })
 
-app.post('/add_lender_classification', async (req, res) => {
+app.post('/add_lender_classification/:borrower_id', async (req, res) => {
     try {
         const lenderclassificationData = req.body
         const lenderClassification = lenderclassificationData.lenderClassificationData
-        const borrower_id = lenderclassificationData.borrower_id
+        const borrower_id = req.params.borrower_id
 
         for (const data of lenderClassification) {
             await LenderClassified.create({
@@ -1238,13 +1238,20 @@ app.post('/add_lender_classification', async (req, res) => {
     }
 })
 
-app.put('/update_lender_classification', async (req, res) => {
+app.delete('/delete_lender_classification/:borrower_id', async (req, res) => {
     try {
+        const borrower_id = req.params.borrower_id;
 
+        // Delete lender classification data associated with the borrower ID
+        await LenderClassified.destroy({ where: { borrower_id } });
+
+        return res.json({ 'message': 'Data deleted' });
     } catch (error) {
-        console.log(error)
+        console.error(error);
+        return res.json({ 'error': 'Error occurred and data not deleted' });
     }
-})
+});
+
 
 app.get('/retrivelenderclassification', async (req, res) => {
     try {
