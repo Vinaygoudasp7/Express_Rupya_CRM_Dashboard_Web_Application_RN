@@ -1253,9 +1253,12 @@ app.delete('/delete_lender_classification/:borrower_id', async (req, res) => {
 });
 
 
-app.get('/retrivelenderclassification', async (req, res) => {
+app.get('/retrivelenderclassification/:borrower_id', async (req, res) => {
     try {
-        const result = await LenderClassification.findAll()
+        const borrower_id = req.params.borrower_id
+        const result = await LenderClassification.findAll({
+            where:{borrower_id:borrower_id}
+        })
         return res.json(result);
     } catch (error) {
         return res.json({ message: "Error while retrivieng data", error })
