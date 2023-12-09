@@ -38,7 +38,6 @@ const borrowers = sequelize.define('borrowers', {
         type: DataTypes.STRING,
         allowNull: true,
         unique: true
-
     },
     loanTypes: {
         type: DataTypes.STRING,

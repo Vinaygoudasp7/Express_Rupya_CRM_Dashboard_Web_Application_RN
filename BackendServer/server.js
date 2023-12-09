@@ -1257,7 +1257,7 @@ app.get('/retrivelenderclassification/:borrower_id', async (req, res) => {
     try {
         const borrower_id = req.params.borrower_id
         const result = await LenderClassification.findAll({
-            where:{borrower_id:borrower_id}
+            where: { borrower_id: borrower_id }
         })
         return res.json(result);
     } catch (error) {
