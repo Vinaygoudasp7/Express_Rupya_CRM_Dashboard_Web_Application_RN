@@ -1,0 +1,39 @@
+.customcontainer {
+    padding: 0px;
+    margin: 5px;
+    box-sizing: border-box;
+    max-width: 100%; 
+    width: 100%;
+}
+
+.selectcontainer {
+    width: 485px;
+    margin-left: 220px;
+
+}
+
+.tableContaient {
+    width: 100%;
+    overflow: auto;
+    height: 600px;
+    text-align: center;
+    font-family: 'Times New Roman', Times, serif;
+}
+.tablehead{
+    position: sticky;
+    top:0;
+    z-index: 1;
+}
+.tablehead th,td{
+    width: 150px;
+}
+.Ltext {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 25px;
+    font-weight: bolder;
+    margin-right: -200px;
+}
+
+.customtable {
+    width: 1000px;
+}

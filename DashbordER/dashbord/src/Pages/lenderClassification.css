@@ -1,0 +1,39 @@
+.form-container {
+    margin: 0 auto;
+    width: 700px;
+    background-color: #f7f7f7;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+/* .form-body {
+    max-height: 100%;
+    overflow: auto;
+
+} */
+
+.form-content {
+    width: 600px;
+    margin: 0 auto;
+
+}
+
+.top-section {
+    height: 60px;
+    position: relative;
+    z-index: 1;
+    top: 0;
+}
+
+.form-bottom-section {
+    height: 50px;
+    position: relative;
+    z-index: 1;
+    bottom: 0;
+}
+
+.form-content-body {
+    max-height: 64vh;
+    overflow: auto
+}

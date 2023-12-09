@@ -1,0 +1,94 @@
+.mainpagectn {
+    background: linear-gradient(to right, rgb(83, 219, 219), rgb(76, 186, 229), rgb(14, 181, 181));
+    width: 100%;
+    height: 100vh;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.main-content {
+    display: grid;
+    place-items: center;
+    margin-top: 20px;
+    margin: 10px;
+}
+
+.form-label {
+    font-size: 16px;
+    font-weight: bold;
+
+}
+
+.form-control.input {
+    border: 2px solid black;
+    margin-bottom: 15px;
+
+}
+
+.sub-content {
+    box-shadow: -5px 5px 5px rgb(0, 18, 26);
+    border: 4px solid rgb(6, 6, 158);
+    border-radius: 15px;
+    box-sizing: border-box;
+    padding-left: 10px;
+    padding: 5px 5px 5px 15px;
+    background-color: rgb(215, 239, 250);
+    max-width: 600px;
+    max-height: 600px;
+    width: 100%;
+    height: 100%;
+}
+
+.contentheader {
+    text-align: center;
+    margin-top: 60px;
+    box-sizing: border-box;
+    font-weight: bold;
+    font-size: 24px;
+
+
+}
+
+nav a {
+    text-decoration: none;
+    margin: 10px;
+    color: rgb(0, 30, 255);
+}
+
+nav .active {
+    color: aliceblue;
+}
+
+.contentbody {
+    display: flex;
+    flex-direction: column;
+    padding-top: 10px;
+}
+
+.topsection {
+    border: none;
+}
+
+.btn-primary {
+    margin-bottom: 8px;
+}
+
+.links {
+    margin-bottom: 5px;
+}
+
+.pass {
+    display: flex;
+    flex-direction: row;
+    border: 2px solid black;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    background-color:white;
+}
+
+.pass button {
+    border: none;
+    height: 10px;
+    border-radius: 8px;
+    padding-top: 5px;
+    background-color: white;
+}

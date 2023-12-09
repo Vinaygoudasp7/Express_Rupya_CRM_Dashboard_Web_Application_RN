@@ -1,0 +1,782 @@
+.teamform-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 65px;
+}
+
+.teamform-containet {
+    border-radius: 10px;
+    width: 500px;
+    background-color: #8fd9ff;
+}
+
+.form {
+    /* display: flex;
+    flex-direction: row; */
+    margin-left: 20px;
+    padding: 20px;
+    font-size: 18px;
+    font-family: 'Times New Roman', Times, serif;
+    color: rgb(4, 0, 255);
+    font-weight: bolder;
+    color: black;
+
+}
+
+.tmid,
+.fname,
+.lname,
+.email {
+    display: flex;
+    flex-direction: row;
+
+}
+
+.tmid label {
+    width: 170px;
+    margin-left: -5px;
+}
+
+.tmid input {
+    margin-left: 50px;
+    border: 2px solid rgba(65, 195, 218, 0.945);
+    width: 200px;
+    border-radius: 5px;
+    height: 30px;
+    margin-bottom: 20px;
+    outline: none;
+    font-size: 14px;
+}
+
+.fname input {
+    margin-left: 116px;
+    border: 2px solid rgba(65, 195, 218, 0.945);
+    width: 200px;
+    border-radius: 5px;
+    height: 30px;
+    margin-bottom: 20px;
+    outline: none;
+    font-size: 14px;
+}
+
+.lname input {
+    margin-left: 117px;
+    border: 2px solid rgba(65, 195, 218, 0.945);
+    width: 200px;
+    border-radius: 5px;
+    height: 30px;
+    margin-bottom: 20px;
+    outline: none;
+    font-size: 14px;
+}
+
+.email input {
+    margin-left: 90px;
+    border: 2px solid rgba(65, 195, 218, 0.945);
+    width: 200px;
+    border-radius: 5px;
+    height: 30px;
+    outline: none;
+    font-size: 14px;
+}
+
+.formsubmit {
+    margin-left: 120px;
+    margin-top: 15px;
+    width: 100px;
+    height: 35px;
+    border-radius: 13px;
+    border: 5px solid lightcyan;
+    background: linear-gradient(rgb(224, 255, 243), rgb(0, 221, 255), rgb(173, 230, 206));
+    cursor: pointer;
+    font-weight: bold;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.createbuttonU {
+    width: 140px;
+    height: 45px;
+    border-radius: 13px;
+    background: linear-gradient(rgb(0, 213, 255), #20b3ff);
+    cursor: pointer;
+    font-weight: bold;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 18px;
+    text-decoration: none;
+    margin-top: 10px;
+    border: none;
+    margin-left: 150px;
+}
+
+.line4 {
+    margin-top: 30px;
+    display: grid;
+    place-items: center;
+}
+
+.createbutton a {
+    text-decoration: none;
+}
+
+.create h2 {
+    padding-bottom: 50px;
+    color: rgb(51, 9, 237);
+    padding-left: 10px;
+}
+
+.assign {
+    color: rgb(51, 9, 237);
+    padding-top: 20px;
+    padding-left: 10px;
+    font-size: 18px;
+     font-family: 'Times New Roman', Times, serif;
+     font-weight: bold;
+
+}
+
+.teammembers th,
+td {
+    padding: 6px;
+    text-align: center;
+    border: none;
+    font-family: 'Times New Roman', Times, serif;
+    border-style: initial;
+    border: 1px solid;
+
+}
+
+.members {
+    margin-left: 10px;
+    border: 1px solid black;
+    border-spacing: 0px;
+}
+
+.tabel {
+    margin-left: 10%;
+    margin-right: 30px;
+
+}
+
+.tabel h3 {
+    font-size: 25px;
+    font-family: 'Times New Roman', Times, serif;
+    margin-bottom: 8px;
+    margin-left: 220px;
+}
+
+.TMmainpage {
+    display: flex;
+}
+
+.borrowerlist {
+    margin-left: 30px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 4px;
+    padding-bottom: 20px;
+}
+
+.borrowerlist label {
+    color: black;
+    font-size: 20px;
+    margin-right: 91px;
+}
+
+.list {
+    appearance: none;
+    border: none;
+    outline: none;
+    border: 2px solid rgb(40, 40, 246);
+    border-radius: 5px;
+    height: fit-content;
+    font-size: 14px;
+    margin-right: 30px;
+}
+
+
+.lenderlist {
+    margin-left: 30px;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 20px;
+}
+
+.lenderlist label {
+    color: black;
+    font-size: 20px;
+    text-align: end;
+    text-align: start;
+    margin-bottom: 2px;
+
+}
+
+.approval label {
+    color: black;
+    font-size: 20px;
+    margin-bottom: 2px;
+}
+
+.approval {
+    box-sizing: border-box;
+    padding-left: 30px;
+    padding-right: 30px;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 20px;
+    width: 106%;
+}
+
+.approval label {
+    margin-right: 20px;
+}
+
+.approval select {
+    width: 200px;
+    height: 40px;
+    outline: none;
+    border-radius: 5px;
+    border: 2px solid rgb(40, 40, 246);
+}
+
+.teamlist {
+    display: flex;
+    flex-direction: column;
+    margin-left: 30px;
+    margin-right: 30px;
+    width: 92%;
+
+}
+
+.teamlist label {
+    color: black;
+    font-size: 20px;
+    margin-right: 74px;
+
+}
+
+.assignform {
+    font-family: 'Times New Roman', Times, serif;
+    margin-top: 15px;
+
+}
+
+.line1 {
+    display: flex;
+    flex-direction: row;
+}
+
+.line2 {
+    display: flex;
+    flex-direction: row;
+}
+
+.line3 {
+    display: flex;
+    flex-direction: row;
+}
+
+.assignform  {
+    margin-top: 10px;
+    text-align: center;
+    font-size: 28px;
+    color: rgb(18, 34, 207)
+}
+
+.assignform .createbutton {
+    margin-left: 30px;
+    margin-top: 25px;
+}
+
+.warningmessage {
+    border: 6px solid white;
+    background-color: white;
+    border-radius: 10px;
+
+}
+
+.createbuttoncancel {
+    margin-left: 20px;
+    margin-top: 5px;
+    width: 100px;
+    height: 30px;
+    border-radius: 13px;
+    border: 5px solid lightcyan;
+    background: linear-gradient(rgb(242, 196, 193), rgb(227, 69, 25), rgb(237, 60, 11), rgb(242, 196, 193));
+    cursor: pointer;
+    font-weight: bold;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 16px;
+    text-decoration: none;
+}
+
+.createbuttoncancel.ok {
+    margin-left: 20px;
+    margin-top: 5px;
+    width: 100px;
+    height: 30px;
+    border-radius: 13px;
+    border: 5px solid lightcyan;
+    background: linear-gradient(rgb(224, 255, 243), rgb(0, 221, 255), rgb(173, 230, 206));
+    cursor: pointer;
+    font-weight: bold;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 16px;
+    text-decoration: none;
+}
+
+.warningmessage p {
+    color: red;
+}
+
+.assignformandtable {
+    display: flex;
+    box-sizing: border-box;
+
+}
+
+.assignTable {
+    margin-left: 50px;
+    background-color: rgb(236, 242, 248);
+    padding-right: 25px;
+}
+
+.headrow th,
+.bodyrow td {
+    border: 1.5px solid blue;
+    padding: 8px;
+
+}
+
+.table table {
+    border-spacing: 0px;
+    outline: 2px solid blue;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.tabelheading h2 {
+    text-align: center;
+}
+
+.searchID {
+    margin-left: 30px;
+
+}
+
+.search {
+    border: 3px solid lightgreen;
+    border-radius: 8px;
+    height: 25px;
+    /* margin-right: 25px; */
+    font-family: 'Times New Roman', Times, serif;
+    /* width: 200px; */
+    outline: none;
+    /* width: 130px; */
+
+}
+
+/* .searchID input {
+    border: 3px solid lightgreen;
+    border-radius: 8px;
+    height: 25px;
+    margin-right: 25px;
+    font-family: 'Times New Roman', Times, serif;
+    width: 200px;
+    outline: none;
+} */
+
+.searchID button {
+    margin-left: 20px;
+    margin-top: 5px;
+    width: 100px;
+    height: 35px;
+    border-radius: 10px;
+    border: 5px solid lightcyan;
+    background: linear-gradient(rgb(224, 255, 243), rgb(0, 221, 255), rgb(173, 230, 206));
+    cursor: pointer;
+    font-weight: bold;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 16px;
+
+}
+
+.tabelheading h2 {
+    font-family: 'Times New Roman', Times, serif;
+    color: blue;
+    text-decoration-color: rgb(5, 163, 231);
+}
+
+.searchID h4 {
+    color: rgb(0, 179, 255);
+}
+
+.tooltip {
+    position: absolute;
+    top: -30px;
+    left: 0;
+    background-color: #333;
+    color: #fff;
+    padding: 5px;
+    border-radius: 5px;
+    z-index: 1;
+
+}
+
+.searchID p {
+    color: red;
+    font-family: 'Times New Roman', Times, serif;
+    margin-bottom: 5px;
+
+}
+
+.buttons {
+    margin-top: 20px;
+    display: flex;
+}
+
+.fileds {
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.assignformandtable {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.approvaltable h3 {
+    color: blue;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 25px;
+    text-align: center;
+}
+
+.approvals {
+    margin: 5px;
+    background: linear-gradient(rgb(224, 255, 243), rgb(0, 221, 255), rgb(173, 230, 206));
+    border: 2px solid;
+    border-radius: 5px;
+    cursor: pointer;
+    height: 25px;
+    width: 60px;
+    border-radius: 6px;
+    border: 2px solid whitesmoke;
+}
+
+.containerbody {
+    display: flex;
+    flex-direction: column;
+}
+
+.division {
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+    width: 110px;
+    margin-top: 10px;
+}
+
+.dborrower {
+    width: 60px;
+    /* padding-bottom: 10px; */
+    color: rgb(18, 18, 19);
+    font-size: 18px;
+    font-weight: 500;
+    font-family: 'Times New Roman', Times, serif;
+
+}
+
+.dborrower {
+    margin-top: 10px;
+    width: 100%;
+}
+
+.division .dlender {
+    margin-left: 20px;
+}
+
+
+
+.line1 .cdate {
+    width: 60px;
+    margin-bottom: 20px;
+}
+
+.line1 label {
+    width: fit-content;
+}
+
+.line2 {
+    margin-bottom: 10px;
+}
+
+.line2 label {
+    width: 120px;
+    margin-left: -10px;
+
+}
+
+.line2 select {
+    margin-left: 30px;
+
+}
+
+.line3 {
+    margin-top: 20px;
+}
+
+.line3 label {
+
+    width: 120px;
+}
+
+.date {
+    height: 30px;
+    padding: 2px;
+    border-radius: 6px;
+    border: 2px solid rgb(40, 40, 246);
+    width: 100%;
+    font-size: 14px;
+}
+
+.actionstaken {
+    border: 2px solid rgb(40, 40, 246);
+    height: 40px;
+    padding: 2px;
+    border-radius: 6px;
+    width: 100%;
+    margin-bottom: -10px;
+    font-size: 14px;
+}
+
+.area {
+    border: 2px solid rgb(40, 40, 246);
+    width: 100%;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.division button {
+    background-color: color-mix(in srgb, rgb(6, 182, 212) 75%, rgb(0, 26, 255) 25%);
+    border-radius: 5px;
+    cursor: pointer;
+    height: 35px;
+    width: 80px;
+    border-radius: 6px;
+    width: 120px;
+    border: none;
+    margin-left: 100px;
+}
+
+
+.division {
+    width: fit-content;
+}
+
+.list {
+    margin-bottom: 10px;
+}
+
+.listna {
+    appearance: none;
+    width: 100%;
+    border: none;
+    outline: none;
+    border: 2px solid rgb(40, 40, 246);
+    border-radius: 5px;
+    height: fit-content;
+    font-size: 14px;
+}
+
+.actionstaken.p {
+    margin-left: 0px;
+}
+
+.form {
+    margin-left: 30px;
+}
+
+.Statuspage.approvaltable,
+.createbutton {
+    width: fit-content;
+}
+
+.containt {
+    width: 100%;
+    overflow: auto;
+    max-height: 90vh;
+    height: 100%;
+    text-align: center;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.containt table {
+    width: 100%;
+    border-spacing: 0px;
+    border: 2px solid #06aaffff;
+}
+
+.containt thead th {
+    position: sticky;
+    top: 0;
+    background-color: #06aaff;
+    padding: 10px;
+    z-index: 999;
+    border: 1px solid rgb(4, 4, 5);
+}
+
+.containt th,
+td {
+    padding: 10px;
+    border: 1px solid #06aaffff;
+}
+
+.Date {
+    margin-top: 10px;
+    margin-bottom: 15px;
+    margin-left: 30px;
+    display: flex;
+    flex-direction: column;
+    margin-right: 15px;
+}
+
+.Date label {
+    color: black;
+    font-size: 20px;
+    margin-right: 50px;
+}
+
+.update {
+    height: 30px;
+    padding: 2px;
+    border-radius: 6px;
+    border: 2px solid rgb(40, 40, 246);
+    width: 200px;
+}
+
+.content {
+    max-width: 500px;
+    max-height: 50px;
+    overflow: hidden;
+}
+
+.readmore {
+    font-size: 12px;
+    font-weight: bold;
+    font-family: 'Times New Roman', Times, serif;
+    background-color: #fff;
+    border: #fff;
+    cursor: pointer;
+}
+
+.readmore:hover {
+    color: blue;
+    text-decoration: underline;
+    text-underline-position: below;
+}
+
+.comment {
+    margin: 25px;
+}
+
+.close {
+    font-size: large;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-left: -10px;
+    position: fixed;
+    appearance: none;
+    background-color: #fff;
+    border: #fff;
+}
+
+.cancel {
+    margin: 5px;
+    background: linear-gradient(rgb(244, 158, 111), rgb(255, 0, 0), rgb(223, 148, 67));
+    border: 2px solid;
+    border-radius: 5px;
+    cursor: pointer;
+    height: 25px;
+    width: 60px;
+    border-radius: 6px;
+    border: 2px solid whitesmoke;
+}
+
+.tablesheading {
+    color: blue;
+    font-size: 28px;
+    text-align: center;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.divisionn {
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+}
+
+.divisionn label {
+    padding-bottom: 10px;
+    color: blue;
+    font-size: 21px;
+    font-weight: 500;
+    font-family: 'Times New Roman', Times, serif;
+    margin-top: 10px;
+    margin-left: 30px;
+}
+
+.divisionn .date {
+    margin-left: 40px;
+}
+
+.SubmitbuttonTM {
+    height: 30px;
+    box-sizing: border-box;
+    background-color: color-mix(in srgb, rgb(6, 182, 212) 75%, rgb(0, 26, 255) 25%);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 110px;
+    margin-top: 20px;
+    margin-left: 100px;
+    font-size: large;
+}
+
+.container-body {
+    display: flex;
+    align-content: center;
+    justify-content: center;
+}
+
+.containet-body {
+    border-radius: 10px;
+    background-color: #8fd9ffff;
+    width: 450px;
+    font-family: 'Times New Roman', Times, serif;
+    color: #101010;
+   
+}
+.fileds{
+    font-family: 'Times New Roman', Times, serif;
+    color: #101010;
+}
+.submitbuttonA{
+    background-color: color-mix(in srgb, rgb(6, 182, 212) 75%, rgb(0, 26, 255) 25%);
+    border: none;
+    height: auto;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    width: fit-content;
+    text-decoration: none;
+    margin: 20px 15px;
+}
+
+.submitbuttonA a{
+    text-decoration: none;
+    color: white;
+}

@@ -1,0 +1,269 @@
+body {
+    margin: 0;
+    padding: 0;
+
+}
+
+.sidebar {
+    background-color: 20b3ff;
+    height: 60px;
+    align-items: flex-start;
+    box-shadow: 5px 5px 10px rgb(86, 86, 87);
+    display: flex;
+    position: relative;
+    width: 100%;
+
+}
+
+.topsection {
+    width: 170px;
+    height: 65px;
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    padding: 5px;
+    border: 5px solid darkblue;
+}
+
+.logo img {
+    width: 70px;
+    object-fit: cover;
+    padding-right: 5px;
+    border-radius: 10px;
+}
+
+.Header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #f1f1f1;
+    /* Additional styling */
+    z-index: 1999;
+    /* Specify a higher z-index if needed */
+}
+
+.Logotext span {
+    font-size: 22px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    color: #20b3ff;
+
+
+}
+
+.Logotext {
+    display: flex;
+    flex-direction: row;
+}
+
+.Logotext span.E {
+    font-weight: bolder;
+    font-size: 32px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.buttonsection {
+    max-width: 300px;
+    margin-top: 0;
+}
+
+.logout_btn {
+    border: 1px solid #20b3ffff;
+    border-radius: 10px;
+    height: 50px;
+}
+
+.logout_btn:hover {
+    background-color: #20b3ffff;
+}
+
+.btn_lg_text {
+    color: #20b3ffff;
+}
+
+.btn_lg_text:hover {
+    color: white;
+}
+
+.dashbord h2 {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 35px;
+    font-weight: bold;
+    color: #f1f1f1;
+    padding: 10px 10px 10px 0;
+    -webkit-text-stroke: 3px rgb(6, 176, 249);
+    background-color: whitesmoke;
+    -webkit-background-clip: text;
+}
+
+.sidebarList {
+    height: 80px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: #20b3ff;
+    margin-bottom: 0px;
+    padding-bottom: 18px;
+    padding-top: 20px;
+    overflow-y: hidden;
+    position: relative;
+    box-shadow: 1px 1px 1px;
+}
+
+.sidebarList .row {
+    /* width: 250px; */
+    height: 60px;
+    list-style-type: none;
+    display: flex;
+    flex-direction: row;
+    color: antiquewhite;
+    align-items: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    margin-inline: 5px;
+
+}
+
+.sidebarList #active .icons .ExpandMoreIcon {
+    transform: rotate(-90deg);
+}
+
+.row .section1 {
+    width: 200px;
+    display: flex;
+
+}
+
+.sidebarList #active {
+    cursor: pointer;
+    height: 70px;
+    color: darkblue;
+    background-color: whitesmoke;
+    border-radius: 20px 20px 0px 0px;
+    padding-top: 8px;
+    margin-bottom: -10px;
+
+}
+
+.sidebarList .row:hover {
+    cursor: pointer;
+    color: darkblue;
+    background-color: whitesmoke;
+    border-radius: 20px;
+}
+
+.row #icon {
+    flex: 25%;
+    display: grid;
+    place-items: center;
+}
+
+.row #title {
+    flex: 70%;
+}
+
+.icons {
+
+    display: grid;
+}
+
+.sidebarList .hassubmenu .section1 .icons .ExpandMoreIcon {
+    margin-left: -4px;
+
+}
+
+.sidebarList .hassubmenu .section1 .icons .up .ExpandMoreIcon {
+    transform: rotate(-180deg);
+}
+
+.sidebarList .hassubmenu {
+    width: 260px;
+    height: auto;
+    list-style-type: none;
+    color: antiquewhite;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    display: block;
+}
+
+.sidebarList .hassubmenu {
+    flex: 20%;
+    display: grid;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.sidebarList .row .submenu {
+    border-top: solid 2px black;
+    background-color: rgb(253, 252, 252);
+    color: darkblue;
+    max-height: 150px;
+    overflow-y: scroll;
+    overflow-x: scroll;
+    width: 100%;
+    padding: 2px;
+}
+
+.sidebarList .hassubmenu .submenuitem {
+    padding: 3px;
+    display: flex;
+}
+
+.submenuitem #submenuicon {
+    flex: 20%;
+    margin-left: 10%;
+    display: grid;
+    font-size: small;
+}
+
+.submenuitem #submenutitle {
+    font-size: 15px;
+    flex: 90%;
+}
+
+.ExpandMoreIcon {
+    transition: transform 0.3s ease;
+}
+
+.icons.up .ExpandMoreIcon {
+    transform: rotate(90deg);
+}
+
+.sections {
+    display: flex;
+    flex-direction: row;
+}
+
+.sidebar-header {
+    margin-top: -8px;
+    margin-left: 86%;
+}
+
+.sidebar .open {
+    width: 150px;
+}
+
+.sidebar-header i {
+    color: blue;
+    font-size: xx-large;
+}
+
+.mainpage {
+    display: flex;
+    flex-direction: row;
+}
+
+.Selectboxs {
+    padding-top: 140px;
+    width: 100%;
+
+}
+
+.recyclebin {
+    margin-left: 100px;
+    outline: 2px solid whitesmoke;
+    background-color: aliceblue;
+}

@@ -1,0 +1,55 @@
+.dailog {
+    width: 500px;
+    height: 220px;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: #6bcbfb;
+}
+
+.dailogHeading {
+    text-align: center;
+    color: whitesmoke;
+    text-transform: uppercase;
+    border: 2px solid aqua;
+    font-weight: bolder;
+    box-sizing: border-box;
+}
+
+.dailogtext {
+    box-sizing: border-box;
+    margin-top: 10px;
+    font-family: 'Times New Roman', Times, serif;
+    color: whitesmoke;
+    text-transform: capitalize;
+    font-size: 20px;
+    text-align: center;
+}
+
+
+.dailogOk {
+    width: 60px;
+    height: 30px;
+    background-color: #058fdfff;
+    border: none;
+    color: aliceblue;
+    text-transform: uppercase;
+    font-weight: bolder;
+    font-size: 17px;
+    box-sizing: border-box;
+    font-family: 'Times New Roman', Times, serif;
+    border-radius: 5px;
+}
+
+.dailogCancel {
+    width: 60px;
+    height: 30px;
+    background-color: red;
+    border: none;
+    color: aliceblue;
+    text-transform: uppercase;
+    font-weight: bolder;
+    font-size: 17px;
+    box-sizing: border-box;
+    font-family: 'Times New Roman', Times, serif;
+    border-radius: 5px;
+}

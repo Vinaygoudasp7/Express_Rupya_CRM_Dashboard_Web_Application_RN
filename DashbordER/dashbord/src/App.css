@@ -1,0 +1,17 @@
+::-webkit-scrollbar {
+    width: 15px;
+    height:13px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: azure;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(6, 158, 234, 0.32);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 6, 9, 0.183);
+    cursor: pointer;
+}

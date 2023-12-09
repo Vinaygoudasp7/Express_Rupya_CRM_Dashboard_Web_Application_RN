@@ -1,0 +1,38 @@
+#Showborrower {
+  border-collapse: collapse;
+  width: fit-content;
+  height: 100%;
+}
+
+#Showborrower th,
+#Showborrower td {
+  border: 1px solid black;
+  padding: 8px;
+  text-align: center;
+}
+
+#Showborrower input {
+  /* width: 100px; */
+  height: 25px;
+  border-radius: 10px;
+  border: 3px solid rgb(145, 245, 136);
+  /* margin-left: 15px; */
+}
+
+.Borrowertable {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: fit-content;
+  overflow: auto;
+
+  /* height: 90vh; */
+
+}
+
+.regionsearch {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 80px;
+}

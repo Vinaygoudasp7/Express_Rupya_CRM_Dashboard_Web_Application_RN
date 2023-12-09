@@ -1,0 +1,17 @@
+.modelbackground{
+    width: 200vh;
+    height: 100vh;
+    background-color:rgba(198, 195, 195, 0.374);
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.modelcontainer{
+    width: 1000px;
+    height: 80px;
+    margin-bottom: 600px;
+    background-color: aliceblue;
+    display: flex;
+    flex-direction: row;
+}
