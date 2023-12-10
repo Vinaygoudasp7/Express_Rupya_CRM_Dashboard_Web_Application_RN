@@ -36,3 +36,152 @@
   align-items: center;
   max-width: 80px;
 }
+
+
+.bcontaint {
+  width: 100%;
+  overflow: auto;
+  max-height: 90vh;
+  height: 100%;
+  text-align: center;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+.bcontaint table {
+  width: 100%;
+  border-spacing: 0px;
+  border: 2px solid #06aaffff;
+}
+
+.bcontaint thead th {
+  position: sticky;
+  top: 0;
+  background-color: #06aaff;
+  padding: 10px;
+  /* z-index: 999; */
+  border: 1px solid rgb(4, 4, 5);
+}
+
+.bcontaint th,
+td {
+  padding: 10px;
+  border: 1px solid #06aaffff;
+}
+
+.bcontaint th:nth-child(1),
+.bcontaint td:nth-child(1) {
+  position: sticky;
+  left: 0;
+
+}
+
+.bcontaint th:nth-child(2),
+.bcontaint td:nth-child(2) {
+  position: sticky;
+  left: 230px;
+
+
+}
+
+.bcontaint th:nth-child(3),
+.bcontaint td:nth-child(3) {
+  position: sticky;
+  left: 327px;
+
+
+}
+
+.bcontaint th:nth-child(4),
+.bcontaint td:nth-child(4) {
+  position: sticky;
+  left: 424px;
+}
+
+.bcontaint td:nth-child(1),
+.bcontaint td:nth-child(2),
+.bcontaint td:nth-child(3),
+.bcontaint td:nth-child(4) {
+  background-color: aliceblue;
+
+}
+
+.bcontaint th:nth-child(1),
+.bcontaint th:nth-child(2),
+.bcontaint th:nth-child(3),
+.bcontaint th:nth-child(4) {
+  background-color: #06aaff;
+  z-index: 5;
+}
+
+
+.lcontaint {
+  width: 100%;
+  overflow: auto;
+  max-height: 90vh;
+  height: 100%;
+  text-align: center;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+.lcontaint table {
+  width: 100%;
+  border-spacing: 0px;
+  border: 2px solid #06aaffff;
+}
+
+.lcontaint thead th {
+  position: sticky;
+  top: 0;
+  background-color: #06aaff;
+  padding: 10px;
+  /* z-index: 999; */
+  border: 1px solid rgb(4, 4, 5);
+}
+
+.lcontaint th,
+td {
+  padding: 10px;
+  border: 1px solid #06aaffff;
+}
+
+.lcontaint th:nth-child(1),
+.lcontaint td:nth-child(1) {
+  position: sticky;
+  left: 0;
+
+}
+
+.lcontaint th:nth-child(2),
+.lcontaint td:nth-child(2) {
+  position: sticky;
+  left: 159px;
+}
+
+.lcontaint th:nth-child(3),
+.lcontaint td:nth-child(3) {
+  position: sticky;
+  left: 255px;
+
+
+}
+
+.lcontaint th:nth-child(4),
+.lcontaint td:nth-child(4) {
+  position: sticky;
+  left: 372px;
+}
+
+.lcontaint td:nth-child(1),
+.lcontaint td:nth-child(2),
+.lcontaint td:nth-child(3),
+.lcontaint td:nth-child(4) {
+  background-color: aliceblue;
+}
+
+.lcontaint th:nth-child(1),
+.lcontaint th:nth-child(2),
+.lcontaint th:nth-child(3),
+.lcontaint th:nth-child(4) {
+  background-color: #06aaff;
+  z-index: 5;
+}

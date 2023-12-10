@@ -558,7 +558,7 @@ const BorrowerDetailsTable = () => {
       <div className='tablesheading'>
         <h2 className='text-center'>Borrower Details Table</h2>
       </div>
-      <div className='containt'>
+      <div className='bcontaint'>
         <table id="Showborrower">
           <thead>
             <tr>

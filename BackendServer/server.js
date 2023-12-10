@@ -1002,7 +1002,7 @@ const filteringNextFollwupDate = async () => {
     console.log('Email sent.........')
 }
 
-cron.schedule('0 6 * * *', filteringNextFollwupDate)
+cron.schedule('0 12 * * *', filteringNextFollwupDate)
 
 var to;
 var cc;

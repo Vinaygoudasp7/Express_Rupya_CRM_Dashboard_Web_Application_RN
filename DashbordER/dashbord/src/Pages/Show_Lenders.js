@@ -337,7 +337,7 @@ const LenderDetailsTable = () => {
     event.preventDefault();
     console.log(lender_Id)
     setEditableLenderId(lender_Id);
-    const lenderDetailsCopy = lenderDetails.find((data)=>data.id===lender_Id)
+    const lenderDetailsCopy = lenderDetails.find((data) => data.id === lender_Id)
     console.log(lenderDetailsCopy)
 
     if (lenderDetailsCopy) {
@@ -494,10 +494,11 @@ const LenderDetailsTable = () => {
       <div className='tablesheading'>
         <h2>Lender Details Table</h2>
       </div>
-      <div className='containt'>
+      <div className='lcontaint'>
         <table id="Showborrower">
           <thead>
             <tr>
+              {/* <div className='freeze-pan'> */}
               <th>
                 <div className='row py-1 px-5'>
                   <div className='col-9' style={{ fontSize: '18px' }}>Name</div>
@@ -562,6 +563,7 @@ const LenderDetailsTable = () => {
                   onChange={(e) => handleFilterChange('city', e.target.value)}
                 />
               </th>
+              {/* </div> */}
               <th
                 style={{ width: '100px' }}
               ><div className='row'>
@@ -754,6 +756,7 @@ const LenderDetailsTable = () => {
           <tbody>
             {filteredlenderDetails.map((detail) => (
               <tr key={detail.id}>
+                {/* <div className='freeze-pan'> */}
                 <td>
                   {detail.id === editableLenderId ? (
                     <input
@@ -825,6 +828,7 @@ const LenderDetailsTable = () => {
                     detail.city
                   )}
                 </td>
+                {/* </div> */}
                 <td>
                   {detail.id === editableLenderId ? (
                     <Select

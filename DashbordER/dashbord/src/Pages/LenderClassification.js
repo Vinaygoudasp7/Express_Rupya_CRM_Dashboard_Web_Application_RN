@@ -63,7 +63,7 @@ const LenderClassification = () => {
           }
           return 0
         })
-        setLenderData(lender_data)
+        // setLenderData(lender_data)
         setLenderDeatailes(lender_data)
         const intiallenderClassification = lender_data.map((data) => (
           {
@@ -154,7 +154,7 @@ const LenderClassification = () => {
       setSelectedBorrower(null);
 
       // Reset lender classification details (if it's a state variable)
-      setLenderClassificationDetails([]);
+      setLenderClassification([]);
 
       // Reset lender details to initial state or empty array
       // setLenderDeatailes([]);
