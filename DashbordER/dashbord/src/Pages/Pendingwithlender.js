@@ -50,8 +50,8 @@ const Pendingwithlender = ({ pendingdata }) => {
                                         <td>{pending.lender_name}</td>
                                         <td>{pending.action_Taken}</td>
                                         <td>{pending.Pending_with}</td>
-                                        <td>{pending.teammember.FirstName}</td>
-                                        <td>{pending.teammember.Email_address}</td>
+                                        <td>{pending.teammember?.FirstName}</td>
+                                        <td>{pending.teammember?.Email_address}</td>
                                         <td>
                                             <button className='sendbtn' onClick={handelOpen} >Drop email</button>
                                             {/**import email component here and pass props */}

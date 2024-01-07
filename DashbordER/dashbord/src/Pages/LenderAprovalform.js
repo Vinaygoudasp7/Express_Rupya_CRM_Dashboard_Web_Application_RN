@@ -146,7 +146,7 @@ const LenderAprovalform = () => {
     { value: "Existing", label: "Existing" },
     { value: "Negtive", label: "Negtive" },
     { value: "Approval Given", label: "Approval Given" },
-    { value: "Approval Not Taken", label: "Approval Not Taken" },
+    { value: "Approval Not Given", label: "Approval Not Given" },
   ]
 
   const [selectedOption, setSelectedOptions] = useState({});

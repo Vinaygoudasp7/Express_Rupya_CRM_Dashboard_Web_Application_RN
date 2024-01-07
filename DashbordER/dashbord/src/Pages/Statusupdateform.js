@@ -21,8 +21,6 @@ const Statusupdateform = () => {
   const [teammember, setTeammember] = useState([]);
   const [selectedteammember, setSelectedteammember] = useState('');
 
-
-
   //borrowers
   useEffect(() => {
     const featchdata = async () => {
@@ -137,6 +135,7 @@ const Statusupdateform = () => {
     { value: "Reminder Sent to Borrower", label: "Reminder Sent to Borrower" },
     { value: "Documents Received from Borrower", label: "Documents Received from Borrower" },
     { value: "Queries Replied to Lender", label: "Queries Replied to Lender" },
+    { value: 'Asked for lenders Approval', label: 'Asked for lenders Approval' },
   ]
 
   const [selectedActions, setSelectedActions] = useState({});
@@ -164,6 +163,7 @@ const Statusupdateform = () => {
     { value: 'Disbursed', label: 'Disbursed' },
     { value: 'Partially Disbursed', label: 'Partially Disbursed' },
     { value: 'Declined', label: 'Declined' },
+    { value: 'Received', label: 'Received' }
   ]
 
   const [selectedpraposalstatus, setselectedPraposalstatus] = useState({});
@@ -227,7 +227,7 @@ const Statusupdateform = () => {
     const pendingwithtoupdate = selectedpendingwith.value;
     const praposalstatustoupdate = selectedpraposalstatus.value;
     const commenttoupdate = textareavalue;
-    const teammember_id = selectedteammember.valueOf;
+    const teammember_id = selectedteammember.value;
     const updatedbytoupdate = selectedteammember.label;
     const nextFollwupdate = Nextselecteddate;
 

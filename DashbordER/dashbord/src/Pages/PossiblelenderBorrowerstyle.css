@@ -1,39 +1,199 @@
 .customcontainer {
-    padding: 0px;
-    margin: 5px;
-    box-sizing: border-box;
-    max-width: 100%; 
+    max-width: 100vw;
     width: 100%;
+    height: 84vh;
+}
+
+.p-borrower {
+    widows: 100%;
+    height: 100%;
+}
+
+.select-b {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pb-label {
+    max-width: 150px;
+    /* Adjust as needed */
 }
 
 .selectcontainer {
-    width: 485px;
-    margin-left: 220px;
-
+    max-width: 350px;
+    /* Adjust as needed */
+    /* Other styles */
 }
 
-.tableContaient {
+.pl-container {
+    width: 100%;
+    height: 100%;
+}
+
+.lender-clsfn {
+    width: 600px;
+}
+
+.lender-clsfn th {
+    background-color: rgb(245, 245, 220);
+    border: 1px solid black;
+    text-align: center;
+}
+
+.lender-clsfn td {
+    border: 1px solid black;
+}
+
+.pl-section {
+    width: 100%;
+    height: 100%;
+}
+
+.pltable-section {
+    width: 100%;
+}
+
+.lender-total {
+    padding-right: 50px;
+    max-width: 350px;
+}
+
+.borrower-name {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1.5rem;
+}
+
+.pl-content {
+    max-height: 600px;
+    height: 100%;
+    overflow-y: auto;
+}
+
+
+.pllender-clf {
+    position: sticky;
+    width: 100%;
+    max-height: 800px;
+    height: 100%;
+    overflow: auto;
+    border: 1px solid black;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.pllender-clf thead {
+    position: sticky;
+    z-index: 1;
+}
+
+.pllender-clf th {
+    background-color: #0588f3;
+    border: 1px solid black;
+    padding: 10px;
+    width: max-content;
+    white-space: normal;
+    /* Allow text to wrap */
+    word-wrap: break-word;
+    text-align: center;
+}
+
+.pllender-clf td {
+    border: 1px solid black;
+    padding: 10px;
+    width: max-content;
+    max-width: 100%;
+    white-space: normal;
+    /* Allow text to wrap */
+    word-wrap: break-word;
+    text-align: center;
+}
+
+/* .pllender-clf tbody {
+    display: block;
+    height: 300px;
+    /* Set your preferred height for tbody to enable scrolling */
+
+.coloumn1 {
+    background-color: #0569bb;
+    padding: 5px;
+    margin-bottom: 3px;
+    color: white;
+    text-align: center;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.lender-clsfn {
+    font-size: 16px;
+    border: 1px solid black;
+}
+
+.lender-clsfn th {
+    background-color: #0588f3;
+    color: white;
+}
+
+.lender-clsfn thead {
+    border: none;
+}
+
+.partialycontaint {
     width: 100%;
     overflow: auto;
-    height: 600px;
+    max-height: 90vh;
+    height: 100%;
     text-align: center;
     font-family: 'Times New Roman', Times, serif;
 }
-.tablehead{
-    position: sticky;
-    top:0;
-    z-index: 1;
-}
-.tablehead th,td{
-    width: 150px;
-}
-.Ltext {
-    font-family: 'Times New Roman', Times, serif;
-    font-size: 25px;
-    font-weight: bolder;
-    margin-right: -200px;
+
+.partialycontaint table {
+    width: 100%;
+    border-spacing: 0px;
+    border: 2px solid #06aaffff;
 }
 
-.customtable {
-    width: 1000px;
+.partialycontaint thead th {
+    position: sticky;
+    top: 0;
+    background-color: #06aaff;
+    padding: 10px;
+    border: 1px solid rgb(4, 4, 5);
+}
+
+.partialycontaint th td {
+    padding: 10px;
+    border: 1px solid rgb(4, 4, 5);
+}
+
+.partialycontaint th:nth-child(1),
+.partialycontaint td:nth-child(1) {
+    position: sticky;
+    left: 0;
+}
+
+.partialycontaint th:nth-child(2),
+.partialycontaint td:nth-child(2) {
+    position: sticky;
+    left: 40px;
+}
+
+.partialycontaint th:nth-child(3),
+.partialycontaint td:nth-child(3) {
+    position: sticky;
+    left: 270px;
+}
+
+.partialycontaint td:nth-child(1),
+.partialycontaint td:nth-child(2),
+.partialycontaint td:nth-child(3) {
+    background-color: aliceblue;
+    z-index: 99;
+}
+
+.partialycontaint th:nth-child(1),
+.partialycontaint th:nth-child(2),
+.partialycontaint th:nth-child(3) {
+    background-color: #06aaff;
+    z-index: 999;
 }

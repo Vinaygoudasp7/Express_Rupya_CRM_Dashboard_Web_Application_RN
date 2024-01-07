@@ -11,6 +11,7 @@ import { ToastContainer, toast } from 'react-toastify';
 
 const Header = () => {
     const [isConfiormopen, setConfiormOpen] = useState(false);
+    const [activeTab, setActiveTab] = useState(null);
     const navigate = useNavigate()
 
     const handleMenuClick = (link) => {
@@ -18,7 +19,7 @@ const Header = () => {
         // let location = useLocation();
         // console.log(location)
         navigate(link);
-
+        setActiveTab(link)
     };
     // let location = useLocation();
     // console.log(location)
@@ -80,7 +81,7 @@ const Header = () => {
                 {Sidebaritems.map((val, key) => (
                     <li
                         key={key}
-                        className={`row ${window.location.pathname === val.link ? "active" : ""}`}
+                        className={`row ${val.link === activeTab ? "sideactivelink" : ""}`}
                         onClick={() => handleMenuClick(val.link)}
                     >
                         <div className='section1'>

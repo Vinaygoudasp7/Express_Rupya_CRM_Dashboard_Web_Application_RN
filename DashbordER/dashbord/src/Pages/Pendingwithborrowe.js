@@ -6,12 +6,21 @@ const Pendingwithborrowe = ({ pendingdata }) => {
     const [open, setOpen] = useState(false);
     const [reminderTime, setReminderTime] = useState(null);
 
+    console.log(pendingdata)
     //filtering data 
-    const Pendingwithborrower = pendingdata.filter(
-        (pendings) => pendings.Pending_with === "Borrower" &&
+    const Pendingwithborrower = pendingdata.filter((pendings) => {
+        if (
+            pendings.Pending_with === "Borrower" &&
             pendings.action_Taken !== "Disbursed" &&
             pendings.action_Taken !== "Declined"
-    )
+        ) {
+            // console.log(pendings.teammember.FirstName);
+            return true; // Include the element in the filtered array
+        }
+        return false; // Exclude the element from the filtered array
+    });
+
+    console.log(Pendingwithborrower)
 
     const handelOpen = () => {
         setOpen(true)
@@ -22,7 +31,7 @@ const Pendingwithborrowe = ({ pendingdata }) => {
     }
 
 
- 
+
     return (
         <div>
             <div className='borrrowertable'>
@@ -52,10 +61,10 @@ const Pendingwithborrowe = ({ pendingdata }) => {
                                             <td>{pending.lender_name}</td>
                                             <td>{pending.action_Taken}</td>
                                             <td>{pending.Pending_with}</td>
-                                            <td>{pending.teammember.FirstName}</td>
-                                            <td>{pending.teammember.Email_address}</td>
+                                            <td>{pending.teammember?.FirstName}</td>
+                                            <td>{pending.teammember?.Email_address}</td>
                                             <td>
-                                                <button className='sendbtn' onClick={ handelOpen} >Drop email</button>
+                                                <button className='sendbtn' onClick={handelOpen} >Drop email</button>
                                                 {/**import email component here and pass props */}
                                                 <Eamil handelClose={handelClose} handelOpen={handelOpen} open={open} />
                                             </td>

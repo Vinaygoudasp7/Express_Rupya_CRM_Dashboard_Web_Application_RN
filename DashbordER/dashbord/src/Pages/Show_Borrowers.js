@@ -9,8 +9,8 @@ import { IconContext } from 'react-icons/lib';
 import { splitDataIntoArray } from './Show_Lenders';
 
 export const producttypes = ['Secured', 'Unsecured']
-export const products = ['Auto Loan', 'Home Loan', 'Business Loan', 'Two Wheeler Loan', 'Gold Loan', 'MFI', 'Commercial Vehicle', 'MSME', 'LAP', 'Personal Loan', 'Agriculture Loans']
-export const creditRating = ['AAA', 'AA', 'A', 'BBB', 'BB', 'B', 'Not Rated']
+export const products = ['Auto Loan', 'Home Loan', 'Business Loan', 'Two Wheeler Loan', 'Gold Loan', 'MFI', 'Commercial Vehicle', 'MSME', 'LAP', 'Personal Loan', 'Agriculture Loans', 'Wholesale lending', 'Used Wheeler']
+export const creditRating = ['AAA', 'AA', 'A', 'BBB', 'BB', 'B', '-AAA', '-AA', '-A', '-BBB', '-BB', '-B', 'Not Rated']
 export const productTypes = ['Secured', 'Unsecured']
 
 const BorrowerDetailsTable = () => {
@@ -179,6 +179,18 @@ const BorrowerDetailsTable = () => {
         creditRatingAgency: formatArray(detail.creditRatingAgency),
         financialYearAUM: formatArray(detail.financialYearAUM)
       }));
+      console.log(formattedData)
+      formattedData.sort((a, b) => {
+        const aName = a.name.toUpperCase()
+        const bName = b.name.toUpperCase()
+        if (aName < bName) {
+          return -1
+        } else if (aName > bName) {
+          return 1
+        } else {
+          return 0
+        }
+      })
       setBorrowerDetails(formattedData);
       setFilteredBorrowerDetails(formattedData);
     } catch (error) {
@@ -197,37 +209,34 @@ const BorrowerDetailsTable = () => {
     return '';
   };
 
-  //handel sorting when column header is clicked
   const handelSort = (key) => {
+    let direction = sortConfig.key === key ? (sortConfig.direction === 'asc' ? 'desc' : 'asc') : '';
 
-    var direction = 'asc';
-    if (sortConfig.key === key && sortConfig.direction === 'asc') {
-      direction = 'desc'
-    }
-    setSortConfig({ key, direction })
-    console.log('key', key)
+    setSortConfig({ key, direction });
 
-    //use the sort method
     const sortedData = [...filteredBorrowerDetails].sort((a, b) => {
       if (key === 'aum' || key === 'maxInterestRate' || key === 'minLoanAmount') {
-        console.log(key)
-        return direction === 'asc' ? a[key] - b[key] : b[key] - a[key]
-      }
-      // Check if a[key] or b[key] is undefined and handle it
-      else if (a[key] === undefined || b[key] === undefined) {
-        return 0; // You can choose to treat undefined values as equal
-      }
-      else { //use local compre to perform case in sensitive
-        const comparison = a[key].localeCompare(b[key], undefined, { sensitivity: 'base' })
-
-        if (comparison === 0) {
-          return 0;
-        }
+        return direction === 'asc' ? a[key] - b[key] : b[key] - a[key];
+      } else if (a[key] === undefined || b[key] === undefined) {
+        return 0; // Treat undefined values as equal
+      } else if (typeof a[key] === 'string' && typeof b[key] === 'string') {
+        // For case-insensitive string comparison
+        const strA = a[key].toUpperCase(); // Convert to uppercase for comparison
+        const strB = b[key].toUpperCase(); // Convert to uppercase for comparison
+        const comparison = strA < strB ? -1 : strA > strB ? 1 : 0;
         return direction === 'asc' ? comparison : -comparison;
+      } else {
+        // For other types of data comparison (assuming numbers), handling ascending and descending orders
+        return direction === 'asc' ? a[key] - b[key] : b[key] - a[key];
       }
-    })
-    setFilteredBorrowerDetails(sortedData)
-  }
+    });
+
+    setFilteredBorrowerDetails(sortedData);
+  };
+
+
+
+
 
   console.log(filteredBorrowerDetails)
   const handleFilterChange = (column, value) => {
@@ -518,7 +527,7 @@ const BorrowerDetailsTable = () => {
     // Implement your logic to update the edited borrower in the database
     // You can use Axios or fetch to send a PUT or PATCH request with `editedBorrower`
     // After successful update, reset the state
-    const borrowerId = editableBorrowerId + 1
+    const borrowerId = editableBorrowerId
     const borrowerupdateddata = JSON.stringify(editedBorrower)
     console.log(borrowerupdateddata)
     axios.put(`http://localhost:4306/borrowers/${borrowerId}`, editedBorrower)
@@ -861,7 +870,6 @@ const BorrowerDetailsTable = () => {
                   className='search'
                   onChange={(e) => handleFilterChange('lessminLoanAmount', e.target.value)}
                 />
-
                 <input
                   type="number"
                   placeholder='more than'
@@ -871,14 +879,16 @@ const BorrowerDetailsTable = () => {
                   onChange={(e) => handleFilterChange('moreminLoanAmount', e.target.value)}
                 />
               </th>
+              <th>
+                GST Number
+              </th>
               <th>Edit</th>
             </tr>
           </thead>
           <tbody>
             {filteredBorrowerDetails.map((detail) => (
               <tr key={detail.id}>
-                <td
-                >
+                <td >
                   {detail.id === editableBorrowerId ? (
                     <input
                       type="text"
@@ -1091,6 +1101,9 @@ const BorrowerDetailsTable = () => {
                   ) : (
                     detail.minLoanAmount
                   )}
+                </td>
+                <td>
+                  {detail?.GST_Number || 'N/A'}
                 </td>
                 <td>
                   {detail.id === editableBorrowerId ? (

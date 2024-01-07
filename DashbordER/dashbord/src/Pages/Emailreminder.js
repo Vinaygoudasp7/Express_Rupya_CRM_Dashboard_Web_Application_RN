@@ -43,11 +43,6 @@ const Emailreminder = () => {
         featchpendingdata()
     }, [])
 
-
-
-    useEffect(() => {
-        //const lenderborrowerteammember=data.filter
-    })
     return (
         <>
 

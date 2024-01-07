@@ -5,7 +5,7 @@ import Select from 'react-select';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import AleartDailog from './Dailogs/AleartDailog';
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 export const entityTypes = ['Company', 'Partnership Firm', 'Proprietorship', 'Sec 8 company', 'Society', 'Trust',];
 export const RegionsData = ['East', 'West', 'North', 'South'];
@@ -108,6 +108,7 @@ const Borrower = () => {
   const [AUMerrorMessage, setAUMErrorMessage] = useState('')
   const [MAXInterrorMessage, setMaxIntErrorMessage] = useState('')
   const [MinloanerrorMessage, setMinloanerrorMessage] = useState('')
+  const [GST_number, setGST_number] = useState('')
   const navigate = useNavigate()
 
 
@@ -286,7 +287,9 @@ const Borrower = () => {
     setIsAlertOpen(false);
   }
 
-
+  const handelGstNumber = (event) => {
+    setGST_number(event.target.value)
+  }
   const handleSubmit = (event) => {
     event.preventDefault();
     if (entityType.length === 0 || name.length === 0 || region.length === 0 || state.length === 0 || creditRatingAgency.length === 0 ||
@@ -318,6 +321,7 @@ const Borrower = () => {
           maxInterestRate: maxInterestRate,
           minLoanAmount: minLoanAmount,
           mfiGrading: mfiGrading,
+          GST_number: GST_number,
         }, {
           headers: { 'Content-Type': 'application/json' }
         }).then((response) => {
@@ -342,6 +346,7 @@ const Borrower = () => {
           setMinLoanAmount('');
           setMfiGrading('');
           setShowMfiGrading(false);
+          setGST_number('')
           const message = response.data.message;
           toast.success(message);
           // Display success message or perform other actions
@@ -456,6 +461,7 @@ const Borrower = () => {
               <label>
                 <input
                   type="checkbox"
+                  className='form-check-input me-1'
                   value="Term Loan"
                   checked={loanTypes.includes('Term Loan')}
                   onChange={handleLoanTypeChange}
@@ -467,6 +473,7 @@ const Borrower = () => {
               <label>
                 <input
                   type="checkbox"
+                  className='form-check-input me-1'
                   value="BC"
                   checked={loanTypes.includes('BC')}
                   onChange={handleLoanTypeChange}
@@ -478,6 +485,7 @@ const Borrower = () => {
               <label>
                 <input
                   type="checkbox"
+                  className='form-check-input me-1'
                   value="PTC"
                   checked={loanTypes.includes('PTC')}
                   onChange={handleLoanTypeChange}
@@ -489,6 +497,7 @@ const Borrower = () => {
               <label>
                 <input
                   type="checkbox"
+                  className='form-check-input me-1'
                   value="DA"
                   checked={loanTypes.includes('DA')}
                   onChange={handleLoanTypeChange}
@@ -500,6 +509,7 @@ const Borrower = () => {
               <label>
                 <input
                   type="checkbox"
+                  className='form-check-input me-1'
                   value="Venture Debt"
                   checked={loanTypes.includes('Venture Debt')}
                   onChange={handleLoanTypeChange}
@@ -510,6 +520,7 @@ const Borrower = () => {
             <div>
               <label>
                 <input
+                  className='form-check-input me-1'
                   type="checkbox"
                   value="Other type"
                   checked={loanTypes.includes('Other type')}
@@ -539,12 +550,14 @@ const Borrower = () => {
               <br />
               <input
                 type='checkbox'
+                className='form-check-input me-1'
                 value="secuerd"
                 checked={productType.includes('secuerd')}
                 onChange={handleProductTypeChange} /> Secured
               <br />
               <input
                 type='checkbox'
+                className='form-check-input me-1'
                 value="Unsecuerd"
                 checked={productType.includes("Unsecuerd")}
                 onChange={handleProductTypeChange} /> Unsecuerd
@@ -567,6 +580,7 @@ const Borrower = () => {
               <label>
                 <input
                   type="checkbox"
+                  className='form-check-input me-1'
                   value="Auto Loan"
                   checked={products.includes('Auto Loan')}
                   onChange={handleProductChange}
@@ -579,6 +593,7 @@ const Borrower = () => {
               <label>
                 <input
                   type="checkbox"
+                  className='form-check-input me-1'
                   value="Home Loan"
                   checked={products.includes('Home Loan')}
                   onChange={handleProductChange}
@@ -591,6 +606,7 @@ const Borrower = () => {
               <label>
                 <input
                   type="checkbox"
+                  className='form-check-input me-1'
                   value="Business Loan"
                   checked={products.includes('Business Loan')}
                   onChange={handleProductChange}
@@ -603,6 +619,7 @@ const Borrower = () => {
               <label>
                 <input
                   type="checkbox"
+                  className='form-check-input me-1'
                   value="Two wheeler loan"
                   checked={products.includes('Two wheeler loan')}
                   onChange={handleProductChange}
@@ -615,6 +632,7 @@ const Borrower = () => {
               <label>
                 <input
                   type="checkbox"
+                  className='form-check-input me-1'
                   value="Gold Loan"
                   checked={products.includes('Gold Loan')}
                   onChange={handleProductChange}
@@ -627,6 +645,7 @@ const Borrower = () => {
               <label>
                 <input
                   type="checkbox"
+                  className='form-check-input me-1'
                   value="MFI"
                   checked={products.includes('MFI')}
                   onChange={handleProductChange}
@@ -638,6 +657,7 @@ const Borrower = () => {
             <div>
               <label>
                 <input
+                  className='form-check-input me-1'
                   type="checkbox"
                   value="Commercial Vehicle"
                   checked={products.includes('Commercial Vehicle')}
@@ -650,6 +670,7 @@ const Borrower = () => {
             <div>
               <label>
                 <input
+                  className='form-check-input me-1'
                   type="checkbox"
                   value="MSME"
                   checked={products.includes('MSME')}
@@ -663,6 +684,7 @@ const Borrower = () => {
               <label>
                 <input
                   type="checkbox"
+                  className='form-check-input me-1'
                   value="LAP"
                   checked={products.includes('LAP')}
                   onChange={handleProductChange}
@@ -675,6 +697,7 @@ const Borrower = () => {
               <label>
                 <input
                   type="checkbox"
+                  className='form-check-input me-1'
                   value="Personal Loan"
                   checked={products.includes('Personal Loan')}
                   onChange={handleProductChange}
@@ -687,11 +710,39 @@ const Borrower = () => {
               <label>
                 <input
                   type="checkbox"
+                  className='form-check-input me-1'
                   value="Agriculture Loans"
                   checked={products.includes('Agriculture Loans')}
                   onChange={handleProductChange}
                 />
                 Agriculture Loans
+              </label>
+              {/* Repeat the above label and input elements for other products */}
+            </div>
+            <div>
+              <label>
+                <input
+                  type="checkbox"
+                  className='form-check-input me-1'
+                  value="Used Wheeler"
+                  checked={products.includes('Used Wheeler')}
+                  onChange={handleProductChange}
+                />
+                Used Wheeler
+
+              </label>
+              {/* Repeat the above label and input elements for other products */}
+            </div>
+            <div>
+              <label>
+                <input
+                  type="checkbox"
+                  className='form-check-input me-1'
+                  value="Wholesale lending"
+                  checked={products.includes('Wholesale lending')}
+                  onChange={handleProductChange}
+                />
+                Wholesale lending
               </label>
               {/* Repeat the above label and input elements for other products */}
             </div>
@@ -711,6 +762,12 @@ const Borrower = () => {
               <option value="BBB">BBB</option>
               <option value="BB">BB</option>
               <option value="B">B</option>
+              <option value="-AAA">-AAA</option>
+              <option value="-AA">-AA</option>
+              <option value="-A">-A</option>
+              <option value="-BBB">-BBB</option>
+              <option value="-BB">-BB</option>
+              <option value="-B">-B</option>
               <option value="Not Rated">Not Rated</option>
             </select>
           </div>
@@ -758,10 +815,10 @@ const Borrower = () => {
               onChange={handleQuarterAUMchange}
             >
               <option value="">Quarter of year</option>
-              <option value="march">March</option>
-              <option value="june">June</option>
-              <option value="september">September</option>
-              <option value="december">December</option>
+              <option value="March">March</option>
+              <option value="June">June</option>
+              <option value="September">September</option>
+              <option value="December">December</option>
             </select>
           </div>
 
@@ -795,6 +852,16 @@ const Borrower = () => {
               id="minLoanAmount"
               value={minLoanAmount}
               onChange={handleMinLoanAmountChange}
+            />
+          </div>
+
+          <div>
+            <label htmlFor="minLoanAmount">GST Number:</label>
+            <input
+              type="text"
+              id="GST_Number"
+              value={GST_number}
+              onChange={handelGstNumber}
             />
           </div>
 

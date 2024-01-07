@@ -105,13 +105,12 @@ select {
 
 }
 
-.currentlink.activelink {
+.currentlink .activelink {
   width: 170px;
   margin: 25px 2px 25px 2px;
   background-color: #20b3ff;
   box-sizing: border-box;
   height: 60px;
- 
 }
 
 .Createpages {

@@ -1,6 +1,6 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../databasesequelize.js";
-import Status_updates from "../models/Status_updates.js";
+import Status_updates from "./Status_updates.js";
 
 const EmailReminder = sequelize.define('EmailReminder', {
     id: {

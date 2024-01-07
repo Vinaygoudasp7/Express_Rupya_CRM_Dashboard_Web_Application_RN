@@ -101,7 +101,7 @@ const Assign = () => {
     { value: "Existing", label: "Existing" },
     { value: "Negtive", label: "Negtive" },
     { value: "Approval Given", label: "Approval Given" },
-    { value: "Approval Not Taken", label: "Approval Not Taken" },
+    { value: "Approval Not given", label: "Approval Not given" },
   ]
 
   const [selectedOption, setSelectedOptions] = useState({});

@@ -398,6 +398,7 @@ const Lender = () => {
             <label>
               <input
                 type="checkbox"
+                className='form-check-input me-1'
                 value="Term Loan"
                 checked={loanTypes.includes('Term Loan')}
                 onChange={handleLoanTypeChange}
@@ -409,6 +410,7 @@ const Lender = () => {
             <label>
               <input
                 type="checkbox"
+                className='form-check-input me-1'
                 value="BC"
                 checked={loanTypes.includes('BC')}
                 onChange={handleLoanTypeChange}
@@ -420,6 +422,7 @@ const Lender = () => {
             <label>
               <input
                 type="checkbox"
+                className='form-check-input me-1'
                 value="PTC"
                 checked={loanTypes.includes('PTC')}
                 onChange={handleLoanTypeChange}
@@ -431,6 +434,7 @@ const Lender = () => {
             <label>
               <input
                 type="checkbox"
+                className='form-check-input me-1'
                 value="DA"
                 checked={loanTypes.includes('DA')}
                 onChange={handleLoanTypeChange}
@@ -442,6 +446,7 @@ const Lender = () => {
             <label>
               <input
                 type="checkbox"
+                className='form-check-input me-1'
                 value="Venture Debt"
                 checked={loanTypes.includes('Venture Debt')}
                 onChange={handleLoanTypeChange}
@@ -452,7 +457,20 @@ const Lender = () => {
           <div>
             <label>
               <input
+              className='form-check-input me-1'
                 type="checkbox"
+                value="Co-lending"
+                checked={loanTypes.includes('Co-lending')}
+                onChange={handleLoanTypeChange}
+              />
+              Co-lending
+            </label>
+          </div>
+          <div>
+            <label>
+              <input
+                type="checkbox"
+                className='form-check-input me-1'
                 value="Other type"
                 checked={loanTypes.includes('Other type')}
                 onChange={handleLoanTypeChange}
@@ -495,6 +513,7 @@ const Lender = () => {
             <label>
               <input
                 type="checkbox"
+                className='form-check-input me-1'
                 value="North"
                 checked={Borrowerregion.includes('North')}
                 onChange={handleBorrowerregionChange}
@@ -506,6 +525,7 @@ const Lender = () => {
             <label>
               <input
                 type="checkbox"
+                className='form-check-input me-1'
                 value="South"
                 checked={Borrowerregion.includes('South')}
                 onChange={handleBorrowerregionChange}
@@ -517,6 +537,7 @@ const Lender = () => {
             <label>
               <input
                 type="checkbox"
+                className='form-check-input me-1'
                 value="East"
                 checked={Borrowerregion.includes('East')}
                 onChange={handleBorrowerregionChange}
@@ -527,6 +548,7 @@ const Lender = () => {
             <label>
               <input
                 type="checkbox"
+                className='form-check-input me-1'
                 value="West"
                 checked={Borrowerregion.includes('West')}
                 onChange={handleBorrowerregionChange}
@@ -542,6 +564,7 @@ const Lender = () => {
             <label>
               <input
                 type="checkbox"
+                className='form-check-input me-1'
                 value="Auto Loan"
                 checked={products.includes('Auto Loan')}
                 onChange={handleProductChange}
@@ -554,6 +577,7 @@ const Lender = () => {
             <label>
               <input
                 type="checkbox"
+                className='form-check-input me-1'
                 value="Bussiness Loan"
                 checked={products.includes('Bussiness Loan')}
                 onChange={handleProductChange}
@@ -562,10 +586,11 @@ const Lender = () => {
             </label>
             {/* Repeat the above label and input elements for other products */}
           </div>
-           <div>
+          <div>
             <label>
               <input
                 type="checkbox"
+                className='form-check-input me-1'
                 value="Home Loan"
                 checked={products.includes('Home Loan')}
                 onChange={handleProductChange}
@@ -578,6 +603,7 @@ const Lender = () => {
             <label>
               <input
                 type="checkbox"
+                className='form-check-input me-1'
                 value="Two wheeler loan"
                 checked={products.includes('Two wheeler loan')}
                 onChange={handleProductChange}
@@ -590,6 +616,7 @@ const Lender = () => {
             <label>
               <input
                 type="checkbox"
+                className='form-check-input me-1'
                 value="Gold Loan"
                 checked={products.includes('Gold Loan')}
                 onChange={handleProductChange}
@@ -602,6 +629,7 @@ const Lender = () => {
             <label>
               <input
                 type="checkbox"
+                className='form-check-input me-1'
                 value="MFI"
                 checked={products.includes('MFI')}
                 onChange={handleProductChange}
@@ -614,6 +642,7 @@ const Lender = () => {
             <label>
               <input
                 type="checkbox"
+                className='form-check-input me-1'
                 value="Commercial Vehicle"
                 checked={products.includes('Commercial Vehicle')}
                 onChange={handleProductChange}
@@ -626,6 +655,7 @@ const Lender = () => {
             <label>
               <input
                 type="checkbox"
+                className='form-check-input me-1'
                 value="MSME"
                 checked={products.includes('MSME')}
                 onChange={handleProductChange}
@@ -638,6 +668,7 @@ const Lender = () => {
             <label>
               <input
                 type="checkbox"
+                className='form-check-input me-1'
                 value="LAP"
                 checked={products.includes('LAP')}
                 onChange={handleProductChange}
@@ -650,6 +681,7 @@ const Lender = () => {
             <label>
               <input
                 type="checkbox"
+                className='form-check-input me-1'
                 value="Personal Loan"
                 checked={products.includes('Personal Loan')}
                 onChange={handleProductChange}
@@ -662,6 +694,7 @@ const Lender = () => {
             <label>
               <input
                 type="checkbox"
+                className='form-check-input me-1'
                 value="Agriculture Loans"
                 checked={products.includes('Agriculture Loans')}
                 onChange={handleProductChange}

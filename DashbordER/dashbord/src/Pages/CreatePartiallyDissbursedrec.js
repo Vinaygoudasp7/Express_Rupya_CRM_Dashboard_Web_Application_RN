@@ -90,7 +90,7 @@ const CreatePartiallyDissbursedrec = () => {
         { value: "Co-lending", label: "Co-lending" },
     ]
 
-    const [selectedActions, setSelectedActions] = useState({});
+    const [selectedActions, setSelectedActions] = useState([]);
 
     const handelActions = (option) => {
         setSelectedActions(option);
@@ -103,7 +103,7 @@ const CreatePartiallyDissbursedrec = () => {
 
     const [sactioned, setsactioned] = useState(0);
     const handelSactionChanged = (event) => {
-        const value = parseFloat(event.target.value)
+        const value = event.target.value
         setsactioned(value);
     }
 
@@ -114,8 +114,8 @@ const CreatePartiallyDissbursedrec = () => {
 
     const [dispursedamt, setDispursedamt] = useState('0');
     const handelDispursedamtChanged = (event) => {
-        const value = parseFloat(event.target.value);
-
+        // const value = parseFloat(event.target.value);
+        const value = event.target.value
         if (value <= sactioned) {
             setDispursedamt(value);
             setError('');
@@ -180,13 +180,21 @@ const CreatePartiallyDissbursedrec = () => {
 
                 })
                 const message = responce.data.message
-                toast.info(message, {
+                toast.success(message, {
                     autoClose: true,
                     hideProgressBar: true,
                     draggable: true,
                     pauseOnHover: true
                 })
-
+                setSelectedborrower('')
+                setSelectedlenders('')
+                setSactioneddate('')
+                setSelectedActions('')
+                setsactioned('')
+                setDispersedDate('')
+                setDispursedamt('')
+                setbalancedDispurceamt('')
+                setFollowupDate('')
             }
             catch (error) {
                 console.log("Error while creating status", error)
@@ -200,6 +208,14 @@ const CreatePartiallyDissbursedrec = () => {
         }
     }
 
+    const getTodayDate = () => {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+        const day = String(today.getDate()).padStart(2, '0');
+
+        return `${year}-${month}-${day}`;
+    };
     return (
         <>
             <div className='formheading'>
@@ -213,24 +229,23 @@ const CreatePartiallyDissbursedrec = () => {
                             <Select className='listb' placeholder="Search..."
                                 isSearchable={true} options={borrower} onChange={handelChangeBorrower} value={selectedborrower} >
                             </Select>
-
                             <label className='lender'>Lender</label>
                             <Select className='listb' placeholder="Search...."
                                 isSearchable={true} options={[{ value: 'NA', label: 'NA' }, ...lenders]} onChange={handelChangeLender} value={selectedlenders}></Select>
-
                             <label className='lender'>Sanction Date</label>
-                            <input type='date' className='list' value={sactionedDate} onChange={handelSactioneddate}></input>
+                            <input type='date' className='list' value={sactionedDate} onChange={handelSactioneddate} max={getTodayDate()}></input>
                             <label>Type of Sanction</label>
-                            <select className="list" value={selectedActions.value} onChange={(e) => handelActions({ value: e.target.value, label: e.target.options[e.target.selectedIndex].text })}>
-                                <option value="">Select </option>
-                                {actiontaken.map((option) => {
-                                    return (
-                                        <option key={option.value} value={option.value}>{option.label}</option>
-                                    )
-                                })}
-                            </select>
+                            <Select className='listb' styles={{
+                                control: (provider, state) => ({
+                                    ...provider,
+                                    width: '398px',
+                                    marginBottom: '10px',
+
+                                })
+                            }} options={actiontaken} value={selectedActions} onChange={handelActions}>
+                            </Select>
                             <label>Sanctioned (in crs)</label>
-                            <input type='text' className='list' placeholder='Amount' value={sactioned} onChange={handelSactionChanged} ></input>
+                            <input type='text' className='list' placeholder='Amount' value={sactioned} onChange={handelSactionChanged}  ></input>
                             <label>Disbursed Date</label>
                             <input type='date' className='list' placeholder='Amount' value={disperseddate} onChange={handelDispersedDateChanged} min={sactionedDate}></input>
                             <label>Disbursed Amount (in crs)</label>
@@ -241,7 +256,6 @@ const CreatePartiallyDissbursedrec = () => {
                             <label>Next Follow up date (Reminder date)</label>
                             <input type='date' className='list' placeholder='Amount' value={followupDate} onChange={handelFollowupDateChanged} min={sactionedDate} ></input>
                             <button className='SubmitbuttonTM' type='submit'>Submit</button>
-
                         </form>
                     </div>
                 </div >

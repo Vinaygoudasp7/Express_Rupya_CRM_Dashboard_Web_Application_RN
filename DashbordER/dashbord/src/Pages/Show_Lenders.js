@@ -9,7 +9,7 @@ import Select from 'react-select'
 import { creditRating, products, producttypes } from './Show_Borrowers';
 
 export const splitDataIntoArray = (data) => {
-  const splitedData = data.split(', ')
+  const splitedData = data?.split(', ')
   return splitedData
 }
 
@@ -83,6 +83,17 @@ const LenderDetailsTable = () => {
         products: formatArray(detaile.products)
       }))
 
+      formatedData.sort((a, b) => {
+        const aName = a.name.toUpperCase()
+        const bName = b.name.toUpperCase()
+        if (aName < bName) {
+          return -1
+        } else if (aName > bName) {
+          return 1
+        } else {
+          return 0
+        }
+      })
       setLenderDetails(formatedData);
       setFilteredlenderDetails(formatedData);
     } catch (error) {
@@ -108,26 +119,27 @@ const LenderDetailsTable = () => {
   };
 
   const handelSort = (key) => {
-    var direction = 'asc'
-    if (sortConfig.key === key && sortConfig.direction === 'asc') {
-      direction = 'desc'
-    }
-    setSortConfig({ key, direction })
-    const sortedData = [...lenderDetails].sort((a, b) => {
-      if (a[key] === undefined || b[key] === undefined) {
-        return 0
-      } else if (key === 'aum' || key === 'minInterestRate' || key === 'minLoanAmount' || key === 'maxLoanAmount') {
-        console.log(key)
-        return direction === 'asc' ? a[key] - b[key] : b[key] - a[key]
-      } else {
-        const comparison = a[key].localeCompare(b[key], undefined, { sensitivity: 'base' })
-        if (comparison === 0) {
-          return 0
-        }
-        return direction === 'asc' ? comparison : -comparison
-      }
+    let direction = sortConfig.key === key ? (sortConfig.direction === 'asc' ? 'desc' : 'asc') : '';
 
-    })
+    setSortConfig({ key, direction });
+
+    const sortedData = [...filteredlenderDetails].sort((a, b) => {
+      if (key === 'aum' || key === 'maxInterestRate' || key === 'minLoanAmount') {
+        return direction === 'asc' ? a[key] - b[key] : b[key] - a[key];
+      } else if (a[key] === undefined || b[key] === undefined) {
+        return 0; // Treat undefined values as equal
+      } else if (typeof a[key] === 'string' && typeof b[key] === 'string') {
+        // For case-insensitive string comparison
+        const strA = a[key].toUpperCase(); // Convert to uppercase for comparison
+        const strB = b[key].toUpperCase(); // Convert to uppercase for comparison
+        const comparison = strA < strB ? -1 : strA > strB ? 1 : 0;
+        return direction === 'asc' ? comparison : -comparison;
+      } else {
+        // For other types of data comparison (assuming numbers), handling ascending and descending orders
+        return direction === 'asc' ? a[key] - b[key] : b[key] - a[key];
+      }
+    });
+
     setLenderDetails(sortedData)
     setFilteredlenderDetails(sortedData)
   }
@@ -456,7 +468,7 @@ const LenderDetailsTable = () => {
   // }
 
   const handleSubmit = () => {
-    const lenderid = editableLenderId + 1
+    const lenderid = editableLenderId
     console.log(lenderid)
     axios.put(`http://localhost:4306/lenders/${lenderid}`, editedLender)
       .then((response) => {
@@ -492,7 +504,7 @@ const LenderDetailsTable = () => {
     <>
 
       <div className='tablesheading'>
-        <h2>Lender Details Table</h2>
+        <h2 className='mb-0'>Lender Details Table</h2>
       </div>
       <div className='lcontaint'>
         <table id="Showborrower">
@@ -763,7 +775,7 @@ const LenderDetailsTable = () => {
                       type="text"
                       name="name"
                       value={editedLender.editname}
-                      onChange={(event) => handleInputChange(event, 'editname')}
+                    // onChange={(event) => handleInputChange(event, 'editname')}
                     />
                   ) : (
                     detail.name

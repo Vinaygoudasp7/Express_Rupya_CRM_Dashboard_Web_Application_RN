@@ -19,7 +19,7 @@ import LenderContactDetailes from "./models/LenderContactDetailes.js";
 import partiallyDisbersedTable from "./models/Partiallydispersed.js";
 import LenderClassification from './models/LenderClassified.js'
 import LenderClassified from "./models/LenderClassified.js";
-import EmailReminder from "./models/ReminderModel.js";
+import EmailReminder from "./models/EmailReminder.js";
 import { DATE, where } from "sequelize";
 import { isDate } from "util/types";
 import cron from 'node-cron'
@@ -42,7 +42,7 @@ const db = mysql.createPool({
     host: "localhost",
     user: "root",
     password: "root@12345",
-    database: "agmr_college",
+    database: "erdatabase",
 
 })
 
@@ -56,7 +56,7 @@ const db = mysql.createPool({
 
 
 app.post('/insertborrowerdetailes', async (req, res) => {
-    const { name, region, state, city, loanTypes, entityType, cin, owner, productType, products, creditRating, creditRatingAgency, aum, maxInterestRate, minLoanAmount, mfiGrading, quarterAUM, financialYearAUM } = req.body;
+    const { name, region, state, city, loanTypes, entityType, cin, owner, productType, products, creditRating, creditRatingAgency, aum, maxInterestRate, minLoanAmount, mfiGrading, quarterAUM, financialYearAUM, GST_number } = req.body;
     try {
         await borrowers.create({
             name: name,
@@ -77,6 +77,7 @@ app.post('/insertborrowerdetailes', async (req, res) => {
             mfiGrading: mfiGrading,
             quarterAUM: quarterAUM,
             financialYearAUM: financialYearAUM,
+            GST_Number: GST_number,
         })
 
         res.json({ message: 'Borrower details is created successfully ' })
@@ -869,37 +870,50 @@ app.post('/statusupdateData/:id', async (req, res) => {
     }
 })
 
-app.get('/getreminderdetails', async (req, res) => {
+
+
+const sendemailReminderToTeamMember = async () => {
+
     try {
         const reminderdetails = await EmailReminder.findAll({
             include: Status_updates,
         })
-        res.status(200).json(reminderdetails)
+        //    console.log(reminderdetails)
     } catch (error) {
         console.log(error)
     }
-})
 
-const updatedStatusData = await Status_updates.findAll({
-    include: [
-        {
-            model: teammembers,
-            attributes: ['TeamM_id', 'FirstName', 'LastName', 'Email_address']
-        }
-    ]
-})
-console.log(updatedStatusData)
-// console.log('filter', filterteammemberData)
 
-const sentEmailreminderToTeamMember = (teamMember) => {
+    const status_updates = await Status_updates.findAll({
+        include: [
+            {
+                model: teammembers,
+                attributes: ['TeamM_id', 'FirstName', 'LastName', 'Email_address']
+            }
+        ]
+    })
+    // // console.log(updatedStatusData)
+    // // console.log('filter', filterteammemberData)
 
-    const filterteammemberData = updatedStatusData.filter((status) => (
-        status.updated_by === teamMember
-    ));
+    const sentEmailreminderToTeamMember = (teamMember) => {
+        const currentDate = new Date();
+        currentDate.setHours(0, 0, 0, 0); // Set time part to midnight for comparison
 
-    console.log('fi;', filterteammemberData)
+        const filterteammemberData = status_updates.filter((status) => {
+            if (status.teammember_id === teamMember) {
+                const reminderDate = new Date(status.Next_followup_Date);
+                reminderDate.setHours(0, 0, 0, 0); // Set time part to midnight for comparison
+                console.log(reminderDate);
 
-    var table = `
+                // Compare dates
+                return reminderDate <= currentDate;
+            }
+            return false;
+        });
+
+        console.log('fi;', filterteammemberData)
+
+        var table = `
     <table border="1" style='border-collapse: collapse;'>
         <thead style='background-color: aquamarine; border: 2px solid rgb(0, 204, 255);'>
             <tr>
@@ -917,9 +931,9 @@ const sentEmailreminderToTeamMember = (teamMember) => {
         </thead>
         <tbody style='border: 2px solid rgb(0, 204, 255); padding: 5px;'>`;
 
-    filterteammemberData.map((statusdetailes) => {
-        return (
-            table += `<tr key=${statusdetailes.St_id}>
+        filterteammemberData.map((statusdetailes) => {
+            return (
+                table += `<tr key=${statusdetailes.St_id}>
             <td style='padding: 5px;'>${statusdetailes.Date_of_Creation}</td>
             <td style='padding: 5px;'>${statusdetailes.lastupdate}</td>
             <td style='padding: 5px;'>${statusdetailes.borrower_name}</td>
@@ -931,50 +945,51 @@ const sentEmailreminderToTeamMember = (teamMember) => {
             <td style='padding: 5px;'>${statusdetailes.updated_by}</td>
             <td style='padding: 5px;'>${statusdetailes.Next_followup_Date}</td>
         </tr>`
-        );
-    });
+            );
+        });
 
-    table += `</tbody></table>`;
+        table += `</tbody></table>`;
 
-    // console.log(table);
-    const toEmailAddress = filterteammemberData.map((member) => member.teammember.Email_address)
-    const transport = nodemailer.createTransport({
-        service: "gmail",
-        auth: {
-            user: process.env.EMAIL,
-            pass: process.env.PASSWORD
+        // console.log(table);
+        const toEmailAddress = filterteammemberData.map((member) => member.teammember.Email_address)
+        console.log(toEmailAddress)
+        const transport = nodemailer.createTransport({
+            service: "gmail",
+            auth: {
+                user: process.env.EMAIL,
+                pass: process.env.PASSWORD
+            }
+        })
+        // const to = filterteammemberData.map((email) => email.teammember.Email_address)
+        // console.log(to)
+        const mailOptions = {
+            from: process.env.EMAIL,
+            to: toEmailAddress,
+            cc: ['statusexpressrupya@gmail.com', 'Vinaysp254@gmail.com', 'expressrupya@gmail.com'],
+            subject: 'Follow-Up the Lenders/Borrowers',
+            html: table,
         }
-    })
-    const to = filterteammemberData.map((email) => email.teammember.Email_address)
-    console.log(to)
-    const mailOptions = {
-        from: process.env.EMAIL,
-        to: toEmailAddress,
-        cc: ['statusexpressrupya@gmail.com', 'Vinaysp254@gmail.com', 'expressrupya@gmail.com'],
-        subject: 'Follow-Up the Lenders/Borrowers',
-        html: table,
+
+        console.log(mailOptions);
+        transport.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.log("error while sending", error)
+                res.json("error while sending", JSON.stringify(error));
+            } else {
+                console.log("email sent successfully" + info.response);
+                res.json(info);
+            }
+        })
     }
 
-    console.log(mailOptions);
-    transport.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            console.log("error while sending", error)
-            res.json("error while sending", error);
-        } else {
-            console.log("email sent successfully" + info.response);
-            res.json(info);
-        }
-    })
-}
-
-const filteringNextFollwupDate = async () => {
+    // const filteringNextFollwupDate = async () => {
     //from filtering to nextfollupdate using curent date
-    const emailReminder = await EmailReminder.findAll()
-    const datewiseEmailReminder = emailReminder.filter((reminder) => {
+    const status_update = await Status_updates.findAll()
+    const datewiseEmailReminder = status_update.filter((reminder) => {
         // Define your conditions to filter 'updatedStatusData' based on EmailReminder data
         const curentDate = new Date();
         curentDate.setHours(0, 0, 0, 0)
-        const reminderDate = new Date(reminder.nextFollowUpdate);
+        const reminderDate = new Date(reminder.Next_followup_Date);
         reminderDate.setHours(0, 0, 0, 0); // Set time part to midnight for comparison
         console.log(reminderDate)
         return (
@@ -989,20 +1004,23 @@ const filteringNextFollwupDate = async () => {
     // identifying uniqe team member and send reminder
     const uniqeTeamMember = new Set()
     const formatedDatewiseEmailReminder = datewiseEmailReminder.map((data) => {
-        const teammember = data.teamMember
-        const status_id = data.Status_id
-
-        uniqeTeamMember.add(teammember)
+        const teammember_id = data.teammember_id
+        uniqeTeamMember.add(teammember_id)
+        // uniqeTeamMember.set('status_id', status_id)
     })
 
     uniqeTeamMember.forEach((member) => {
         sentEmailreminderToTeamMember(member)
     })
-    console.log('date', uniqeTeamMember)
+    console.log('teammember', uniqeTeamMember)
     console.log('Email sent.........')
+    // }
 }
-
-cron.schedule('0 12 * * *', filteringNextFollwupDate)
+// Manually invoke the function for testing purposes
+// sendemailReminderToTeamMember().catch((error) => {
+//     console.error('An error occurred:', error);
+// });
+cron.schedule('14 21 * * *', sendemailReminderToTeamMember)
 
 var to;
 var cc;
@@ -1114,7 +1132,7 @@ app.post("/sendEmailreminder", (req, res) => {
         to: emaillist,
         cc: cclist,
         subject: subject,
-        html: table,
+        // html: table,
     }
 
     console.log(mailOptions);
@@ -1151,7 +1169,8 @@ app.post("/partiallydisbursed", async (req, res) => {
     return res.json({ message: "Data is created" })
 })
 
-app.post("/partiallydisbursedupdate", async (req, res) => {
+app.post("/partiallydisbursedupdate/:id", async (req, res) => {
+    const id = req.params.id
     const {
         borrowerId,
         borrowerName,
@@ -1164,49 +1183,44 @@ app.post("/partiallydisbursedupdate", async (req, res) => {
         disbursedDate,
         balanceDisbursedAmt,
         nextFollowupDate } = req.body;
-    console.log(borrowerId, lenderId)
-
 
     const balance = balanceDisbursedAmt - disbursedAmt;
     let isDisbursedamt = 0;
-    if (balanceDisbursedAmt === 0) {
-        isDisbursedamt = 1
-    }
-    await partiallyDisbersedTable.create({
+    await partiallyDisbersedTable.update({
         borrower_id: borrowerId,
         borrower_name: borrowerName,
         lender_name: lenderName,
         lender_id: lenderId,
         sanction_date: sactioneDate,
         type_of_sanction: typeOfSanction,
-        sanctioned: 0,
+        sanctioned: sanctionedAmt,
         disbuersed_date: disbursedDate,
         disbursed_amt: disbursedAmt,
         balance_disbursed_amt: balance,
         nextfollowupdate: nextFollowupDate,
         isDisbursed: isDisbursedamt,
+    }, {
+        where: {
+            id: id
+        }
     });
     return res.json({ message: "Data is updated" })
     // }
 })
 
-app.delete("/deleteRow/:selectborrowerId/:selectlenderId", (req, res) => {
-    const borrowerId = req.params.selectborrowerId;
-    const lenderId = req.params.selectlenderId
-
-    //implement delet logic
-    const sqlquery = 'delete from partiallydisbersedtables where borrower_id=? and lender_id=?';
-    db.query(sqlquery, [borrowerId, lenderId], (err, result) => {
-        if (err) {
-            console.error('Error deleting row from the database:', err);
-            res.status(500).json({ message: 'Error deleting row from the database' });
-        }
-        else {
-            console.log('Row deleted successfully!');
-            res.status(200).json({ message: 'Row deleted successfully' });
-
-        }
-    })
+app.delete("/deletepartialydisbursedData/:id", async (req, res) => {
+    const partialy_id = req.params.id;
+    try {
+        const result = await partiallyDisbersedTable.destroy({
+            where: {
+                id: partialy_id
+            }
+        })
+        return res.json(result)
+    } catch (error) {
+        console.log(error)
+        return res.json({ message: "Error while retrivieng data", error })
+    }
 })
 
 app.get("/retrivepartiallydispursed", async (req, res) => {
@@ -1222,12 +1236,13 @@ app.post('/add_lender_classification/:borrower_id', async (req, res) => {
     try {
         const lenderclassificationData = req.body
         const lenderClassification = lenderclassificationData.lenderClassificationData
+        console.log(lenderClassification)
         const borrower_id = req.params.borrower_id
 
         for (const data of lenderClassification) {
             await LenderClassified.create({
                 borrower_id: borrower_id,
-                lender_id: data.lender_id,
+                lender_id: data.id,
                 classification: data.classification
             })
         }
@@ -1241,7 +1256,12 @@ app.post('/add_lender_classification/:borrower_id', async (req, res) => {
 app.delete('/delete_lender_classification/:borrower_id', async (req, res) => {
     try {
         const borrower_id = req.params.borrower_id;
+        console.log(borrower_id)
 
+        const existingBorrowerId = await LenderClassified.findOne({ where: { borrower_id } })
+        if (!existingBorrowerId) {
+            return res.json({ 'message': 'No data found for the provided borrower_id' });
+        }
         // Delete lender classification data associated with the borrower ID
         await LenderClassified.destroy({ where: { borrower_id } });
 
@@ -1251,19 +1271,47 @@ app.delete('/delete_lender_classification/:borrower_id', async (req, res) => {
         return res.json({ 'error': 'Error occurred and data not deleted' });
     }
 });
-
-
-app.get('/retrivelenderclassification/:borrower_id', async (req, res) => {
+app.get('/retrivelenderclassificationofborrower/:id', async (req, res) => {
     try {
-        const borrower_id = req.params.borrower_id
+        const borrower_id = req.params.id
+
+        // Check if borrower_id is present in the query parameters
+        if (!borrower_id) {
+            return res.status(400).json({ message: "No borrower ID provided" });
+        }
+
         const result = await LenderClassification.findAll({
             where: { borrower_id: borrower_id }
-        })
+        });
+
         return res.json(result);
     } catch (error) {
-        return res.json({ message: "Error while retrivieng data", error })
+        return res.status(500).json({ message: "Error while retrieving data", error });
     }
-})
+});
+
+
+
+app.get('/retrivelenderclassificationoflender/:id', async (req, res) => {
+    try {
+        const lender_id = req.params.id
+
+        // Check if lender_id is present in the query parameters
+        if (!lender_id) {
+            return res.status(400).json({ message: "No borrower ID provided" });
+        }
+
+        const result = await LenderClassification.findAll({
+            where: { lender_id: lender_id }
+        });
+
+        return res.json(result);
+    } catch (error) {
+        return res.status(500).json({ message: "Error while retrieving data", error });
+    }
+});
+
+
 app.listen(4306, () => {
     console.log("listening..............", 4306);
 });

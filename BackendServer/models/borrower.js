@@ -92,7 +92,10 @@ const borrowers = sequelize.define('borrowers', {
         type: DataTypes.STRING,
         allowNull: true,
     },
-
+    GST_Number: {
+        type: DataTypes.STRING,
+        allowNull: true
+    }
 });
 
 export default borrowers;

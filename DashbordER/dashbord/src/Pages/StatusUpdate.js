@@ -378,23 +378,23 @@ const StatusUpdate = () => {
     })
   }
 
-  useEffect(() => {
-    const featchdata = async () => {
-      const response = await axios.get('http://localhost:4306/getreminderdetails')
-      console.log(response.data)
-      const relatedEmailReminder = response.data.filter((reminder) => {
-        // Define your conditions to filter 'updatedStatusData' based on EmailReminder data
-        const curentDate = new Date();
-        curentDate.setHours(0, 0, 0, 0)
-        const reminderDate = new Date(reminder.updatedAt);
-        reminderDate.setHours(0, 0, 0, 0); // Set time part to midnight for comparison
+  // useEffect(() => {
+  //   const featchdata = async () => {
+  //     const response = await axios.get('http://localhost:4306/getreminderdetails')
+  //     console.log(response.data)
+  //     const relatedEmailReminder = response.data.filter((reminder) => {
+  //       // Define your conditions to filter 'updatedStatusData' based on EmailReminder data
+  //       const curentDate = new Date();
+  //       curentDate.setHours(0, 0, 0, 0)
+  //       const reminderDate = new Date(reminder.updatedAt);
+  //       reminderDate.setHours(0, 0, 0, 0); // Set time part to midnight for comparison
 
-        return reminderDate.getTime() === curentDate.getTime();
-      });
-      console.log('relatedEmailreminder', relatedEmailReminder)
-    }
-    featchdata()
-  }, [])
+  //       return reminderDate.getTime() === curentDate.getTime();
+  //     });
+  //     console.log('relatedEmailreminder', relatedEmailReminder)
+  //   }
+  //   featchdata()
+  // }, [])
 
   return (
     <div className='Statuspage'>

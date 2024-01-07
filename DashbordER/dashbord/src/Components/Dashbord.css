@@ -251,19 +251,45 @@ body {
     font-size: xx-large;
 }
 
-.mainpage {
+/* .mainpage {
     display: flex;
     flex-direction: row;
-}
-
-.Selectboxs {
-    padding-top: 140px;
-    width: 100%;
-
-}
-
+} */
 .recyclebin {
     margin-left: 100px;
     outline: 2px solid whitesmoke;
     background-color: aliceblue;
+}
+
+/* 
+.d-body{
+    max-height: 95vh;
+    height: 100%;
+    overflow: auto; */
+/* } */
+
+.Selectboxs {
+    /* max-height: 95vh; */
+    height: 100%;
+    overflow: auto;
+}
+
+.dashbord-container {
+    height: 100vh;
+    /* overflow: auto; */
+}
+
+.row.sideactivelink {
+    height: 60px;
+    background-color: #f7f9fa;
+    list-style-type: none;
+    display: flex;
+    border-radius: 20px;
+    flex-direction: row;
+    color: #0087ca;
+    align-items: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    margin-inline: 5px;
 }

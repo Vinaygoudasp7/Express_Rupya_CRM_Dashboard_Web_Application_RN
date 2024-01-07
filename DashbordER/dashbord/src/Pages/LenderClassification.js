@@ -9,14 +9,18 @@ const LenderClassification = () => {
   const [selectedBorrower, setSelectedBorrower] = useState(null)
   const [Lenderdetailes, setLenderDeatailes] = useState([])
   const [lenderClassification, setLenderClassification] = useState([])
+  const [filterdlenderCLassification, setFilterdLenderClassification] = useState([])
   const [isBorrowerSelected, setIsBorrowerSelected] = useState(false)
 
   useEffect(() => {
     const featchDetailes = async () => {
       try {
         const responce = await axios.get("http://localhost:4306/List_borrowers")
+        const lenderresponce = await axios.get('http://localhost:4306/List_Lenders')
         const borrowers = responce.data
+        const lenders = lenderresponce.data
         console.log(borrowers)
+        console.log(lenders)
         borrowers.sort((a, b) => {
           const nameA = a.name.toUpperCase()
           const nameB = b.name.toUpperCase()
@@ -34,26 +38,7 @@ const LenderClassification = () => {
         }))
         setBorrowers([{ value: '', label: 'Select Borrower' }, ...formatedBorrowers])
 
-      } catch (error) {
-        console.log(error)
-      }
-    }
-    featchDetailes()
-  }, [])
-
-  const handelSelectedBorrowers = (selectedBorrower) => {
-    setSelectedBorrower(selectedBorrower)
-    setIsBorrowerSelected(true)
-  }
-  console.log(isBorrowerSelected)
-  useEffect(() => {
-    const featchLenderDetailes = async () => {
-      try {
-        const responce = await axios.get("http://localhost:4306/List_Lenders")
-        const lender_data = responce.data
-        console.log(lender_data)
-
-        lender_data.sort((a, b) => {
+        lenders.sort((a, b) => {
           const nameA = a.name.toUpperCase()
           const nameB = b.name.toUpperCase()
           if (nameA < nameB) {
@@ -63,52 +48,60 @@ const LenderClassification = () => {
           }
           return 0
         })
-        // setLenderData(lender_data)
-        setLenderDeatailes(lender_data)
-        const intiallenderClassification = lender_data.map((data) => (
-          {
-            lender_id: data.id,
+
+        setLenderDeatailes(lenders)
+
+        const borrower_id = selectedBorrower ? selectedBorrower.value : 0
+        const lenderclassification = await axios.get(`http://localhost:4306/retrivelenderclassificationofborrower/${borrower_id}`)
+        const lenderclassificationData = lenderclassification.data
+        console.log(lenderclassificationData)
+        if (lenderclassificationData.length !== 0) {
+          const formatedlenderclassification = lenderclassificationData.map((data) => ({
+            id: data.lender_id,
+            name: lenders.find((lenderdata) => lenderdata.id === data.lender_id)?.name || '',
+            classification: data.classification
+          }))
+          setLenderClassification(formatedlenderclassification)
+          console.log(formatedlenderclassification)
+        } else {
+          const formatedlenderclassification = lenders.map((data) => ({
+            id: data.id,
+            name: data.name,
             classification: 'Not Classified'
-          }
-        ))
-        setLenderClassification(intiallenderClassification)
+          }))
+          setLenderClassification(formatedlenderclassification)
+          console.log(formatedlenderclassification)
+        }
       } catch (error) {
         console.log(error)
       }
     }
-    featchLenderDetailes()
-  }, [])
-  console.log(lenderClassification)
+    featchDetailes()
+  }, [selectedBorrower])
+
+
 
   const handelLenderClasiification = (e, index, lender_id) => {
     const selectedValue = e.target.value
-    setLenderClassification((prevClassification) => {
-      const lenderClassificationCopy = [...prevClassification]
-      lenderClassificationCopy[index] = {
-        lender_id: lender_id,
-        classification: selectedValue
+    const copyoflenderclassification = [...lenderClassification]
+    console.log(copyoflenderclassification)
+    const lenderclassificationdetails = copyoflenderclassification.map((data) => {
+      if (data.id === lender_id) {
+        return {
+          ...data,
+          classification: selectedValue
+        }
       }
-      return lenderClassificationCopy
+      return data
     })
+    console.log(lenderclassificationdetails)
+    setLenderClassification(lenderclassificationdetails)
   }
-
   console.log(lenderClassification)
 
-  useEffect(() => {
-    const borrower_id = selectedBorrower != null ? selectedBorrower.value : ''
-    console.log(borrower_id)
-    if (isBorrowerSelected) {
-      const featchDetailes = async () => {
-        const responce = await axios.get(`http://localhost:4306/retrivelenderclassification/${borrower_id}`)
-        const lender_data = responce.data
-        console.log(lender_data)
-        setLenderClassification(lender_data)
-      }
-      featchDetailes()
-    } else {
-      return
-    }
-  }, [selectedBorrower])
+  const handelSelectedBorrowers = (selectedBorrower) => {
+    setSelectedBorrower(selectedBorrower)
+  }
 
   const handelSubmit = async (e, borrower) => {
     e.preventDefault()
@@ -153,15 +146,11 @@ const LenderClassification = () => {
       // Reset the selected borrower (if it's a state variable)
       setSelectedBorrower(null);
 
-      // Reset lender classification details (if it's a state variable)
-      setLenderClassification([]);
-
-      // Reset lender details to initial state or empty array
-      // setLenderDeatailes([]);
     } catch (error) {
       console.log(error)
     }
   }
+
   return (
     <div className='container px-1' style={{ maxHeight: '100%', height: '100%' }} >
       <div className='main-container px-2 ' style={{ height: '100%' }}>
@@ -173,40 +162,37 @@ const LenderClassification = () => {
             <div className='select-borrower' style={{ width: '350px', }}>
               <Select isSearchable onChange={handelSelectedBorrowers} value={selectedBorrower} options={borrowers}></Select>
             </div>
-
           </div>
           <div className='container form-content-body mx-auto w-100'>
             <div className='form-body  p-1'  >
               <div className='container'>
-                {Lenderdetailes.map((lender, index) => {
-                  if (lender.id !== null) {
-                    const classificationValue = selectedBorrower != null ? lenderClassification.find((data) =>
-                      data.lender_id == lender.id
-                    ) : null
-                    return (
-                      <div className='row-content' key={index} >
-                        <div className='input-group'>
-                          <div className='row w-100 my-1'>
-                            <div className='col-5 '>
-                              <input className='form-control input-group-text text-start mb-0 fw-normal w-100' value={lender.name} style={{ fontSize: '16px', maxWidth: '450px' }} readOnly></input>
-                            </div>
-                            <div className='col-7'>
-                              <select className='form-select form-select-sm mb-1'
-                                value={classificationValue ? classificationValue.classification : ""}
-                                onChange={(e) => handelLenderClasiification(e, index, lender.id)}>
-                                <option value=''>Select Classification</option>
-                                <option value='Existing lender'>Existing lender</option>
-                                <option value='Negative Lender'>Negative Lender</option>
-                                <option value='Not Classified'>Not Classified</option>
-                                <option value='Mandate Given'>Mandate Given</option>
-                                <option value='Existing through Us'>Existing through Us</option>
-                              </select>
-                            </div>
+                {lenderClassification.map((lender, index) => {
+                  return (
+                    <div className='row-content' key={index} >
+                      <div className='input-group'>
+                        <div className='row w-100 my-1'>
+                          <div className='col-5 '>
+                            <div className='form-control input-group-text text-start mb-0 fw-normal w-100'
+                              style={{ fontSize: '16px', maxWidth: '450px' }}
+                            >{lender.name}</div>
+                          </div>
+                          <div className='col-7'>
+                            <select className='form-select form-select-sm mb-1'
+                              value={lender.classification ? lender.classification : 'Not Classified'}
+                              onChange={(e) => handelLenderClasiification(e, index, lender.id)}
+                            >
+                              <option value=''>Select Classification</option>
+                              <option value='Existing lender'>Existing lender</option>
+                              <option value='Negative Lender'>Negative Lender</option>
+                              <option value='Not Classified'>Not Classified</option>
+                              <option value='Mandate Given'>Mandate Given</option>
+                              <option value='Existing through Us'>Existing through Us</option>
+                            </select>
                           </div>
                         </div>
                       </div>
-                    )
-                  }
+                    </div>
+                  )
                 })}
               </div>
             </div>
