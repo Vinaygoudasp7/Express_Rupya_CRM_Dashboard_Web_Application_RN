@@ -116,7 +116,7 @@ const CreatePartiallyDissbursedrec = () => {
     const handelDispursedamtChanged = (event) => {
         // const value = parseFloat(event.target.value);
         const value = event.target.value
-        if (value <= sactioned) {
+        if (parseFloat(value) <= parseFloat(sactioned)) {
             setDispursedamt(value);
             setError('');
         } else {

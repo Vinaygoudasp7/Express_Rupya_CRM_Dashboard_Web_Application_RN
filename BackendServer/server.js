@@ -1022,6 +1022,168 @@ const sendemailReminderToTeamMember = async () => {
 // });
 cron.schedule('14 21 * * *', sendemailReminderToTeamMember)
 
+
+// email reminder for partial updates
+const sendEmailreminderFor_PartialDisbursed = async () => {
+
+    // try {
+    //     const reminderdetails = await EmailReminder.findAll({
+    //         include: Status_updates,
+    //     })
+    //     //    console.log(reminderdetails)
+    // } catch (error) {
+    //     console.log(error)
+    // }
+
+
+    const partialDispbursedRecords = await partiallyDisbersedTable.findAll()
+    // // console.log(updatedStatusData)
+    // // console.log('filter', filterteammemberData)
+
+    // const sentEmailreminderToTeamMember = (teamMember) => {
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0); // Set time part to midnight for comparison
+
+    const filterpartialDisbursedrData = partialDispbursedRecords.filter((status) => {
+        const reminderDate = new Date(status.nextfollowupdate);
+        reminderDate.setHours(0, 0, 0, 0); // Set time part to midnight for comparison
+        console.log(reminderDate);
+
+        // Compare dates
+        if (reminderDate <= currentDate) {
+            return reminderDate <= currentDate;
+        }
+        return false;
+    });
+
+    // console.log('fi;', filterteammemberData)
+    const totalsanctionedAmt = filterpartialDisbursedrData.reduce((total, data) => total + data.sanctioned, 0)
+    const totalDispursedAmt = filterpartialDisbursedrData.reduce((total, data) => total + data.disbursed_amt, 0)
+    const totalBalanceDispursedAmt = filterpartialDisbursedrData.reduce((total, data) => total + data.balance_disbursed_amt, 0)
+
+    var table = `
+    <table border="1" style='border-collapse: collapse;'>
+        <thead style='background-color: aquamarine; border: 2px solid rgb(0, 204, 255);'>
+            <tr>
+                <th style='padding: 5px;'>S.No</th>
+                <th style='padding: 5px;'>Borrower Name</th>
+                <th style='padding: 5px;'>Lender Name</th>
+                <th style='padding: 5px;'>Sanctioned Date</th>
+                <th style='padding: 5px;'>Type of Sanction</th>
+                <th style='padding: 5px;'>Sanctioned</th>
+                <th style='padding: 5px;'>Disbursed date</th>
+                <th style='padding: 5px;'>Disbursed Amount</th>
+                <th style='padding: 5px;'>Balance Disbursed Amount</th>
+                <th style='padding: 5px;'>Next Follow-up Date</th>
+            </tr>
+        </thead>
+        <tbody style='border: 2px solid rgb(0, 204, 255); padding: 5px;'>`;
+
+    filterpartialDisbursedrData.map((statusdetailes, index) => {
+        return (
+            table += `<tr key=${statusdetailes.id}>
+            <td style='padding: 5px;'>${index + 1}</td>
+            <td style='padding: 5px;'>${statusdetailes.borrower_name}</td>
+            <td style='padding: 5px;'>${statusdetailes.lender_name}</td>
+            <td style='padding: 5px;'>${statusdetailes.sanction_date}</td>
+            <td style='padding: 5px;'>${statusdetailes.type_of_sanction}</td>
+            <td style='padding: 5px;'>${statusdetailes.sanctioned}</td>
+            <td style='padding: 5px;'>${statusdetailes.disbuersed_date}</td>
+            <td style='padding: 5px;'>${statusdetailes.disbursed_amt}</td>
+            <td style='padding: 5px;'>${statusdetailes.balance_disbursed_amt}</td>
+            <td style='padding: 5px;'>${statusdetailes.nextfollowupdate}</td>
+
+        </tr>`
+        );
+    });
+    table += ` <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td colSpan={5}>total</td>
+    <td>${totalsanctionedAmt}</td>
+    <td></td>
+    <td>${totalDispursedAmt}</td>
+    <td>${totalBalanceDispursedAmt}</td>
+</tr>`
+
+    table += `</tbody></table>`;
+
+    // // console.log(table);
+    // const toEmailAddress = filterteammemberData.map((member) => member.teammember.Email_address)
+    // console.log(toEmailAddress)
+    const transport = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+            user: process.env.EMAIL,
+            pass: process.env.PASSWORD
+        }
+    })
+    // const to = filterteammemberData.map((email) => email.teammember.Email_address)
+    // console.log(to)
+    const mailOptions = {
+        from: process.env.EMAIL,
+        to: 'finance.expressrupya@gmail.com',
+        cc: ['expressrupya@gmail.com', 'vinaysp254@gmail.com'],
+        subject: 'Partialy disbursed records',
+        html: table,
+    }
+
+    console.log(mailOptions);
+    transport.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            console.log("error while sending", error)
+            res.json("error while sending", JSON.stringify(error));
+        } else {
+            console.log("email sent successfully" + info.response);
+            res.json(info);
+        }
+    })
+
+
+    // // const filteringNextFollwupDate = async () => {
+    // //from filtering to nextfollupdate using curent date
+    // const status_update = await Status_updates.findAll()
+    // const datewiseEmailReminder = status_update.filter((reminder) => {
+    //     // Define your conditions to filter 'updatedStatusData' based on EmailReminder data
+    //     const curentDate = new Date();
+    //     curentDate.setHours(0, 0, 0, 0)
+    //     const reminderDate = new Date(reminder.Next_followup_Date);
+    //     reminderDate.setHours(0, 0, 0, 0); // Set time part to midnight for comparison
+    //     console.log(reminderDate)
+    //     return (
+    //         reminderDate.getFullYear() <= curentDate.getFullYear() &&
+    //         reminderDate.getMonth() <= curentDate.getMonth() &&
+    //         reminderDate.getDate() <= curentDate.getDate()
+    //     );
+    // });
+
+    // console.log('dataes', datewiseEmailReminder)
+
+    // // identifying uniqe team member and send reminder
+    // const uniqeTeamMember = new Set()
+    // const formatedDatewiseEmailReminder = datewiseEmailReminder.map((data) => {
+    //     const teammember_id = data.teammember_id
+    //     uniqeTeamMember.add(teammember_id)
+    //     // uniqeTeamMember.set('status_id', status_id)
+    // })
+
+    // uniqeTeamMember.forEach((member) => {
+    //     sentEmailreminderToTeamMember(member)
+    // })
+    // console.log('teammember', uniqeTeamMember)
+    // console.log('Email sent.........')
+    // }
+}
+// Manually invoke the function for testing purposes
+// sendEmailreminderFor_PartialDisbursed().catch((error) => {
+//     console.error('An error occurred:', error);
+// });
+cron.schedule('14 21 * * *', sendEmailreminderFor_PartialDisbursed)
+
+
+
 var to;
 var cc;
 var subject;
