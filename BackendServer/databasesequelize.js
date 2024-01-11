@@ -1,6 +1,6 @@
 import { Sequelize, DataTypes } from "sequelize";
 
-const sequelize = new Sequelize("erdatabase", "root", "root@12345", {
+const sequelize = new Sequelize("erdatabase", "root", "Server@456", {
     dialect: "mysql",
     host: "localhost",
 });

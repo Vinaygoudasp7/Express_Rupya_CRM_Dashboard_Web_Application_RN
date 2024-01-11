@@ -33,7 +33,7 @@ const Emailreminder = () => {
     useEffect(() => {
         const featchpendingdata = async () => {
             try {
-                const responce = await axios.get("http://localhost:4306/retrivestatus");
+                const responce = await axios.get("http://192.168.29.250:4306/retrivestatus");
                 setPendingdata(responce.data);
 
             } catch (error) {

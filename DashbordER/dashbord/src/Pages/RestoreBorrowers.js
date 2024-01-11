@@ -8,7 +8,7 @@ function RestoreBorrowers() {
   useEffect(() => {
     const featchdata = async () => {
       try {
-        const responce = await axios.get("http://localhost:4306/restoreB");
+        const responce = await axios.get("http://192.168.29.250:4306/restoreB");
         setData(responce.data)
 
       } catch (error) {
@@ -43,7 +43,7 @@ function RestoreBorrowers() {
 const handleDelete = (id) => {
   const result = window.confirm("Lender id " + id + " are you continue ");
     if (result) {
-      axios.delete(`http://localhost:4306/deleteB/${id}`)
+      axios.delete(`http://192.168.29.250:4306/deleteB/${id}`)
         .then(res => {
           alert("Lender id " + id + " deleted successfully");
           window.location.reload();
@@ -60,7 +60,7 @@ const handleDelete = (id) => {
 const handleRestore=(id)=>{
   const result=window.confirm("Are you suer to restore");
   if(result){
-      axios.delete(`http://localhost:4306/TempdeleteB/${id}`, { data: { isDeleted: false } }).then(res=>{
+      axios.delete(`http://192.168.29.250:4306/TempdeleteB/${id}`, { data: { isDeleted: false } }).then(res=>{
         window.location.reload();
         window.alert("Borrower "+id+" restore sucessfull")
       }).catch(err=>{

@@ -32,7 +32,7 @@ function LoginPage() {
     const handelLogin = async (event) => {
         try {
             event.preventDefault();
-            const responce = await axios.get("http://localhost:4306/teammembers");
+            const responce = await axios.get("http://192.168.29.250:4306/teammembers");
             const teammember = responce.data;
             let loginsuccessfull = false;
             teammember.forEach(element => {

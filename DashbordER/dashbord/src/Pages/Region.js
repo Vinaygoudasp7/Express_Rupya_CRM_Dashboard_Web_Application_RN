@@ -42,7 +42,7 @@ function Region() {
 
 
   const featchData = () => {
-    axios.get('http://localhost:4306/retrive', {
+    axios.get('http://192.168.29.250:4306/retrive', {
       params: {
         region: selectedRegion,
         state: selectedState,

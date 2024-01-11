@@ -1,5 +1,5 @@
-Get http://localhost:4306/lenderDetailesOf/123
+Get http://192.168.29.250:4306/lenderDetailesOf/123
 
 ###
 
-GET http://localhost:4306/retrivestatus
+GET http://192.168.29.250:4306/retrivestatus

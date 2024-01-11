@@ -8,7 +8,7 @@ const Detailesof = () => {
   const [data, setData] = useState(null);
   useEffect(() => {
     const featchdata = (id) => {
-      axios.get(`http://localhost:4306/read/${id}`)
+      axios.get(`http://192.168.29.250:4306/read/${id}`)
         .then(responce => {
           setData(responce.data);
         }).catch(error => {

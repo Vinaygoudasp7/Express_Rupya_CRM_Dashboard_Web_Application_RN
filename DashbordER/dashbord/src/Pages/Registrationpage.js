@@ -43,7 +43,7 @@ function Registrationpage() {
       const id = teammemberId
       console.log(id)
       const pass = password;
-      const responce = await axios.put(`http://localhost:4306/attachPassword/${id}`, {
+      const responce = await axios.put(`http://192.168.29.250:4306/attachPassword/${id}`, {
         password: pass,
         secret_key: adminSecretKey,
         userType: usertype,

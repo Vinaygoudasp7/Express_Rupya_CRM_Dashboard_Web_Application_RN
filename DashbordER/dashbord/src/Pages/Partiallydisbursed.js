@@ -11,7 +11,7 @@ const Partiallydisbursed = () => {
     const [errormsg, seterrormsg] = useState(false)
     const featchData = async () => {
         try {
-            const responce = await axios.get("http://localhost:4306/retrivepartiallydispursed");
+            const responce = await axios.get("http://192.168.29.250:4306/retrivepartiallydispursed");
             console.log(responce.data)
             const partialydisbursed = responce.data
             console.log(partialydisbursed)
@@ -121,7 +121,7 @@ const Partiallydisbursed = () => {
         const confoirm = window.confirm('are you suer to delete')
         try {
             if (confoirm) {
-                const responce = await axios.delete(`http://localhost:4306/deletepartialydisbursedData/${p_id}`);
+                const responce = await axios.delete(`http://192.168.29.250:4306/deletepartialydisbursedData/${p_id}`);
                 console.log(responce.data)
                 setFeatchdetails(true)
             }
@@ -197,7 +197,7 @@ const Partiallydisbursed = () => {
         const balanceDisbursedAmt = editableRowData.balance_disbursed_amt;
         const nextFollowupDate = editableRowData.nextfollowupdate;
         try {
-            const responce = await axios.post(`http://localhost:4306/partiallydisbursedupdate/${p_id}`, {
+            const responce = await axios.post(`http://192.168.29.250:4306/partiallydisbursedupdate/${p_id}`, {
 
                 borrowerId,
                 borrowerName,

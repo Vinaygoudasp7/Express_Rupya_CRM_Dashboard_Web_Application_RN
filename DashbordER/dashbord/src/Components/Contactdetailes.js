@@ -15,7 +15,7 @@ const Contactdetailes = () => {
   const [selectedBorrower, setSelectedBorrower] = useState('');
 
   useEffect(() => {
-    axios.get('http://localhost:4306/retriveName')
+    axios.get('http://192.168.29.250:4306/retriveName')
       .then(response => {
         setBorrowers(response.data);
         console.log(response.data);
