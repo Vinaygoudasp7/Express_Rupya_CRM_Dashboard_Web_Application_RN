@@ -480,23 +480,23 @@ const BorrowerDetailsTable = () => {
       ))
 
       setEditedBorrower({
-        editname: copyEditableBorrower.name,
-        editregion: copyEditableBorrower.region,
-        editstate: copyEditableBorrower.state,
-        editcity: copyEditableBorrower.city,
-        editaum: copyEditableBorrower.aum,
-        editcin: copyEditableBorrower.cin,
+        editname: copyEditableBorrower?.name,
+        editregion: copyEditableBorrower?.region,
+        editstate: copyEditableBorrower?.state,
+        editcity: copyEditableBorrower?.city,
+        editaum: copyEditableBorrower?.aum,
+        editcin: copyEditableBorrower?.cin,
         editcreditRatingAgency: formatedintialCreditratingAgency,
         editcreditRating: formatedintialintialcreditrating,
-        editentityType: copyEditableBorrower.entityType,
+        editentityType: copyEditableBorrower?.entityType,
         editfinancialYearAUM: formatedintialfinacialyearAum,
         editloanTypes: formatedintialloantypes,
-        editmaxInterestRate: copyEditableBorrower.maxInterestRate,
-        editminLoanAmount: copyEditableBorrower.minLoanAmount,
+        editmaxInterestRate: copyEditableBorrower?.maxInterestRate,
+        editminLoanAmount: copyEditableBorrower?.minLoanAmount,
         editowner: formatedintialowner,
         editproductType: formatedintialproducttypes,
         editproducts: formatedintialproducts,
-        editquarterAUM: copyEditableBorrower.quarterAUM,
+        editquarterAUM: copyEditableBorrower?.quarterAUM,
       });
     }
   };
