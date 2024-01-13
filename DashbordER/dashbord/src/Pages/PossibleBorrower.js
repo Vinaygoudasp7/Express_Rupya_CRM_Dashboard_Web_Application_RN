@@ -25,8 +25,8 @@ const PossibleBorrower = () => {
     useEffect(() => {
         const fetchBorrowerDetails = async () => {
             try {
-                const response = await axios.get("http://localhost:4306/List_borrowers");
-                const lenderresponse = await axios.get("http://localhost:4306/List_lenders");
+                const response = await axios.get("http://192.168.29.250:4306/List_borrowers");
+                const lenderresponse = await axios.get("http://192.168.29.250:4306/List_lenders");
                 console.log(lenderresponse.data)
                 const lenderdetails = lenderresponse.data
 
@@ -83,7 +83,7 @@ const PossibleBorrower = () => {
         const lender_id = selectedLender?.value
         console.log(lender_id)
         try {
-            const lenderclassification = await axios.get(`http://localhost:4306/retrivelenderclassificationoflender/${lender_id}`)
+            const lenderclassification = await axios.get(`http://192.168.29.250:4306/retrivelenderclassificationoflender/${lender_id}`)
             console.log(lenderclassification.data)
 
             const lenderClassificationsData = lenderclassification.data

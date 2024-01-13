@@ -72,7 +72,7 @@ const BorrowerDetailsTable = () => {
   useEffect(() => {
     const featchTeammember = async () => {
       try {
-        const responce = await axios.get("http://localhost:4306/teammembers");
+        const responce = await axios.get("http://192.168.29.250:4306/teammembers");
         const teamMember = responce.data;
         const formatedOptions = teamMember.map((teamMember) => ({
           value: teamMember.TeamM_id,
@@ -173,7 +173,7 @@ const BorrowerDetailsTable = () => {
 
   const fetchBorrowerDetails = async () => {
     try {
-      const response = await axios.get("http://localhost:4306/List_borrowers");
+      const response = await axios.get("http://192.168.29.250:4306/List_borrowers");
       const data = response.data
       const formattedData = data.map((detail) => ({
         ...detail,
@@ -512,6 +512,7 @@ const BorrowerDetailsTable = () => {
         editcreditRatingAgency: formatedintialCreditratingAgency,
         editcreditRating: formatedintialintialcreditrating,
         editentityType: copyEditableBorrower?.entityType,
+        editentityType: copyEditableBorrower?.entityType,
         editfinancialYearAUM: formatedintialfinacialyearAum,
         editloanTypes: formatedintialloantypes,
         editmaxInterestRate: copyEditableBorrower?.maxInterestRate,
@@ -555,7 +556,7 @@ const BorrowerDetailsTable = () => {
     const borrowerId = editableBorrowerId
     const borrowerupdateddata = JSON.stringify(editedBorrower)
     console.log(borrowerupdateddata)
-    axios.put(`http://localhost:4306/borrowers/${borrowerId}`, editedBorrower)
+    axios.put(`http://192.168.29.250:4306/borrowers/${borrowerId}`, editedBorrower)
       .then((response) => {
         // Handle the response (optional)
         console.log('Borrower details updated successfully:', response.data,);

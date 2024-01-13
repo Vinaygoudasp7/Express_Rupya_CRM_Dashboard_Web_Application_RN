@@ -58,7 +58,7 @@ function TeamMemberReg() {
   useEffect(() => {
     const featchTeammember = async () => {
       try {
-        const responce = await axios.get("http://localhost:4306/teammembers");
+        const responce = await axios.get("http://192.168.29.250:4306/teammembers");
         const data = responce.data;
 
         data.sort((a, b) => {
@@ -91,7 +91,7 @@ function TeamMemberReg() {
       const id = teammemberId
       console.log(id)
       const pass = password;
-      const responce = await axios.put(`http://localhost:4306/attachPassword/${id}`, {
+      const responce = await axios.put(`http://192.168.29.250:4306/attachPassword/${id}`, {
         password: pass,
         region: selectedRegion,
       });

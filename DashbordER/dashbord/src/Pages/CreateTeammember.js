@@ -53,7 +53,7 @@ const CreateTeammember = () => {
                 };
 
                 // api request to update to database
-                axios.post(`http://localhost:4306/insertdata`, updateformData)
+                axios.post(`http://192.168.29.250:4306/insertdata`, updateformData)
                     .then((res) => {
                         console.log('data updated successfully', res.data)
                         toast.info('team members successfully Created', {

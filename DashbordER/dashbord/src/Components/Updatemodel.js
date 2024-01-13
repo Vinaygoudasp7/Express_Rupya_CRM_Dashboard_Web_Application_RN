@@ -19,9 +19,9 @@ const Assign = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const borrowerResponse = await axios.get("http://localhost:4306/borrowers");
-        const lenderResponse = await axios.get("http://localhost:4306/lenders");
-        const teammemberResponse = await axios.get("http://localhost:4306/teammembers");
+        const borrowerResponse = await axios.get("http://192.168.29.250:4306/borrowers");
+        const lenderResponse = await axios.get("http://192.168.29.250:4306/lenders");
+        const teammemberResponse = await axios.get("http://192.168.29.250:4306/teammembers");
 
         const borrowerOptions = borrowerResponse.data.map((borrower) => ({
           value: borrower.Borrower_id,
@@ -82,7 +82,7 @@ const Assign = () => {
     const teammemberNameToUpdate = selectedteammember.label;
     const selectedOptionToUpdated = selectedOption.value;
 
-    axios.post("http://localhost:4306/assign", {
+    axios.post("http://192.168.29.250:4306/assign", {
       borrowerId: borrowerIdToUpdate,
       borrowerName: borrowerNameToUpdate,
       lenderId: lenderIdToUpdate,
@@ -110,7 +110,7 @@ const Assign = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:4306/retriveApprovals");
+        const response = await axios.get("http://192.168.29.250:4306/retriveApprovals");
         setData(response.data);
       } catch (error) {
         console.log(error);
@@ -205,7 +205,7 @@ const Assign = () => {
     const teammemberNameToUpdate = updateData.teammemberNameToUpdate;
     const selectedOptionToUpdated = updateData.lender_approval;
 
-    axios.post(`http://localhost:4306/updatetoAproval/${approvalId}`, {
+    axios.post(`http://192.168.29.250:4306/updatetoAproval/${approvalId}`, {
       borrowerId: borrowerIdToUpdate,
       borrowerName: borrowerNameToUpdate,
       lenderId: lenderIdToUpdate,

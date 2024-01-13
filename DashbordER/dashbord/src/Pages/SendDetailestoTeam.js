@@ -9,7 +9,7 @@ const SendDetailestoTeam = ({ pendingdata }) => {
     useEffect(() => {
         const featchteam = async () => {
             try {
-                const responce = await axios.get("http://localhost:4306/teammembers");
+                const responce = await axios.get("http://192.168.29.250:4306/teammembers");
                 const teammebers = responce.data;
                 const teammemberoptions = teammebers.map((teammember) => ({
                     label: teammember.FirstName + " " + teammember.LastName,

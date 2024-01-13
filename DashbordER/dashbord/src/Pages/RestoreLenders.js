@@ -9,7 +9,7 @@ function RestoreLenders() {
   useEffect(() => {
     const featchdata = async () => {
       try {
-        const responce = await axios.get("http://localhost:4306/restoreL");
+        const responce = await axios.get("http://192.168.29.250:4306/restoreL");
         setData(responce.data)
 
       } catch (error) {
@@ -25,7 +25,7 @@ function RestoreLenders() {
 
     const result = window.confirm("Lender id " + id + " are you continue ");
     if (result) {
-      axios.delete(`http://localhost:4306/deleteL/${id}`)
+      axios.delete(`http://192.168.29.250:4306/deleteL/${id}`)
         .then(res => {
           alert("Lender id " + id + " deleted successfully");
           window.location.reload();
@@ -43,7 +43,7 @@ function RestoreLenders() {
 
     const result = window.confirm("Are you suer to Restore")
     if (result) {
-      axios.delete(`http://localhost:4306/TempdeleteL/${id}`, { data: { isDeleted: false } }).then(res => {
+      axios.delete(`http://192.168.29.250:4306/TempdeleteL/${id}`, { data: { isDeleted: false } }).then(res => {
         window.location.reload();
         window.alert("Lender id " + id + " Restore successfully");
 

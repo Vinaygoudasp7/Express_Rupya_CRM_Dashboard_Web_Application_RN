@@ -71,7 +71,7 @@ const Eamil = ({ handelClose, open }) => {
       console.log(data)
 
       try {
-        const response = await axios.post("http://localhost:4306/sendemail", data, {
+        const response = await axios.post("http://192.168.29.250:4306/sendemail", data, {
           headers: {
             "Content-Type": "multipart/form-data; boundary=<boundary>",
           },

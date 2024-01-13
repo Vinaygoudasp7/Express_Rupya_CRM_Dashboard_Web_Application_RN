@@ -74,7 +74,7 @@ const LenderDetailsTable = () => {
 
   const fetchlenderDetails = async () => {
     try {
-      const response = await axios.get("http://localhost:4306/List_Lenders");
+      const response = await axios.get("http://192.168.29.250:4306/List_Lenders");
 
       //format data
       const data = response.data
@@ -149,7 +149,7 @@ const LenderDetailsTable = () => {
   useEffect(() => {
     const featchTeammember = async () => {
       try {
-        const responce = await axios.get("http://localhost:4306/teammembers");
+        const responce = await axios.get("http://192.168.29.250:4306/teammembers");
         const teamMember = responce.data;
         const formatedOptions = teamMember.map((teamMember) => ({
           value: teamMember.TeamM_id,
@@ -472,7 +472,7 @@ const LenderDetailsTable = () => {
   const handleSubmit = () => {
     const lenderid = editableLenderId
     console.log(lenderid)
-    axios.put(`http://localhost:4306/lenders/${lenderid}`, editedLender)
+    axios.put(`http://192.168.29.250:4306/lenders/${lenderid}`, editedLender)
       .then((response) => {
         // Handle the response (optional)
         console.log('Lender details updated successfully:', response.data);

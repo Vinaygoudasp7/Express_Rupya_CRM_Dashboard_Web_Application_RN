@@ -20,7 +20,7 @@ const CreatePartiallyDissbursedrec = () => {
     useEffect(() => {
         const featchdata = async () => {
             try {
-                const response = await axios.get("http://localhost:4306/List_borrowers");
+                const response = await axios.get("http://192.168.29.250:4306/List_borrowers");
 
                 const borrowers = response.data;
                 borrowers.sort((a, b) => {
@@ -54,7 +54,7 @@ const CreatePartiallyDissbursedrec = () => {
     useEffect(() => {
         const featchdata = async () => {
             try {
-                const response = await axios.get("http://localhost:4306/List_Lenders");
+                const response = await axios.get("http://192.168.29.250:4306/List_Lenders");
                 const lenders = response.data;
                 lenders.sort((a, b) => {
                     const aName = a.name.toUpperCase()
@@ -165,7 +165,7 @@ const CreatePartiallyDissbursedrec = () => {
             handelOpenAlert();
         } else {
             try {
-                const responce = await axios.post("http://localhost:4306/partiallydisbursed", {
+                const responce = await axios.post("http://192.168.29.250:4306/partiallydisbursed", {
                     borrowerId: borrowerid,
                     borrowerName: borrowername,
                     lenderId: lenderid,

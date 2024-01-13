@@ -235,7 +235,7 @@ const Lender = () => {
   useEffect(() => {
     const featchTeammember = async () => {
       try {
-        const responce = await axios.get("http://localhost:4306/teammembers");
+        const responce = await axios.get("http://192.168.29.250:4306/teammembers");
         const teamMember = responce.data;
         const formatedOptions = teamMember.map((teamMember) => ({
           value: teamMember.TeamM_id,
@@ -272,7 +272,7 @@ const Lender = () => {
 
       try {
         // Send a POST request to the backend API
-        Axios.post("http://localhost:4306/insertlenderdetailes", {
+        Axios.post("http://192.168.29.250:4306/insertlenderdetailes", {
           name: name,
           region: region,
           state: state,

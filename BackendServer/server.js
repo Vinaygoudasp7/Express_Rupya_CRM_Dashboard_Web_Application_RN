@@ -1,5 +1,5 @@
 import express, { response } from "express";
-import mysql from "mysql";
+import mysql from "mysql2";
 import cors from "cors";
 import lenders from "./models/lenders.js";
 import borrowers from "./models/borrower.js";
@@ -41,7 +41,7 @@ app.use(express.json());
 const db = mysql.createPool({
     host: "localhost",
     user: "root",
-    password: "root@12345",
+    password: "Server@456",
     database: "erdatabase",
 
 })
@@ -968,7 +968,7 @@ const sendemailReminderToTeamMember = async () => {
         const mailOptions = {
             from: process.env.EMAIL,
             to: toEmailAddress,
-            cc: ['statusexpressrupya@gmail.com', 'Vinaysp254@gmail.com', 'expressrupya@gmail.com'],
+            cc: ['statusexpressrupya@gmail.com', 'expressrupya@gmail.com'],
             subject: 'Follow-Up the Lenders/Borrowers',
             html: table,
         }
@@ -1128,7 +1128,7 @@ const sendEmailreminderFor_PartialDisbursed = async () => {
     const mailOptions = {
         from: process.env.EMAIL,
         to: 'finance.expressrupya@gmail.com',
-        cc: ['expressrupya@gmail.com', 'vinaysp254@gmail.com'],
+        cc: ['expressrupya@gmail.com'],
         subject: 'Partialy disbursed records',
         html: table,
     }

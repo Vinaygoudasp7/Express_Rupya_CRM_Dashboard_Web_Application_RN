@@ -25,8 +25,8 @@ const PossibleLender = () => {
     useEffect(() => {
         const fetchBorrowerDetails = async () => {
             try {
-                const response = await axios.get("http://localhost:4306/List_borrowers");
-                const lenderresponse = await axios.get("http://localhost:4306/List_lenders");
+                const response = await axios.get("http://192.168.29.250:4306/List_borrowers");
+                const lenderresponse = await axios.get("http://192.168.29.250:4306/List_lenders");
                 console.log(lenderresponse.data)
                 const lenderdetails = lenderresponse.data
                 lenderdetails.sort((a, b) => {
@@ -80,7 +80,7 @@ const PossibleLender = () => {
         const borrower_id = selectedBorrower?.value
         console.log(borrower_id)
         try {
-            const lenderclassification = await axios.get(`http://localhost:4306/retrivelenderclassificationofborrower/${borrower_id}`)
+            const lenderclassification = await axios.get(`http://192.168.29.250:4306/retrivelenderclassificationofborrower/${borrower_id}`)
             const lenderClassificationsData = lenderclassification.data
             console.log(lenderClassificationsData)
             // logic for the matching the selected borrower with all lenders

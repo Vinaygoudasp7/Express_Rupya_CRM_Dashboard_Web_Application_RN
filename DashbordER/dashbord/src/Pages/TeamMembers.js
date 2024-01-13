@@ -12,7 +12,7 @@ const TeamMembers = () => {
     // useEffect(() => {
     //     const fetchData = async () => {
     //         try {
-    //             const response = await axios.get(`http://localhost:4306/assignment`);
+    //             const response = await axios.get(`http://192.168.29.250:4306/assignment`);
     //             setTeamMemberdata(response.data);
     //         } catch (error) {
     //             console.log(error);
@@ -45,7 +45,7 @@ const TeamMembers = () => {
     useEffect(() => {
         const featchdata = async () => {
             try {
-                const responce = await axios.get("http://localhost:4306/retrivedata");
+                const responce = await axios.get("http://192.168.29.250:4306/retrivedata");
                 setData(responce.data);
             } catch (error) {
                 console.log(error);

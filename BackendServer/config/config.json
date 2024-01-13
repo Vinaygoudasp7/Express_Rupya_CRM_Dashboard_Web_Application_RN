@@ -1,8 +1,8 @@
 {
   "development": {
     "username": "root",
-    "password": "root@12345",
-    "database": "agmr_college",
+    "password": "Server@456",
+    "database": "erdatabase",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },

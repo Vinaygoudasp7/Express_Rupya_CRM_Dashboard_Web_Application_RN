@@ -33,7 +33,7 @@ const StatusUpdate = () => {
   useEffect(() => {
     const featchdata = async () => {
       try {
-        const responce = await axios.get("http://localhost:4306/retrivestatus");
+        const responce = await axios.get("http://192.168.29.250:4306/retrivestatus");
         setData(responce.data);
         console.log(responce.data)
       } catch (error) {
@@ -226,7 +226,7 @@ const StatusUpdate = () => {
     console.log("message:", message);
     console.log("subject:", subject);
     try {
-      const response = await fetch("http://localhost:4306/sendEmailreminder", {
+      const response = await fetch("http://192.168.29.250:4306/sendEmailreminder", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -314,7 +314,7 @@ const StatusUpdate = () => {
     console.log(editRow);
 
     try {
-      const responce = await axios.post(`http://localhost:4306/statusupdateData/${editStatusId}`, editRow);
+      const responce = await axios.post(`http://192.168.29.250:4306/statusupdateData/${editStatusId}`, editRow);
       console.log(responce.data);
 
       //update the data in the local state
@@ -380,7 +380,7 @@ const StatusUpdate = () => {
 
   // useEffect(() => {
   //   const featchdata = async () => {
-  //     const response = await axios.get('http://localhost:4306/getreminderdetails')
+  //     const response = await axios.get('http://192.168.29.250:4306/getreminderdetails')
   //     console.log(response.data)
   //     const relatedEmailReminder = response.data.filter((reminder) => {
   //       // Define your conditions to filter 'updatedStatusData' based on EmailReminder data
