@@ -106,9 +106,12 @@ const Borrower = () => {
   const [isAlertOpen, setIsAlertOpen] = useState(false)
   const [nameerrorMessage, setNameErrorMessage] = useState('')
   const [AUMerrorMessage, setAUMErrorMessage] = useState('')
+  const [networtherrorMessage, setnetworthErrorMessage] = useState('')
+  const [netWorth, setNetWorth] = useState('')
   const [MAXInterrorMessage, setMaxIntErrorMessage] = useState('')
   const [MinloanerrorMessage, setMinloanerrorMessage] = useState('')
   const [GST_number, setGST_number] = useState('')
+  const [borrowrcomment, setBorrowercomment] = useState('')
   const navigate = useNavigate()
 
 
@@ -243,6 +246,18 @@ const Borrower = () => {
     }
   };
 
+  const handleNetworthChange = (event) => {
+
+    const inputValue = event.target.value
+
+    if (/^[0-9.]*$/.test(inputValue)) {
+      setNetWorth(inputValue);
+      setnetworthErrorMessage('');
+    } else {
+      setnetworthErrorMessage("Please enter valid input '[do not enter the (%-+*/$@)]'")
+    }
+  };
+
   const handleMinLoanAmountChange = (event) => {
     const inputValue = event.target.value
 
@@ -290,6 +305,10 @@ const Borrower = () => {
   const handelGstNumber = (event) => {
     setGST_number(event.target.value)
   }
+
+  const handelChangeComment = (event) => {
+    setBorrowercomment(event.target.value)
+  }
   const handleSubmit = (event) => {
     event.preventDefault();
     if (entityType.length === 0 || name.length === 0 || region.length === 0 || state.length === 0 || creditRatingAgency.length === 0 ||
@@ -318,10 +337,12 @@ const Borrower = () => {
           financialYearAUM: financialYearAUM,
           quarterAUM: quarterAUM,
           aum: aum,
+          netWorth: netWorth,
           maxInterestRate: maxInterestRate,
           minLoanAmount: minLoanAmount,
           mfiGrading: mfiGrading,
           GST_number: GST_number,
+          borrowrcomment: borrowrcomment,
         }, {
           headers: { 'Content-Type': 'application/json' }
         }).then((response) => {
@@ -347,6 +368,8 @@ const Borrower = () => {
           setMfiGrading('');
           setShowMfiGrading(false);
           setGST_number('')
+          setBorrowercomment('')
+          setOwner('')
           const message = response.data.message;
           toast.success(message);
           // Display success message or perform other actions
@@ -369,7 +392,7 @@ const Borrower = () => {
       <div id="form1">
         <form className='form1' onSubmit={handleSubmit}>
 
-          <div id="entityType">
+          <div id="entityType" >
             <label htmlFor="entityType">Entity Type:</label>
             <select
               className='form-select'
@@ -395,9 +418,9 @@ const Borrower = () => {
             </div>
           )}
 
-          <div id="name">
+          <div id="name" className='mb-1'>
             <label htmlFor="name">Name of borrower:</label>
-            <p className='text-danger'>{nameerrorMessage}</p>
+            <p className='text-danger mb-0'>{nameerrorMessage}</p>
             <input
               type="text"
               value={name}
@@ -455,7 +478,7 @@ const Borrower = () => {
             </select>
           </div>
 
-          <div id="Loan-type">
+          <div id="Loan-type" className='mb-1'>
             <label>Loan Types:</label>
             <div>
               <label>
@@ -531,7 +554,7 @@ const Borrower = () => {
             </div>
           </div>
 
-          <div id="Owner_name">
+          <div id="Owner_name" className='mb-1'>
             <label htmlFor="Ownername">Owner of borrower:</label>
             {/* <input
               type="text"
@@ -545,7 +568,7 @@ const Borrower = () => {
             {/* )} */}
           </div>
 
-          <div>
+          <div className='mb-1'>
             <label htmlFor="productType">Product Type:
               <br />
               <input
@@ -574,7 +597,7 @@ const Borrower = () => {
             </select> */}
           </div>
 
-          <div>
+          <div className='mb-1'>
             <label htmlFor="products">Products:</label>
             <div>
               <label>
@@ -589,7 +612,7 @@ const Borrower = () => {
               </label>
               {/* Repeat the above label and input elements for other products */}
             </div>
-            <div>
+            <div className='mb-1'>
               <label>
                 <input
                   type="checkbox"
@@ -602,7 +625,7 @@ const Borrower = () => {
               </label>
               {/* Repeat the above label and input elements for other products */}
             </div>
-            <div>
+            <div >
               <label>
                 <input
                   type="checkbox"
@@ -822,9 +845,9 @@ const Borrower = () => {
             </select>
           </div>
 
-          <div>
+          <div className='mb-1'>
             <label htmlFor="aum">AUM ( in crores):</label>
-            <p className='text-danger'>{AUMerrorMessage}</p>
+            <p className='text-danger mb-0'>{AUMerrorMessage}</p>
             <input
               type="decimal"
               id="aum"
@@ -832,10 +855,23 @@ const Borrower = () => {
               onChange={handleAumChange}
             />
           </div>
-
-          <div>
+          <div className='mb-1'>
+            <label htmlFor="Comment">Comment:</label>
+            <textarea className='form-control' cols={30} rows={3} value={borrowrcomment} onChange={handelChangeComment}></textarea>
+          </div>
+          <div className='mb-1'>
+            <label htmlFor="networth">Net worth ( in crores):</label>
+            <p className='text-danger mb-0'>{networtherrorMessage}</p>
+            <input
+              type="decimal"
+              id="aum"
+              value={netWorth}
+              onChange={handleNetworthChange}
+            />
+          </div>
+          <div className='mb-1'>
             <label htmlFor="maxInterestRate">Maximum Interest Rate (%):</label>
-            <p className='text-danger'>{MAXInterrorMessage}</p>
+            <p className='text-danger mb-0'>{MAXInterrorMessage}</p>
             <input
               type="decimal"
               id="maxInterestRate"
@@ -844,9 +880,9 @@ const Borrower = () => {
             />
           </div>
 
-          <div>
+          <div className='mb-1'>
             <label htmlFor="minLoanAmount">Minimum Loan Amount (in crores):</label>
-            <p className='text-danger'>{MinloanerrorMessage}</p>
+            <p className='text-danger mb-0'>{MinloanerrorMessage}</p>
             <input
               type="decimal"
               id="minLoanAmount"
@@ -855,7 +891,7 @@ const Borrower = () => {
             />
           </div>
 
-          <div>
+          <div className='mb-1'>
             <label htmlFor="minLoanAmount">GST Number:</label>
             <input
               type="text"

@@ -34,6 +34,7 @@ const LenderDetailsTable = () => {
     editminInterestRate: '',
     editminLoanAmount: '',
     editmaxLoanAmount: '',
+    editlenderComment: '',
   });
 
   const [filters, setFilters] = useState({
@@ -54,6 +55,7 @@ const LenderDetailsTable = () => {
     moreminInterestRate: '',
     minLoanAmount: '',
     maxLoanAmount: '',
+    lenderComment: '',
   });
 
   const [sortConfig, setSortConfig] = useState({ key: '', direction: '' });
@@ -745,15 +747,15 @@ const LenderDetailsTable = () => {
                 />
 
               </th>
-
-              <th><div className='row'>
-                <div className='col-10 p-1 m-0'>Maximum Loan amount (in crores)</div>
-                <IconContext.Provider value={{ size: '1.3rem' }}>
-                  <div className='col-2 d-flex align-items-center justify-content-center'>
-                    <button className='btn btn-sm me-3 ' onClick={() => handelSort('maxLoanAmount')}>{sortConfig.direction === 'asc' ? <FaSortAlphaDown /> : <FaSortAlphaUp />}</button>
-                  </div>
-                </IconContext.Provider>
-              </div>
+              <th>
+                <div className='row'>
+                  <div className='col-10 p-1 m-0'>Maximum Loan amount (in crores)</div>
+                  <IconContext.Provider value={{ size: '1.3rem' }}>
+                    <div className='col-2 d-flex align-items-center justify-content-center'>
+                      <button className='btn btn-sm me-3 ' onClick={() => handelSort('maxLoanAmount')}>{sortConfig.direction === 'asc' ? <FaSortAlphaDown /> : <FaSortAlphaUp />}</button>
+                    </div>
+                  </IconContext.Provider>
+                </div>
                 <input
                   style={{ width: '130px' }}
                   type="decimal"
@@ -761,6 +763,23 @@ const LenderDetailsTable = () => {
                   value={filters.maxLoanAmount}
                   onChange={(e) => handleFilterChange('maxLoanAmount', e.target.value)}
                 />
+              </th>
+              <th>
+                <div className='row'>
+                  <div className='col-10 p-1 m-0'>Comment</div>
+                  {/* <IconContext.Provider value={{ size: '1.3rem' }}>
+                    <div className='col-2 d-flex align-items-center justify-content-center'>
+                      <button className='btn btn-sm me-3 ' onClick={() => handelSort('maxLoanAmount')}>{sortConfig.direction === 'asc' ? <FaSortAlphaDown /> : <FaSortAlphaUp />}</button>
+                    </div>
+                  </IconContext.Provider> */}
+                </div>
+                {/* <input
+                  style={{ width: '130px' }}
+                  type="decimal"
+                  // placeholder='less than'
+                  value={filters.maxLoanAmount}
+                  onChange={(e) => handleFilterChange('maxLoanAmount', e.target.value)}
+                /> */}
               </th>
               <th>Edit</th>
             </tr>
@@ -960,6 +979,19 @@ const LenderDetailsTable = () => {
                     />
                   ) : (
                     detail.maxLoanAmount
+                  )}
+                </td>
+                <td>
+                  {detail.id === editableLenderId ? (
+                    <input
+                      type="decimal"
+                      name="maxLoanAmount"
+                      value={editedLender.editlenderComment}
+                      onChange={(event) => handleInputChange(event, 'editlenderComment')}
+
+                    />
+                  ) : (
+                    detail.lendercomment
                   )}
                 </td>
 

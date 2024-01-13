@@ -80,6 +80,10 @@ const lenders = sequelize.define('lenders', {
     Borrowerregion: {
         type: DataTypes.STRING,
         allowNull: false
+    },
+    lendercomment: {
+        type: DataTypes.STRING,
+        allowNull: false
     }
 });
 

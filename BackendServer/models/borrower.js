@@ -95,7 +95,17 @@ const borrowers = sequelize.define('borrowers', {
     GST_Number: {
         type: DataTypes.STRING,
         allowNull: true
-    }
+    },
+    netWorth: {
+        type: DataTypes.DECIMAL,
+        allowNull: true,
+        defaultValue: 0.00
+    },
+    borrowerComment: {
+        type: DataTypes.DECIMAL,
+        allowNull: true,
+        defaultValue: 0.00
+    },
 });
 
 export default borrowers;

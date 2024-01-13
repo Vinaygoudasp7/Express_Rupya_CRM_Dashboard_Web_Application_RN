@@ -36,6 +36,8 @@ const BorrowerDetailsTable = () => {
     editaum: '',
     editmaxInterestRate: '',
     editminLoanAmount: '',
+    editNetworth: '',
+    editborrowercomment: '',
   });
   const [filters, setFilters] = useState({
     name: '',
@@ -59,6 +61,8 @@ const BorrowerDetailsTable = () => {
     moremaxInterestRate: '',
     lessminLoanAmount: '',
     moreminLoanAmount: '',
+    networth: '',
+    borrowercomment: '',
   });
 
   const [sortConfig, setSortConfig] = useState({ key: '', direction: 'asc' });
@@ -423,6 +427,24 @@ const BorrowerDetailsTable = () => {
       );
     }
 
+    if (filters.networth) {
+      filteredData = filteredData.filter((detail) => {
+        if (detail.netWorth) {
+          return detail.netWorth >= filters.networth
+        }
+      }
+      );
+    }
+
+    if (filters.borrowercomment) {
+      filteredData = filteredData.filter((detail) => {
+        if (detail.borrowercomment) {
+          return detail.borrowercomment >= filters.borrowercomment
+        }
+      }
+      );
+    }
+
 
     setFilteredBorrowerDetails(filteredData);
   }, [filters, borrowerDetails]);
@@ -439,64 +461,67 @@ const BorrowerDetailsTable = () => {
       formatedintialCreditratingAgency, formatedintialfinacialyearAum
 
     if (copyEditableBorrower) {
-      formatedintialloantypes = splitDataIntoArray(copyEditableBorrower.loanTypes).map((loantypes) => ({
+      formatedintialloantypes = Array.isArray(splitDataIntoArray(copyEditableBorrower?.loanTypes)) ? splitDataIntoArray(copyEditableBorrower?.loanTypes).map((loantypes) => ({
         value: loantypes,
         label: loantypes,
-      }))
+      })) : ''
 
-      formatedintialowner = splitDataIntoArray(copyEditableBorrower.owner).map((owner) => ({
+      formatedintialowner = Array.isArray(splitDataIntoArray(copyEditableBorrower?.owner)) ? splitDataIntoArray(copyEditableBorrower?.owner).map((owner) => ({
         value: owner,
         label: owner,
-      }))
+      })) : ''
 
-      formatedintialproducttypes = splitDataIntoArray(copyEditableBorrower.productType).map((productType) => ({
+      formatedintialproducttypes = Array.isArray(splitDataIntoArray(copyEditableBorrower?.productType)) ? splitDataIntoArray(copyEditableBorrower?.productType).map((productType) => ({
         value: productType,
         label: productType,
       }
-      ))
+      )) : ''
 
-      formatedintialproducts = splitDataIntoArray(copyEditableBorrower.products).map((prd) => ({
+      formatedintialproducts = splitDataIntoArray(copyEditableBorrower?.products) ? splitDataIntoArray(copyEditableBorrower?.products).map((prd) => ({
         value: prd,
         label: prd,
       }
-      ))
+      )) : ''
 
-      formatedintialintialcreditrating = splitDataIntoArray(copyEditableBorrower.creditRating).map((cr) => ({
+
+      formatedintialintialcreditrating = splitDataIntoArray(copyEditableBorrower?.creditRating) ? splitDataIntoArray(copyEditableBorrower?.creditRating).map((cr) => ({
         value: cr,
         label: cr,
       }
-      ))
+      )) : ''
 
-      formatedintialCreditratingAgency = splitDataIntoArray(copyEditableBorrower.creditRatingAgency).map((cra) => ({
+      formatedintialCreditratingAgency = splitDataIntoArray(copyEditableBorrower?.creditRatingAgency) ? splitDataIntoArray(copyEditableBorrower?.creditRatingAgency).map((cra) => ({
         value: cra,
         label: cra,
       }
-      ))
+      )) : ''
 
-      formatedintialfinacialyearAum = splitDataIntoArray(copyEditableBorrower.financialYearAUM).map((fya) => ({
+      formatedintialfinacialyearAum = splitDataIntoArray(copyEditableBorrower?.financialYearAUM) ? splitDataIntoArray(copyEditableBorrower?.financialYearAUM).map((fya) => ({
         value: fya,
         label: fya,
       }
-      ))
+      )) : ''
 
       setEditedBorrower({
-        editname: copyEditableBorrower.name,
-        editregion: copyEditableBorrower.region,
-        editstate: copyEditableBorrower.state,
-        editcity: copyEditableBorrower.city,
-        editaum: copyEditableBorrower.aum,
-        editcin: copyEditableBorrower.cin,
+        editname: copyEditableBorrower?.name,
+        editregion: copyEditableBorrower?.region,
+        editstate: copyEditableBorrower?.state,
+        editcity: copyEditableBorrower?.city,
+        editaum: copyEditableBorrower?.aum,
+        editcin: copyEditableBorrower?.cin,
         editcreditRatingAgency: formatedintialCreditratingAgency,
         editcreditRating: formatedintialintialcreditrating,
-        editentityType: copyEditableBorrower.entityType,
+        editentityType: copyEditableBorrower?.entityType,
         editfinancialYearAUM: formatedintialfinacialyearAum,
         editloanTypes: formatedintialloantypes,
-        editmaxInterestRate: copyEditableBorrower.maxInterestRate,
-        editminLoanAmount: copyEditableBorrower.minLoanAmount,
+        editmaxInterestRate: copyEditableBorrower?.maxInterestRate,
+        editminLoanAmount: copyEditableBorrower?.minLoanAmount,
         editowner: formatedintialowner,
         editproductType: formatedintialproducttypes,
         editproducts: formatedintialproducts,
-        editquarterAUM: copyEditableBorrower.quarterAUM,
+        editquarterAUM: copyEditableBorrower?.quarterAUM,
+        editNetworth: copyEditableBorrower?.netWorth,
+        editborrowercomment:copyEditableBorrower?.borrowercomment
       });
     }
   };
@@ -882,6 +907,40 @@ const BorrowerDetailsTable = () => {
               <th>
                 GST Number
               </th>
+              <th>
+                <div className='row'>
+                  <div className='col-8' style={{ fontSize: '17px' }}>Net Worth</div>
+                  <IconContext.Provider value={{ size: '1.4rem' }}>
+                    <div className='col-4 d-flex align-items-center justify-content-center'>
+                      <button className='btn btn-sm' onClick={() => handelSort('quarterAUM')}>{sortConfig.direction === 'asc' ? <FaSortAlphaDown /> : <FaSortAlphaUp />}</button>
+                    </div>
+                  </IconContext.Provider>
+                </div>
+                <input
+                  type="text"
+                  value={filters.networth}
+                  style={{ width: '120px' }}
+                  className='search'
+                  onChange={(e) => handleFilterChange('networth', e.target.value)}
+                />
+              </th>
+              <th>
+                <div className='row'>
+                  <div className='col-8' style={{ fontSize: '17px' }}>Comment</div>
+                  <IconContext.Provider value={{ size: '1.4rem' }}>
+                    <div className='col-4 d-flex align-items-center justify-content-center'>
+                      <button className='btn btn-sm' onClick={() => handelSort('quarterAUM')}>{sortConfig.direction === 'asc' ? <FaSortAlphaDown /> : <FaSortAlphaUp />}</button>
+                    </div>
+                  </IconContext.Provider>
+                </div>
+                <input
+                  type="text"
+                  value={filters.networth}
+                  style={{ width: '120px' }}
+                  className='search'
+                  onChange={(e) => handleFilterChange('borr', e.target.value)}
+                />
+              </th>
               <th>Edit</th>
             </tr>
           </thead>
@@ -1104,6 +1163,26 @@ const BorrowerDetailsTable = () => {
                 </td>
                 <td>
                   {detail?.GST_Number || 'N/A'}
+                </td>
+                <td>
+                  {detail.id === editableBorrowerId ? (
+                    <input
+                      type="number"
+                      value={editedBorrower.editNetworth} onChange={(e) => handleInputChange(e, 'editNetworth')}
+                    />
+                  ) : (
+                    detail.netWorth
+                  )}
+                </td>
+                <td>
+                  {detail.id === editableBorrowerId ? (
+                    <input
+                      type="number"
+                      value={editedBorrower.editborrowercomment} onChange={(e) => handleInputChange(e, 'editborrowercomment')}
+                    />
+                  ) : (
+                    detail.borrowercomment
+                  )}
                 </td>
                 <td>
                   {detail.id === editableBorrowerId ? (

@@ -56,7 +56,7 @@ const db = mysql.createPool({
 
 
 app.post('/insertborrowerdetailes', async (req, res) => {
-    const { name, region, state, city, loanTypes, entityType, cin, owner, productType, products, creditRating, creditRatingAgency, aum, maxInterestRate, minLoanAmount, mfiGrading, quarterAUM, financialYearAUM, GST_number } = req.body;
+    const { name, region, state, city, loanTypes, entityType, borrowrcomment, cin, owner, netWorth, productType, products, creditRating, creditRatingAgency, aum, maxInterestRate, minLoanAmount, mfiGrading, quarterAUM, financialYearAUM, GST_number } = req.body;
     try {
         await borrowers.create({
             name: name,
@@ -72,14 +72,15 @@ app.post('/insertborrowerdetailes', async (req, res) => {
             creditRating: creditRating,
             creditRatingAgency: creditRatingAgency,
             aum: aum,
+            netWorth: netWorth,
             maxInterestRate: maxInterestRate,
             minLoanAmount: minLoanAmount,
             mfiGrading: mfiGrading,
             quarterAUM: quarterAUM,
             financialYearAUM: financialYearAUM,
             GST_Number: GST_number,
+            borrowrcomment: borrowrcomment
         })
-
         res.json({ message: 'Borrower details is created successfully ' })
     } catch (error) {
         console.error('Error querying team members:', error);
@@ -167,6 +168,7 @@ app.put('/lenders/:id', async (req, res) => {
             lender.minInterestRate = updatedLender.editminInterestRate,
             lender.minLoanAmount = updatedLender.editminLoanAmount,
             lender.maxLoanAmount = updatedLender.editmaxLoanAmount,
+            lender.lendercomment=updatedLender.lendercomment
 
             await lender.save()
         console.log('Borrower Details updated successfully');
@@ -207,8 +209,9 @@ app.put('/borrowers/:id', async (req, res) => {
             // updatedBorrower.editmfiGrading,
             borrower.quarterAUM = updatedBorrower.editquarterAUM,
             borrower.financialYearAUM = JSON.stringify(updatedBorrower.editfinancialYearAUM.value),
-
-            await borrower.save()
+            borrower.netWorth = updatedBorrower.editNetworth
+            borrower.borrowrcomment=updatedBorrower.editborrowercomment
+        await borrower.save()
         console.log('Borrower Details updated successfully');
         res.status(200).json({ message: 'Borrower Details updated successfully' });
     } catch (err) {
