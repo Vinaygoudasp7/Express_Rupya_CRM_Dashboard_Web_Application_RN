@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Link } from "react-router-dom";
 import axios from 'axios';
+import BACKEND_API_END_POINT from '../config';
 
 const TeamMembers = () => {
-
     // filtering data
     const [inputvalue, setInputvalue] = useState('');
     const [teamMemberdata, setTeamMemberdata] = useState([]);
@@ -12,7 +12,7 @@ const TeamMembers = () => {
     // useEffect(() => {
     //     const fetchData = async () => {
     //         try {
-    //             const response = await axios.get(`http://192.168.29.250:4306/assignment`);
+    //             const response = await axios.get(`${BACKEND_API_END_POINT}/assignment`);
     //             setTeamMemberdata(response.data);
     //         } catch (error) {
     //             console.log(error);
@@ -42,10 +42,11 @@ const TeamMembers = () => {
 
     //for dispalying data of team members
     const [data, setData] = useState([])
+    console.log(BACKEND_API_END_POINT)
     useEffect(() => {
         const featchdata = async () => {
             try {
-                const responce = await axios.get("http://192.168.29.250:4306/retrivedata");
+                const responce = await axios.get(`${BACKEND_API_END_POINT}/retrivedata`);
                 setData(responce.data);
             } catch (error) {
                 console.log(error);

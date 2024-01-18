@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, Routes } from 'react-router-dom';
+import { Route, Router, Routes } from 'react-router-dom';
 import Region from "../Pages/Region";
 import Delete from '../Pages/Delete';
 import RestoreLenders from '../Pages/RestoreLenders';
@@ -26,8 +26,10 @@ import Contactdetaileslender from '../Pages/ContactDetailslender'
 import PossibleBorrower from '../Pages/PossibleBorrower';
 import PossibleLenders from '../Pages/PossibleLenders';
 import Registrationpage from '../Pages/Registrationpage';
+import RestoreData from '../Pages/RestoreData';
 
 const PageRoutes = () => {
+
   return (
     <Routes>
       <Route path='/Show_Borrowers' element={<Show_Borrowers />}></Route >
@@ -56,6 +58,7 @@ const PageRoutes = () => {
       <Route path='/PossibleBorrowers' element={<PossibleBorrower />}></Route>
       <Route path='/PossibleLenders' element={<PossibleLenders />}></Route>
       <Route path='/registration' element={<Registrationpage />}></Route>
+      <Route path='/restoredata' element={<RestoreData />}></Route>
     </Routes>
   )
 }

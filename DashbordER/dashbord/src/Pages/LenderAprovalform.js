@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import AleartDailog from './Dailogs/AleartDailog';
 import ConfiromDailog from './Dailogs/ConfiromDailog';
+import BACKEND_API_END_POINT from '../config';
 
 const LenderAprovalform = () => {
   const [borrower, setBorrower] = useState([]);
@@ -37,7 +38,7 @@ const LenderAprovalform = () => {
   useEffect(() => {
     const featchdata = async () => {
       try {
-        const response = await axios.get("http://192.168.29.250:4306/List_borrowers");
+        const response = await axios.get(`${BACKEND_API_END_POINT}/List_borrowers`);
 
         const borrowers = response.data;
 
@@ -74,7 +75,7 @@ const LenderAprovalform = () => {
   useEffect(() => {
     const featchdata = async () => {
       try {
-        const response = await axios.get("http://192.168.29.250:4306/List_Lenders");
+        const response = await axios.get(`${BACKEND_API_END_POINT}/List_Lenders`);
         const lenders = response.data;
 
         lenders.sort((a, b) => {
@@ -110,7 +111,7 @@ const LenderAprovalform = () => {
   useEffect(() => {
     const featchdata = async () => {
       try {
-        await axios.get("http://192.168.29.250:4306/teammembers").then(responce => {
+        await axios.get(`${BACKEND_API_END_POINT}/teammembers`).then(responce => {
           const teammembers = responce.data;
 
           teammembers.sort((a, b) => {
@@ -182,14 +183,14 @@ const LenderAprovalform = () => {
       setMessage('Please fill all required detailes');
       handelOpenAlert();
     } else {
-      axios.post("http://192.168.29.250:4306/checkforApprovalTABEL", {
+      axios.post(`${BACKEND_API_END_POINT}/checkforApprovalTABEL`, {
         borrowerId: borrowerIdToUpdate,
         lenderId: lenderIdToUpdate,
       }).then(async (response) => {
         const { borrowerExists } = response.data;
         if (!borrowerExists) {
           // Create the assignment without sending a response
-          const responce = await axios.post("http://192.168.29.250:4306/assign", {
+          const responce = await axios.post(`${BACKEND_API_END_POINT}/assign`, {
             Date_of_creation: Date,
             lastupDate: Date,
             borrowerId: borrowerIdToUpdate,
@@ -218,7 +219,7 @@ const LenderAprovalform = () => {
           })
           // var handelOnconfirm = () => {
           //   // Update the assignment
-          //   const responce = axios.post("http://192.168.29.250:4306/assign", {
+          //   const responce = axios.post("${BACKEND_API_END_POINT}/assign", {
           //     date: date,
           //     lastupDate: date,
           //     borrowerId: borrowerIdToUpdate,

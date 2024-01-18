@@ -10,6 +10,7 @@ import './Borrower.css'
 
 import axios from 'axios';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import BACKEND_API_END_POINT from '../config';
 
 const regions = [
   {
@@ -58,7 +59,7 @@ function TeamMemberReg() {
   useEffect(() => {
     const featchTeammember = async () => {
       try {
-        const responce = await axios.get("http://192.168.29.250:4306/teammembers");
+        const responce = await axios.get(`${BACKEND_API_END_POINT}/teammembers`);
         const data = responce.data;
 
         data.sort((a, b) => {
@@ -91,7 +92,7 @@ function TeamMemberReg() {
       const id = teammemberId
       console.log(id)
       const pass = password;
-      const responce = await axios.put(`http://192.168.29.250:4306/attachPassword/${id}`, {
+      const responce = await axios.put(`${BACKEND_API_END_POINT}/attachPassword/${id}`, {
         password: pass,
         region: selectedRegion,
       });

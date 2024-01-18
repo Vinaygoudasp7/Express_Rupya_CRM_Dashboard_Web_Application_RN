@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import Select from 'react-select'
 import './lenderClassification.css'
 import { toast } from 'react-toastify'
+import BACKEND_API_END_POINT from '../config'
 
 const LenderClassification = () => {
   const [borrowers, setBorrowers] = useState([]);
@@ -15,8 +16,8 @@ const LenderClassification = () => {
   useEffect(() => {
     const featchDetailes = async () => {
       try {
-        const responce = await axios.get("http://192.168.29.250:4306/List_borrowers")
-        const lenderresponce = await axios.get('http://192.168.29.250:4306/List_Lenders')
+        const responce = await axios.get(`${BACKEND_API_END_POINT}/List_borrowers`)
+        const lenderresponce = await axios.get(`${BACKEND_API_END_POINT}/List_Lenders`)
         const borrowers = responce.data
         const lenders = lenderresponce.data
         console.log(borrowers)
@@ -52,7 +53,7 @@ const LenderClassification = () => {
         setLenderDeatailes(lenders)
 
         const borrower_id = selectedBorrower ? selectedBorrower.value : 0
-        const lenderclassification = await axios.get(`http://192.168.29.250:4306/retrivelenderclassificationofborrower/${borrower_id}`)
+        const lenderclassification = await axios.get(`${BACKEND_API_END_POINT}/retrivelenderclassificationofborrower/${borrower_id}`)
         const lenderclassificationData = lenderclassification.data
         console.log(lenderclassificationData)
         if (lenderclassificationData.length !== 0) {
@@ -123,8 +124,8 @@ const LenderClassification = () => {
     }
     console.log(lenderclassificationData)
     try {
-      const deleteresponce = await axios.delete(`http://192.168.29.250:4306/delete_lender_classification/${borrower_id}`)
-      const response = await axios.post(`http://192.168.29.250:4306/add_lender_classification/${borrower_id}`, lenderclassificationData)
+      const deleteresponce = await axios.delete(`${BACKEND_API_END_POINT}/delete_lender_classification/${borrower_id}`)
+      const response = await axios.post(`${BACKEND_API_END_POINT}/add_lender_classification/${borrower_id}`, lenderclassificationData)
       console.log(deleteresponce.data)
       const message = response.data
       if ('message' in message) {

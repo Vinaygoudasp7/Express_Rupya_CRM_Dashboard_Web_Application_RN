@@ -8,7 +8,8 @@ import { GiPayMoney } from 'react-icons/gi';
 import AddIcon from '@mui/icons-material/Add';
 import PersonIcon from '@mui/icons-material/Person';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-
+import { MdOutlineRestorePage } from "react-icons/md";
+import { FaTrashRestoreAlt } from 'react-icons/fa';
 export const Sidebaritems = [
 
     {
@@ -38,7 +39,7 @@ export const Sidebaritems = [
         link: "/StatusUpdate"
 
     },
-    
+
     {
         title: "Partially Disbursed",
         icon: <AssuredWorkloadIcon />,
@@ -63,6 +64,11 @@ export const Sidebaritems = [
         title: "Email Reminder",
         icon: <EmailIcon />,
         link: "/Emailreminder"
+    },
+    {
+        title: "Restore Data",
+        icon: <FaTrashRestoreAlt/>,
+        link: "/restoredata"
     },
 ];
 

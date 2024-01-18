@@ -7,6 +7,8 @@ import { FaSortAlphaDown, FaSortAlphaUp } from 'react-icons/fa'
 import { IconContext } from 'react-icons/lib';
 import Select from 'react-select'
 import { creditRating, products, producttypes } from './Show_Borrowers';
+import BACKEND_API_END_POINT from '../config';
+import CommentPage from './CommentPage';
 
 export const splitDataIntoArray = (data) => {
   const splitedData = data?.split(', ')
@@ -35,6 +37,7 @@ const LenderDetailsTable = () => {
     editminLoanAmount: '',
     editmaxLoanAmount: '',
     editlenderComment: '',
+    editlenderComment: '',
   });
 
   const [filters, setFilters] = useState({
@@ -57,7 +60,8 @@ const LenderDetailsTable = () => {
     maxLoanAmount: '',
     lenderComment: '',
   });
-
+  const [passlendercomment, setPasslenderComment] = useState('')
+  const [showModal, setShowModal] = useState(false)
   const [sortConfig, setSortConfig] = useState({ key: '', direction: '' });
   let formatedintialborrowerregion;
   let formatedintialloantypes;
@@ -74,7 +78,7 @@ const LenderDetailsTable = () => {
 
   const fetchlenderDetails = async () => {
     try {
-      const response = await axios.get("http://192.168.29.250:4306/List_Lenders");
+      const response = await axios.get(`${BACKEND_API_END_POINT}/List_Lenders`);
 
       //format data
       const data = response.data
@@ -149,7 +153,7 @@ const LenderDetailsTable = () => {
   useEffect(() => {
     const featchTeammember = async () => {
       try {
-        const responce = await axios.get("http://192.168.29.250:4306/teammembers");
+        const responce = await axios.get(`${BACKEND_API_END_POINT}/teammembers`);
         const teamMember = responce.data;
         const formatedOptions = teamMember.map((teamMember) => ({
           value: teamMember.TeamM_id,
@@ -320,6 +324,15 @@ const LenderDetailsTable = () => {
       }
       );
     }
+
+    if (filters.lenderComment) {
+      filteredData = filteredData.filter((detail) => {
+        if (detail.lendercomment) {
+          return detail.lendercomment === filters.lenderComment
+        }
+      }
+      );
+    }
     setFilteredlenderDetails(filteredData);
   }, [filters, lenderDetails]);
 
@@ -402,6 +415,7 @@ const LenderDetailsTable = () => {
         editmaxLoanAmount: lenderDetailsCopy.maxLoanAmount,
         editminLoanAmount: lenderDetailsCopy.minLoanAmount,
         editminInterestRate: lenderDetailsCopy.minInterestRate,
+        editlenderComment: lenderDetailsCopy.lendercomment,
       })
     }
   }
@@ -472,7 +486,7 @@ const LenderDetailsTable = () => {
   const handleSubmit = () => {
     const lenderid = editableLenderId
     console.log(lenderid)
-    axios.put(`http://192.168.29.250:4306/lenders/${lenderid}`, editedLender)
+    axios.put(`${BACKEND_API_END_POINT}/lenders/${lenderid}`, editedLender)
       .then((response) => {
         // Handle the response (optional)
         console.log('Lender details updated successfully:', response.data);
@@ -502,6 +516,56 @@ const LenderDetailsTable = () => {
     setEditedLender('');
   };
 
+
+  const handelReadmore = (comment) => {
+    setPasslenderComment(comment)
+    setShowModal(true)
+  }
+
+  const handelCloseModal = () => {
+    setShowModal(false)
+  }
+
+
+  const handdelCancel = () => {
+    setEditableLenderId(-1)
+  }
+
+  const handelDeleteLender = (event, id, name) => {
+    event.preventDefault()
+    try {
+      const confiorm = window.confirm(`Are you suer to delete lender [${name}]`)
+      if (confiorm) {
+        axios.put(`${BACKEND_API_END_POINT}/deletelender/${id}`).then((responce) => {
+          console.log(responce)
+          toast.success(`Lender [${name}] Deleted`, {
+            position: 'top-right',
+            autoClose: 3000,
+            hideProgressBar: true
+          })
+        }).catch((error) => {
+          console.log(error)
+          toast.error(`some thing went wrong Lender [${name}] not Deleted`, {
+            position: 'top-right',
+            autoClose: 3000,
+            hideProgressBar: true
+          })
+        })
+
+      } else {
+        toast.info(`user cancel delete`, {
+          position: 'top-right',
+          autoClose: 3000,
+          hideProgressBar: true
+        })
+      }
+
+      setsubmitedit(true)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <>
 
@@ -524,7 +588,7 @@ const LenderDetailsTable = () => {
                 </div>
                 <input
                   type="text"
-                  style={{ width: '140px' }}
+                  style={{ width: "300px" }}
                   value={filters.name}
                   onChange={(e) => handleFilterChange('name', e.target.value)}
                 />
@@ -579,7 +643,7 @@ const LenderDetailsTable = () => {
               </th>
               {/* </div> */}
               <th
-                style={{ width: '100px' }}
+                style={{ width: '200px' }}
               ><div className='row'>
                   <div className='col-9 p-0 m-0' style={{ fontSize: '16px' }}>Borrower region</div>
                   <IconContext.Provider value={{ size: '1.3rem' }}>
@@ -590,7 +654,7 @@ const LenderDetailsTable = () => {
                 </div>
                 <input
                   type="text"
-                  style={{ width: '150px' }}
+                  style={{ width: '250px' }}
                   value={filters.Borrowerregion}
                   onChange={(e) => handleFilterChange('Borrowerregion', e.target.value)}
                 />
@@ -766,20 +830,8 @@ const LenderDetailsTable = () => {
               </th>
               <th>
                 <div className='row'>
-                  <div className='col-10 p-1 m-0'>Comment</div>
-                  {/* <IconContext.Provider value={{ size: '1.3rem' }}>
-                    <div className='col-2 d-flex align-items-center justify-content-center'>
-                      <button className='btn btn-sm me-3 ' onClick={() => handelSort('maxLoanAmount')}>{sortConfig.direction === 'asc' ? <FaSortAlphaDown /> : <FaSortAlphaUp />}</button>
-                    </div>
-                  </IconContext.Provider> */}
+                  <div className='col-10 p-1 m-0' style={{ width: '450px', minWidth: '450px', maxWidth: '500px' }}>Comment</div>
                 </div>
-                {/* <input
-                  style={{ width: '130px' }}
-                  type="decimal"
-                  // placeholder='less than'
-                  value={filters.maxLoanAmount}
-                  onChange={(e) => handleFilterChange('maxLoanAmount', e.target.value)}
-                /> */}
               </th>
               <th>Edit</th>
             </tr>
@@ -788,7 +840,7 @@ const LenderDetailsTable = () => {
             {filteredlenderDetails.map((detail) => (
               <tr key={detail.id}>
                 {/* <div className='freeze-pan'> */}
-                <td>
+                <td style={{ width: "300px" }}>
                   {detail.id === editableLenderId ? (
                     <input
                       type="text"
@@ -860,7 +912,7 @@ const LenderDetailsTable = () => {
                   )}
                 </td>
                 {/* </div> */}
-                <td>
+                <td style={{ width: "250px" }}>
                   {detail.id === editableLenderId ? (
                     <Select
                       isMulti
@@ -938,7 +990,7 @@ const LenderDetailsTable = () => {
                       onChange={(event) => handleInputChange(event, 'editminaum')}
                     />
                   ) : (
-                    detail.aum
+                    detail.aum ? parseFloat(detail.aum).toFixed(2) : 'nill'
                   )}
                 </td>
                 <td>
@@ -951,7 +1003,7 @@ const LenderDetailsTable = () => {
 
                     />
                   ) : (
-                    detail.minInterestRate
+                    detail.minInterestRate ? parseFloat(detail.minInterestRate).toFixed(2) : 'nill'
                   )}
                 </td>
 
@@ -965,7 +1017,7 @@ const LenderDetailsTable = () => {
 
                     />
                   ) : (
-                    detail.minLoanAmount
+                    detail.minLoanAmount ? parseFloat(detail.minLoanAmount).toFixed(2) : 'nill'
                   )}
                 </td>
                 <td>
@@ -978,32 +1030,42 @@ const LenderDetailsTable = () => {
 
                     />
                   ) : (
-                    detail.maxLoanAmount
+                    detail.maxLoanAmount ? parseFloat(detail.maxLoanAmount).toFixed(2) : 'nill'
                   )}
                 </td>
-                <td>
+                <td style={{ width: '450px', minWidth: '450px', maxWidth: '500px' }}>
                   {detail.id === editableLenderId ? (
-                    <input
-                      type="decimal"
-                      name="maxLoanAmount"
+                    <textarea
+                      className='w-100'
+                      type="text"
                       value={editedLender.editlenderComment}
-                      onChange={(event) => handleInputChange(event, 'editlenderComment')}
-
-                    />
+                      onChange={(e) => handleInputChange(e, 'editlenderComment')}
+                    ></textarea>
                   ) : (
-                    detail.lendercomment
+                    detail?.lendercomment.length > 80 ? (
+                      <>
+                        `${detail?.lendercomment.slice(0, 80)}....`
+                        <button onClick={() => handelReadmore(detail.lendercomment)} className='readmore'>Read more...</button>
+                      </>
+                    ) : detail?.lendercomment
                   )}
                 </td>
-
-                <td>
+                <td >
                   {detail.id === editableLenderId ? (
-                    <button className='deletebtn' onClick={handleSubmit}>Submit</button>
+                    <div className='d-flex flex-row'>
+                      <button className='deletebtn' onClick={handleSubmit}>Submit</button>
+                      <button className='cancel' onClick={handdelCancel}>Cancel</button>
+                    </div>
                   ) : (
-                    <button className='deletebtn' onClick={(event) => handleEditLender(event, detail.id)}>Edit</button>
-                  )}
+                    <div className='d-flex flex-row'>
+                      <button className='deletebtn' onClick={(event) => handleEditLender(event, detail.id)}>Edit</button>
+                      <button className='cancel' onClick={(event) => handelDeleteLender(event, detail.id, detail.name)}>Delete</button>
+                    </div>)}
                 </td>
               </tr>
             ))}
+            <CommentPage showModal={showModal} handelCloseModal={handelCloseModal} Comment={passlendercomment} />
+
           </tbody>
         </table>
         <ToastContainer

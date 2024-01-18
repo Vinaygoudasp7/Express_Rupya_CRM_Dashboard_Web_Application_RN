@@ -5,6 +5,7 @@ import Pendingwithlender from './Pendingwithlender';
 import axios from 'axios';
 import "./Email.css"
 import SendDetailestoTeam from './SendDetailestoTeam';
+import BACKEND_API_END_POINT from '../config';
 
 const Emailreminder = () => {
 
@@ -33,7 +34,7 @@ const Emailreminder = () => {
     useEffect(() => {
         const featchpendingdata = async () => {
             try {
-                const responce = await axios.get("http://192.168.29.250:4306/retrivestatus");
+                const responce = await axios.get(`${BACKEND_API_END_POINT}/retrivestatus`);
                 setPendingdata(responce.data);
 
             } catch (error) {

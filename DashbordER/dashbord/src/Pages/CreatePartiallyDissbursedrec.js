@@ -4,6 +4,7 @@ import "./PartiallyDisbursed.css"
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import AleartDailog from './Dailogs/AleartDailog';
+import BACKEND_API_END_POINT from '../config';
 
 const CreatePartiallyDissbursedrec = () => {
 
@@ -20,7 +21,7 @@ const CreatePartiallyDissbursedrec = () => {
     useEffect(() => {
         const featchdata = async () => {
             try {
-                const response = await axios.get("http://192.168.29.250:4306/List_borrowers");
+                const response = await axios.get(`${BACKEND_API_END_POINT}/List_borrowers`);
 
                 const borrowers = response.data;
                 borrowers.sort((a, b) => {
@@ -54,7 +55,7 @@ const CreatePartiallyDissbursedrec = () => {
     useEffect(() => {
         const featchdata = async () => {
             try {
-                const response = await axios.get("http://192.168.29.250:4306/List_Lenders");
+                const response = await axios.get(`${BACKEND_API_END_POINT}/List_Lenders`);
                 const lenders = response.data;
                 lenders.sort((a, b) => {
                     const aName = a.name.toUpperCase()
@@ -165,7 +166,7 @@ const CreatePartiallyDissbursedrec = () => {
             handelOpenAlert();
         } else {
             try {
-                const responce = await axios.post("http://192.168.29.250:4306/partiallydisbursed", {
+                const responce = await axios.post(`${BACKEND_API_END_POINT}/partiallydisbursed`, {
                     borrowerId: borrowerid,
                     borrowerName: borrowername,
                     lenderId: lenderid,

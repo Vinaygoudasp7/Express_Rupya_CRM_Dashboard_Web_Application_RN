@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
+import BACKEND_API_END_POINT from '../config';
 
 const Detailesof = () => {
 
@@ -8,7 +9,7 @@ const Detailesof = () => {
   const [data, setData] = useState(null);
   useEffect(() => {
     const featchdata = (id) => {
-      axios.get(`http://192.168.29.250:4306/read/${id}`)
+      axios.get(`${BACKEND_API_END_POINT}/read/${id}`)
         .then(responce => {
           setData(responce.data);
         }).catch(error => {

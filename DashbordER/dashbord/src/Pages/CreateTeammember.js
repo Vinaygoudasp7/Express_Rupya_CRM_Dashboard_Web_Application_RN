@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import AleartDailog from './Dailogs/AleartDailog';
+import BACKEND_API_END_POINT from '../config';
 
 
 
@@ -53,7 +54,7 @@ const CreateTeammember = () => {
                 };
 
                 // api request to update to database
-                axios.post(`http://192.168.29.250:4306/insertdata`, updateformData)
+                axios.post(`${BACKEND_API_END_POINT}/insertdata`, updateformData)
                     .then((res) => {
                         console.log('data updated successfully', res.data)
                         toast.info('team members successfully Created', {

@@ -11,12 +11,12 @@ import Home from "./Components/Home";
 import LoginPage from "./Pages/LoginPage";
 import AdminRegistration from "./Pages/AdminRegistration";
 import ReadFormat from "./Pages/ReadFormat";
+import DashbordContext, { CreateDashbordContext } from "./Context/DashbordContext.js";
 
 function App() {
   return (
-
-    <>
-      <Router>
+    <Router>
+      <DashbordContext>
         {/* <Routes>
           <Route exact path="/" element={<Registrationpage />}></Route>
           <Route path="/LoginPage" element={<LoginPage />}></Route>
@@ -24,9 +24,9 @@ function App() {
         </Routes> */}
         <Dashbord />
         {/* <AdminRegistration /> */}
-      </Router>
-      {/* <ReadFormat/> */}
-    </>
+        {/* <ReadFormat/> */}
+      </DashbordContext>
+    </Router>
   );
 }
 

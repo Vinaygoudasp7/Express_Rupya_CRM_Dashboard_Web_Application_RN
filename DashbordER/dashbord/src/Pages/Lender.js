@@ -5,6 +5,7 @@ import Select from 'react-select'
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import AleartDailog from "./Dailogs/AleartDailog"
+import BACKEND_API_END_POINT from '../config';
 
 export const regions = ['East', 'West', 'North', 'South',];
 
@@ -99,7 +100,7 @@ const Lender = () => {
   const [nameerrorMessage, setNameErrorMessage] = useState('')
   const [AUMerrorMessage, setAUMErrorMessage] = useState('')
   const [minInterrorMessage, setMinIntErrorMessage] = useState('')
-  const [MAXInterrorMessage, setMaxIntErrorMessage] = useState('')
+  const [lenderComment, setLenderComment] = useState('')
   const [MinloanerrorMessage, setMinloanerrorMessage] = useState('')
   const [maxloanerrorMessage, setMaxloanerrorMessage] = useState('')
 
@@ -137,6 +138,10 @@ const Lender = () => {
       setLoanTypes(loanTypes.filter((type) => type !== selectedLoanType));
     }
   };
+
+  const handelChangeComment = (event) => {
+    setLenderComment(event.target.value)
+  }
 
   const handleBorrowerregionChange = (event) => {
     const selectedBorrowerregion = event.target.value;
@@ -235,7 +240,7 @@ const Lender = () => {
   useEffect(() => {
     const featchTeammember = async () => {
       try {
-        const responce = await axios.get("http://192.168.29.250:4306/teammembers");
+        const responce = await axios.get(`${BACKEND_API_END_POINT}/teammembers`);
         const teamMember = responce.data;
         const formatedOptions = teamMember.map((teamMember) => ({
           value: teamMember.TeamM_id,
@@ -272,7 +277,7 @@ const Lender = () => {
 
       try {
         // Send a POST request to the backend API
-        Axios.post("http://192.168.29.250:4306/insertlenderdetailes", {
+        Axios.post(`${BACKEND_API_END_POINT}/insertlenderdetailes`, {
           name: name,
           region: region,
           state: state,
@@ -284,6 +289,7 @@ const Lender = () => {
           mincreditRating: mincreditRating,
           minInterestRate: minInterestRate,
           mfiGrading: mfiGrading,
+          lenderComment: lenderComment,
           aum: aum,
           minLoanAmount: minLoanAmount,
           maxLoanAmount: maxLoanAmount,
@@ -457,13 +463,25 @@ const Lender = () => {
           <div>
             <label>
               <input
-              className='form-check-input me-1'
+                className='form-check-input me-1'
                 type="checkbox"
                 value="Co-lending"
                 checked={loanTypes.includes('Co-lending')}
                 onChange={handleLoanTypeChange}
               />
               Co-lending
+            </label>
+          </div>
+          <div>
+            <label>
+              <input
+                type="checkbox"
+                className='form-check-input me-1'
+                value="NCD"
+                checked={loanTypes.includes('NCD')}
+                onChange={handleLoanTypeChange}
+              />
+              NCD
             </label>
           </div>
           <div>
@@ -723,7 +741,10 @@ const Lender = () => {
             <option value="Not Rated">Not Rated</option>
           </select>
         </div>
-
+        <div className='mb-1'>
+          <label htmlFor="Comment">Comment:</label>
+          <textarea className='form-control' cols={30} rows={3} value={lenderComment} onChange={handelChangeComment}></textarea>
+        </div>
         <div>
           <label htmlFor="aum">Minimum AUM ( in crores):</label>
           <p className='text-danger'>{AUMerrorMessage}</p>

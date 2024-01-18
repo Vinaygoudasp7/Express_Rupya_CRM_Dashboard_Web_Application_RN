@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { entityTypes, statesByRegion, citiesByState, LonTypesData, quteryearsAum, RegionsData } from './Borrower'
 import axios from 'axios';
 import './TeamMembers.css'
@@ -7,7 +7,9 @@ import { ToastContainer, toast } from 'react-toastify';
 import { FaSortAlphaDown, FaSortAlphaUp } from 'react-icons/fa'
 import { IconContext } from 'react-icons/lib';
 import { splitDataIntoArray } from './Show_Lenders';
-
+import DashbordContext from '../Context/DashbordContext';
+import BACKEND_API_END_POINT from '../config';
+import CommentPage from './CommentPage';
 export const producttypes = ['Secured', 'Unsecured']
 export const products = ['Auto Loan', 'Home Loan', 'Business Loan', 'Two Wheeler Loan', 'Gold Loan', 'MFI', 'Commercial Vehicle', 'MSME', 'LAP', 'Personal Loan', 'Agriculture Loans', 'Wholesale lending', 'Used Wheeler']
 export const creditRating = ['AAA', 'AA', 'A', 'BBB', 'BB', 'B', '-AAA', '-AA', '-A', '-BBB', '-BB', '-B', 'Not Rated']
@@ -17,7 +19,7 @@ const BorrowerDetailsTable = () => {
   const [borrowerDetails, setBorrowerDetails] = useState([]);
   const [submitedit, setsubmitedit] = useState(false);
   const [filteredBorrowerDetails, setFilteredBorrowerDetails] = useState([]);
-  const [editableBorrowerId, setEditableBorrowerId] = useState(null);
+  const [editableBorrowerId, setEditableBorrowerId] = useState(1);
   const [editedBorrower, setEditedBorrower] = useState({
     editname: '',
     editregion: '',
@@ -64,15 +66,16 @@ const BorrowerDetailsTable = () => {
     networth: '',
     borrowercomment: '',
   });
-
+  const [showModal, setShowModal] = useState(false)
   const [sortConfig, setSortConfig] = useState({ key: '', direction: 'asc' });
   const [owner, setOwner] = useState([])
   const [editeddata, setEditedData] = useState(false)
-
+  const apiEndpoint = useContext(DashbordContext)
+  const [passcomment,setPassComment]=useState('')
   useEffect(() => {
     const featchTeammember = async () => {
       try {
-        const responce = await axios.get("http://192.168.29.250:4306/teammembers");
+        const responce = await axios.get(`${BACKEND_API_END_POINT}/teammembers`);
         const teamMember = responce.data;
         const formatedOptions = teamMember.map((teamMember) => ({
           value: teamMember.TeamM_id,
@@ -170,10 +173,10 @@ const BorrowerDetailsTable = () => {
       editowner: selectedOwner
     })
   }
-
+  console.log(apiEndpoint)
   const fetchBorrowerDetails = async () => {
     try {
-      const response = await axios.get("http://192.168.29.250:4306/List_borrowers");
+      const response = await axios.get(`${BACKEND_API_END_POINT}/List_borrowers`);
       const data = response.data
       const formattedData = data.map((detail) => ({
         ...detail,
@@ -376,7 +379,7 @@ const BorrowerDetailsTable = () => {
     if (filters.lessaum) {
       filteredData = filteredData.filter((detail) => {
         if (detail.aum) {
-          return detail.aum <= filters.lessaum
+          return parseFloat(detail.aum) <= parseFloat(filters.lessaum)
         }
       }
       );
@@ -385,7 +388,7 @@ const BorrowerDetailsTable = () => {
     if (filters.moreaum) {
       filteredData = filteredData.filter((detail) => {
         if (detail.aum) {
-          return detail.aum >= filters.moreaum
+          return parseFloat(detail.aum) >= parseFloat(filters.moreaum)
         }
       }
       );
@@ -522,7 +525,7 @@ const BorrowerDetailsTable = () => {
         editproducts: formatedintialproducts,
         editquarterAUM: copyEditableBorrower?.quarterAUM,
         editNetworth: copyEditableBorrower?.netWorth,
-        editborrowercomment:copyEditableBorrower?.borrowercomment
+        editborrowercomment: copyEditableBorrower?.borrowerComment
       });
     }
   };
@@ -556,7 +559,7 @@ const BorrowerDetailsTable = () => {
     const borrowerId = editableBorrowerId
     const borrowerupdateddata = JSON.stringify(editedBorrower)
     console.log(borrowerupdateddata)
-    axios.put(`http://192.168.29.250:4306/borrowers/${borrowerId}`, editedBorrower)
+    axios.put(`${BACKEND_API_END_POINT}/borrowers/${borrowerId}`, editedBorrower)
       .then((response) => {
         // Handle the response (optional)
         console.log('Borrower details updated successfully:', response.data,);
@@ -587,6 +590,58 @@ const BorrowerDetailsTable = () => {
     setEditedBorrower('');
     setEditableBorrowerId(null)
   };
+
+
+
+  const handelReadmore = (comment) => {
+    setPassComment(comment)
+    setShowModal(true)
+    
+  }
+
+  const handelCloseModal = () => {
+    setShowModal(false)
+  }
+
+  const handdelCancel = () => {
+    setEditableBorrowerId(-1)
+  }
+
+  const handelDeleteBorrower = (event, id, name) => {
+    event.preventDefault()
+    try {
+      const confiorm = window.confirm(`Are you suer to delete borrower [${name}]`)
+      if (confiorm) {
+        axios.put(`${BACKEND_API_END_POINT}/deleteborrower/${id}`).then((responce) => {
+          console.log(responce)
+          toast.success(`Borrower [${name}] Deleted`, {
+            position: 'top-right',
+            autoClose: 3000,
+            hideProgressBar: true
+          })
+        }).catch((error) => {
+          console.log(error)
+          toast.error(`some thing went wrong borrower [${name}] not Deleted`, {
+            position: 'top-right',
+            autoClose: 3000,
+            hideProgressBar: true
+          })
+        })
+
+      } else {
+        toast.info(`user cancel delete`, {
+          position: 'top-right',
+          autoClose: 3000,
+          hideProgressBar: true
+        })
+      }
+      setsubmitedit(true);
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
 
   return (
     <>
@@ -891,7 +946,7 @@ const BorrowerDetailsTable = () => {
                 <input
                   type="number"
                   placeholder='less than'
-                  style={{ width: '140px' }}
+                  style={{ width: '142px' }}
                   value={filters.lessminLoanAmount}
                   className='search'
                   onChange={(e) => handleFilterChange('lessminLoanAmount', e.target.value)}
@@ -920,27 +975,15 @@ const BorrowerDetailsTable = () => {
                 <input
                   type="text"
                   value={filters.networth}
-                  style={{ width: '120px' }}
+                  style={{ width: '130px' }}
                   className='search'
                   onChange={(e) => handleFilterChange('networth', e.target.value)}
                 />
               </th>
-              <th>
+              <th >
                 <div className='row'>
                   <div className='col-8' style={{ fontSize: '17px' }}>Comment</div>
-                  <IconContext.Provider value={{ size: '1.4rem' }}>
-                    <div className='col-4 d-flex align-items-center justify-content-center'>
-                      <button className='btn btn-sm' onClick={() => handelSort('quarterAUM')}>{sortConfig.direction === 'asc' ? <FaSortAlphaDown /> : <FaSortAlphaUp />}</button>
-                    </div>
-                  </IconContext.Provider>
                 </div>
-                <input
-                  type="text"
-                  value={filters.networth}
-                  style={{ width: '120px' }}
-                  className='search'
-                  onChange={(e) => handleFilterChange('borr', e.target.value)}
-                />
               </th>
               <th>Edit</th>
             </tr>
@@ -1136,7 +1179,7 @@ const BorrowerDetailsTable = () => {
                       value={editedBorrower.editaum} onChange={(e) => handleInputChange(e, 'editaum')}
                     />
                   ) : (
-                    detail.aum
+                    detail.aum ? parseFloat((detail.aum)).toFixed(2) : 'nill'
                   )}
                 </td>
 
@@ -1148,7 +1191,7 @@ const BorrowerDetailsTable = () => {
 
                     />
                   ) : (
-                    detail.maxInterestRate
+                    detail.maxInterestRate ? parseFloat(detail.maxInterestRate).toFixed(2) : 'nill'
                   )}
                 </td>
 
@@ -1159,7 +1202,7 @@ const BorrowerDetailsTable = () => {
                       value={editedBorrower.editminLoanAmount} onChange={(e) => handleInputChange(e, 'editminLoanAmount')}
                     />
                   ) : (
-                    detail.minLoanAmount
+                    detail.minLoanAmount ? parseFloat(detail.minLoanAmount).toFixed(2) : 'nill'
                   )}
                 </td>
                 <td>
@@ -1172,30 +1215,52 @@ const BorrowerDetailsTable = () => {
                       value={editedBorrower.editNetworth} onChange={(e) => handleInputChange(e, 'editNetworth')}
                     />
                   ) : (
-                    detail.netWorth
+                    detail.netWorth ? parseFloat(detail.netWorth).toFixed(2) : 'nill'
+                  )}
+                </td>
+                <td 
+                >
+                  {detail.id === editableBorrowerId ? (
+                    <textarea
+                      type="text"
+                      className='w-100'
+                      value={editedBorrower.editborrowercomment}
+                      onChange={(e) => handleInputChange(e, 'editborrowercomment')}
+                    ></textarea>
+                  ) : (
+                    <>
+                      {detail.borrowerComment?.length >= 75 ?
+                        <span  className='pe-3'>{`${detail.borrowerComment.slice(0, 75)}....`}</span> :
+                        <span className='pe-3'>{detail.borrowerComment}</span>
+                      }
+                      {detail.borrowerComment?.length > 80 && (
+                        <button onClick={()=>handelReadmore(detail.borrowerComment)} className='readmore'>
+                          Read more....
+                        </button>
+                      )}
+                    </>
                   )}
                 </td>
                 <td>
                   {detail.id === editableBorrowerId ? (
-                    <input
-                      type="number"
-                      value={editedBorrower.editborrowercomment} onChange={(e) => handleInputChange(e, 'editborrowercomment')}
-                    />
+                    <div className='d-flex flex-row'>
+                      <button className='deletebtn' onClick={handleSubmit}>Submit</button>
+                      <button className='cancel' onClick={handdelCancel}>Cancel</button>
+                    </div>
                   ) : (
-                    detail.borrowercomment
+                    <div className='d-flex flex-row'>
+                      <button className='deletebtn' onClick={(event) => handleEditBorrower(event, detail.id)}>Edit</button>
+                      <button className='cancel' onClick={(event) => handelDeleteBorrower(event, detail.id, detail.name)}>Delete</button>
+                    </div>
                   )}
                 </td>
-                <td>
-                  {detail.id === editableBorrowerId ? (
-                    <button className='deletebtn' onClick={handleSubmit}>Submit</button>
-                  ) : (
-                    <button className='deletebtn' onClick={(event) => handleEditBorrower(event, detail.id)}>Edit</button>
-                  )}
-                </td>
+
               </tr>
             ))}
           </tbody>
         </table>
+        <CommentPage showModal={showModal} handelCloseModal={handelCloseModal} Comment={passcomment} />
+
         <ToastContainer
           autoClose={5000}
           position={toast.POSITION.TOP_RIGHT}

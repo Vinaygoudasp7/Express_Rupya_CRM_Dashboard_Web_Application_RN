@@ -3,6 +3,7 @@ import Select from 'react-select';
 import axios from 'axios';
 import './TeamMembers.css';
 import { Link } from 'react-router-dom';
+import BACKEND_API_END_POINT from '../config';
 
 
 const Assign = () => {
@@ -28,7 +29,7 @@ const Assign = () => {
   useEffect(() => {
     const featchdata = async () => {
       try {
-        const response = await axios.get("http://192.168.29.250:4306/borrowers");
+        const response = await axios.get(`${BACKEND_API_END_POINT}/borrowers`);
 
         const borrowers = response.data;
         const formattedOptions = borrowers.map((borrower) => ({
@@ -53,7 +54,7 @@ const Assign = () => {
   useEffect(() => {
     const featchdata = async () => {
       try {
-        const response = await axios.get("http://192.168.29.250:4306/lenders");
+        const response = await axios.get(`${BACKEND_API_END_POINT}/lenders`);
         const lenders = response.data;
         const formattedOptions = lenders.map((lender) => ({
           value: lender.Lender_Id,
@@ -77,7 +78,7 @@ const Assign = () => {
   useEffect(() => {
     const featchdata = async () => {
       try {
-        await axios.get("http://192.168.29.250:4306/teammembers").then(responce => {
+        await axios.get(`${BACKEND_API_END_POINT}/teammembers`).then(responce => {
           const teammembers = responce.data;
           const formattedOptions = teammembers.map((teammember) => ({
             value: teammember.TeamM_id,
@@ -122,7 +123,7 @@ const Assign = () => {
     const teammemberIdToUpdate = selectedteammember.value;
     const teammemberNameToUpdate = selectedteammember.label;
     const selectedoptionToUpdated = selectedOption.value;
-    axios.post("http://192.168.29.250:4306/checkforApprovalTABEL", {
+    axios.post(`${BACKEND_API_END_POINT}/checkforApprovalTABEL`, {
       borrowerId: borrowerIdToUpdate,
       lenderId: lenderIdToUpdate,
     }).then((response) => {
@@ -130,7 +131,7 @@ const Assign = () => {
       window.alert("lender and borrowers are exist", borrowerExists)
       if (!borrowerExists) {
         // Create the assignment without sending a response
-        return axios.post("http://192.168.29.250:4306/assign", {
+        return axios.post(`${BACKEND_API_END_POINT}/assign`, {
           borrowerId: borrowerIdToUpdate,
           borrowerName: borrowerNameToUpdate,
           lenderId: lenderIdToUpdate,
@@ -145,7 +146,7 @@ const Assign = () => {
         const confirmUpdate = window.confirm("Are you sure you want to update?");
         if (confirmUpdate) {
           // Update the assignment
-          return axios.post("http://192.168.29.250:4306/assign", {
+          return axios.post(`${BACKEND_API_END_POINT}/assign`, {
             borrowerId: borrowerIdToUpdate,
             borrowerName: borrowerNameToUpdate,
             lenderId: lenderIdToUpdate,
@@ -172,7 +173,7 @@ const Assign = () => {
   useEffect(() => {
     const featchdata = async () => {
       try {
-        const responce = await axios.get("http://192.168.29.250:4306/retriveApprovals");
+        const responce = await axios.get(`${BACKEND_API_END_POINT}/retriveApprovals`);
         setData(responce.data)
       } catch (error) {
         console.log(error);
@@ -277,7 +278,7 @@ const Assign = () => {
       updated_by: updateData.updated_by || '',
     };
     console.log(updatedData)
-    axios.post(`http://192.168.29.250:4306/updatetoAproval/${approvalId}`, updatedData)
+    axios.post(`${BACKEND_API_END_POINT}/updatetoAproval/${approvalId}`, updatedData)
       .then(responce => {
         const msg = responce.data
         console.log("status updated  succcessfully");

@@ -5,6 +5,7 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import TostNotification from './ReminderNotification';
 import 'react-toastify/dist/ReactToastify.css';
+import BACKEND_API_END_POINT from '../config';
 
 const Eamil = ({ handelClose, open }) => {
 
@@ -71,7 +72,7 @@ const Eamil = ({ handelClose, open }) => {
       console.log(data)
 
       try {
-        const response = await axios.post("http://192.168.29.250:4306/sendemail", data, {
+        const response = await axios.post(`${BACKEND_API_END_POINT}/sendemail`, data, {
           headers: {
             "Content-Type": "multipart/form-data; boundary=<boundary>",
           },

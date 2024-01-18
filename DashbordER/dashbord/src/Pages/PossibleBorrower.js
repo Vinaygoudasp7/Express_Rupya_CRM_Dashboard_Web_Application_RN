@@ -2,6 +2,7 @@ import axios from 'axios'
 import React, { useCallback, useEffect, useState } from 'react'
 import Select from 'react-select'
 import './PossiblelenderBorrowerstyle.css'
+import BACKEND_API_END_POINT from '../config'
 
 const PossibleBorrower = () => {
     const [borrower, setBorrower] = useState([])
@@ -25,8 +26,8 @@ const PossibleBorrower = () => {
     useEffect(() => {
         const fetchBorrowerDetails = async () => {
             try {
-                const response = await axios.get("http://192.168.29.250:4306/List_borrowers");
-                const lenderresponse = await axios.get("http://192.168.29.250:4306/List_lenders");
+                const response = await axios.get(`${BACKEND_API_END_POINT}/List_borrowers`);
+                const lenderresponse = await axios.get(`${BACKEND_API_END_POINT}/List_lenders`);
                 console.log(lenderresponse.data)
                 const lenderdetails = lenderresponse.data
 
@@ -83,7 +84,7 @@ const PossibleBorrower = () => {
         const lender_id = selectedLender?.value
         console.log(lender_id)
         try {
-            const lenderclassification = await axios.get(`http://192.168.29.250:4306/retrivelenderclassificationoflender/${lender_id}`)
+            const lenderclassification = await axios.get(`${BACKEND_API_END_POINT}/retrivelenderclassificationoflender/${lender_id}`)
             console.log(lenderclassification.data)
 
             const lenderClassificationsData = lenderclassification.data
@@ -212,20 +213,20 @@ const PossibleBorrower = () => {
     // const totalNoOfLenders = existingLender.length + existingThrowUs.length + negtiveLender.length + notClassified.length + mandateGiven.length
 
     useEffect(() => {
-        const totalExistingLenderMaxAmt = existingLender.reduce((total, data) => (total + data.minLoanAmount), 0)
+        const totalExistingLenderMaxAmt = existingLender.reduce((total, data) => (total + parseFloat(data.minLoanAmount)), 0)
         console.log(totalExistingLenderMaxAmt)
         setExistingLendertotalMaxAmt(totalExistingLenderMaxAmt)
 
-        const totalExistingThrowusLenderMaxAmt = existingThrowUs.reduce((total, data) => (total + data.minLoanAmount), 0)
+        const totalExistingThrowusLenderMaxAmt = existingThrowUs.reduce((total, data) => (total + parseFloat(data.minLoanAmount)), 0)
         setExistingThrowUstotalMaxAmt(totalExistingThrowusLenderMaxAmt)
 
-        const totalnotClassifiedLenderMaxAmt = notClassified.reduce((total, data) => (total + data.minLoanAmount), 0)
+        const totalnotClassifiedLenderMaxAmt = notClassified.reduce((total, data) => (total + parseFloat(data.minLoanAmount)), 0)
         setNotClassifiedtotalMaxAmt(totalnotClassifiedLenderMaxAmt)
 
-        const totalMandategivenMaxAmt = mandateGiven.reduce((total, data) => (total + data.minLoanAmount), 0)
+        const totalMandategivenMaxAmt = mandateGiven.reduce((total, data) => (total + parseFloat(data.minLoanAmount)), 0)
         setMandateGiventotalMaxAmt(totalMandategivenMaxAmt)
 
-        const totalnegtiveLenderMaxLoanamt = negtiveLender.reduce((total, data) => (total + data.minLoanAmount), 0)
+        const totalnegtiveLenderMaxLoanamt = negtiveLender.reduce((total, data) => (total + parseFloat(data.minLoanAmount)), 0)
         setNegitiveLendertotalMaxAmt(totalnegtiveLenderMaxLoanamt)
 
         const totalloanAmt = totalExistingLenderMaxAmt + totalExistingThrowusLenderMaxAmt + totalnotClassifiedLenderMaxAmt + totalMandategivenMaxAmt +
@@ -253,7 +254,7 @@ const PossibleBorrower = () => {
                         </div>
                     </div>
                     <div className='m-2 '>
-                        <h4 className='fs-4 text-center fw-bolder'>{selectedLender.value > 0 ? <span className='borrower-name'>{(selectedLender.label).toUpperCase()}</span> : '_'} Possible Borrower Data anlysis</h4>
+                        <h4 className='fs-4 text-center fw-bolder'>{selectedLender.value > 0 ? <span className='borrower-name'>{(selectedLender.label).toUpperCase()}</span> : '_'} Possible Borrower Data analysis</h4>
                     </div>
                     <section className='table-group-divider pl-section my-2'>
                         <div className='pltop-section float-end px-2 w-100'>
@@ -283,32 +284,32 @@ const PossibleBorrower = () => {
                                             <tr>
                                                 <td className='fw-bold fs-5'>Existing borrower</td>
                                                 <td>{existingLender.length}</td>
-                                                <td>{existingLendertotalMaxAmt}</td>
+                                                <td>{parseFloat(existingLendertotalMaxAmt).toFixed(2)}</td>
                                             </tr>
                                             <tr>
                                                 <td className='fw-bold fs-5'>Existing Through us</td>
                                                 <td>{existingThrowUs.length}</td>
-                                                <td>{existingThrowUstotalMaxAmt}</td>
+                                                <td>{parseFloat(existingThrowUstotalMaxAmt).toFixed(2)}</td>
                                             </tr>
                                             <tr>
                                                 <td className='fw-bold fs-5'>Mandate Given</td>
                                                 <td>{mandateGiven.length}</td>
-                                                <td>{mandateGiventotalMaxAmt}</td>
+                                                <td>{parseFloat(mandateGiventotalMaxAmt).toFixed(2)}</td>
                                             </tr>
                                             <tr>
                                                 <td className='fw-bold fs-5'>Not classificed</td>
                                                 <td>{notClassified.length}</td>
-                                                <td>{notClassifiedtotalMaxAmt}</td>
+                                                <td>{parseFloat(notClassifiedtotalMaxAmt).toFixed(2)}</td>
                                             </tr>
                                             <tr>
                                                 <td className='fw-bold fs-5'>Negative Borrower</td>
                                                 <td>{negtiveLender.length}</td>
-                                                <td>{negtiveLendertotalMaxAmt}</td>
+                                                <td>{parseFloat(negtiveLendertotalMaxAmt).toFixed(2)}</td>
                                             </tr>
                                             <tr className='fs- fw-bold table-group-divider'>
                                                 <td>Total</td>
                                                 <td>{totalNoOfPossibleBorrower}</td>
-                                                <td>{totalLoanAmount}</td>
+                                                <td>{parseFloat(totalLoanAmount).toFixed(2)}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -337,7 +338,7 @@ const PossibleBorrower = () => {
                                             <tr key={index}>
                                                 <td style={{ width: '60px' }}>{index + 1}</td>
                                                 <td>{data.name}</td>
-                                                <td style={{ maxWidth: '100%', width: 'max-content' }}>{data.minLoanAmount}</td>
+                                                <td style={{ maxWidth: '100%', width: 'max-content' }}>{parseFloat(data.minLoanAmount).toFixed(2)}</td>
                                             </tr>
                                         ))) : (
                                             <tr>
@@ -365,7 +366,7 @@ const PossibleBorrower = () => {
                                             <tr key={index}>
                                                 <td style={{ width: '60px' }}>{index + 1}</td>
                                                 <td>{data.name}</td>
-                                                <td style={{ maxWidth: '100%', width: 'max-content' }}>{data.minLoanAmount}</td>
+                                                <td style={{ maxWidth: '100%', width: 'max-content' }}>{parseFloat(data.minLoanAmount).toFixed(2)}</td>
                                             </tr>
                                         ))) : (
                                             <tr>
@@ -393,7 +394,7 @@ const PossibleBorrower = () => {
                                             <tr key={index}>
                                                 <td style={{ width: '60px' }}>{index + 1}</td>
                                                 <td>{data.name}</td>
-                                                <td style={{ maxWidth: '100%', width: 'max-content' }}>{data.minLoanAmount}</td>
+                                                <td style={{ maxWidth: '100%', width: 'max-content' }}>{parseFloat(data.minLoanAmount).toFixed(2)}</td>
                                             </tr>
                                         ))) : (
                                             <tr>
@@ -421,7 +422,7 @@ const PossibleBorrower = () => {
                                             <tr key={index}>
                                                 <td style={{ width: '60px' }}>{index + 1}</td>
                                                 <td>{data.name}</td>
-                                                <td style={{ maxWidth: '100%', width: 'max-content' }}>{data.minLoanAmount}</td>
+                                                <td style={{ maxWidth: '100%', width: 'max-content' }}>{parseFloat(data.minLoanAmount).toFixed(2)}</td>
                                             </tr>
                                         ))) : (
                                             <tr>
@@ -449,7 +450,7 @@ const PossibleBorrower = () => {
                                             <tr key={index}>
                                                 <td style={{ width: '60px' }}>{index + 1}</td>
                                                 <td>{data.name}</td>
-                                                <td style={{ maxWidth: '100%', width: 'max-content' }}>{data.minLoanAmount}</td>
+                                                <td style={{ maxWidth: '100%', width: 'max-content' }}>{parseFloat(data.minLoanAmount).toFixed(2)}</td>
                                             </tr>
                                         ))) : (
                                             <tr>
@@ -464,27 +465,27 @@ const PossibleBorrower = () => {
                             <div className='w-100 row'>
 
                                 <span className='col-6 text-end'>Total Amount :</span>
-                                <span className='col-6 text-start'>{existingThrowUstotalMaxAmt}</span>
+                                <span className='col-6 text-start'>{parseFloat(existingThrowUstotalMaxAmt).toFixed(2)}</span>
                             </div>
                             <div className='w-100 row'>
 
                                 <span className='col-6 text-end'>Total Amount :</span>
-                                <span className='col-6 text-start'>{existingLendertotalMaxAmt}</span>
+                                <span className='col-6 text-start'>{parseFloat(existingLendertotalMaxAmt).toFixed(2)}</span>
                             </div>
                             <div className='w-100 row'>
 
                                 <span className='col-6 text-end'>Total Amount :</span>
-                                <span className='col-6 text-start'>{mandateGiventotalMaxAmt}</span>
+                                <span className='col-6 text-start'>{parseFloat(mandateGiventotalMaxAmt).toFixed(0)}</span>
                             </div>
                             <div className='w-100 row'>
 
                                 <span className='col-6 text-end'>Total Amount :</span>
-                                <span className='col-6 text-start'>{notClassifiedtotalMaxAmt}</span>
+                                <span className='col-6 text-start'>{parseFloat(notClassifiedtotalMaxAmt).toFixed(2)}</span>
                             </div>
                             <div className='w-100 row'>
 
                                 <span className='col-6 text-end'>Total Amount :</span>
-                                <span className='col-6 text-start'>{negtiveLendertotalMaxAmt}</span>
+                                <span className='col-6 text-start'>{parseFloat(negtiveLendertotalMaxAmt).toFixed(2)}</span>
                             </div>
                         </div>
                     </div>

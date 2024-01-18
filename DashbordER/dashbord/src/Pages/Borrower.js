@@ -1,4 +1,4 @@
-import React, { useEffect, useState, } from 'react';
+import React, { useContext, useEffect, useState, } from 'react';
 import Axios from 'axios';
 import './Borrower.css';
 import Select from 'react-select';
@@ -6,6 +6,8 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import AleartDailog from './Dailogs/AleartDailog';
 import { useNavigate } from 'react-router-dom'
+import DashbordContext, { CreateDashbordContext } from '../Context/DashbordContext';
+import BACKEND_API_END_POINT from '../config';
 
 export const entityTypes = ['Company', 'Partnership Firm', 'Proprietorship', 'Sec 8 company', 'Society', 'Trust',];
 export const RegionsData = ['East', 'West', 'North', 'South'];
@@ -113,8 +115,8 @@ const Borrower = () => {
   const [GST_number, setGST_number] = useState('')
   const [borrowrcomment, setBorrowercomment] = useState('')
   const navigate = useNavigate()
-
-
+  const apiEndpoint = useContext(CreateDashbordContext)
+  console.log(apiEndpoint)
   const handleEntityTypeChange = (event) => {
     const selectedEntityType = event.target.value;
     setEntityType(selectedEntityType);
@@ -277,13 +279,13 @@ const Borrower = () => {
   useEffect(() => {
     const featchTeammember = async () => {
       try {
-        const responce = await axios.get("http://192.168.29.250:4306/teammembers");
+        const responce = await axios.get(`${BACKEND_API_END_POINT}/teammembers`);
         const teamMember = responce.data;
         const formatedOptions = teamMember.map((teamMember) => ({
           value: teamMember.TeamM_id,
           label: `${teamMember.FirstName} ${teamMember.LastName}`
         }))
-
+        console.log(formatedOptions)
         setOwner(formatedOptions);
       } catch (error) {
         console.log("Error occur while featching data ", error)
@@ -309,6 +311,7 @@ const Borrower = () => {
   const handelChangeComment = (event) => {
     setBorrowercomment(event.target.value)
   }
+  
   const handleSubmit = (event) => {
     event.preventDefault();
     if (entityType.length === 0 || name.length === 0 || region.length === 0 || state.length === 0 || creditRatingAgency.length === 0 ||
@@ -321,7 +324,7 @@ const Borrower = () => {
       try {
         // Send a POST request to the backend API
 
-        Axios.post("http://192.168.29.250:4306/insertborrowerdetailes", {
+        Axios.post(`${BACKEND_API_END_POINT}/insertborrowerdetailes`, {
           entityType: entityType,
           cin: cin,
           name: name,
@@ -543,6 +546,18 @@ const Borrower = () => {
             <div>
               <label>
                 <input
+                  type="checkbox"
+                  className='form-check-input me-1'
+                  value="NCD"
+                  checked={loanTypes.includes('NCD')}
+                  onChange={handleLoanTypeChange}
+                />
+                NCD
+              </label>
+            </div>
+            <div>
+              <label>
+                <input
                   className='form-check-input me-1'
                   type="checkbox"
                   value="Other type"
@@ -752,7 +767,6 @@ const Borrower = () => {
                   onChange={handleProductChange}
                 />
                 Used Wheeler
-
               </label>
               {/* Repeat the above label and input elements for other products */}
             </div>
@@ -779,18 +793,18 @@ const Borrower = () => {
               onChange={handleCreditRatingChange}
             >
               <option value="">Select Credit Rating</option>
-              <option value="AAA">AAA</option>
-              <option value="AA">AA</option>
-              <option value="A">A</option>
-              <option value="BBB">BBB</option>
-              <option value="BB">BB</option>
-              <option value="B">B</option>
-              <option value="-AAA">-AAA</option>
-              <option value="-AA">-AA</option>
-              <option value="-A">-A</option>
-              <option value="-BBB">-BBB</option>
-              <option value="-BB">-BB</option>
-              <option value="-B">-B</option>
+              <option value="AAA">AAA+</option>
+              <option value="AA">AA+</option>
+              <option value="A">A+</option>
+              <option value="BBB">BBB+</option>
+              <option value="BB">BB+</option>
+              <option value="B">B+</option>
+              <option value="-AAA">AAA-</option>
+              <option value="-AA">AA-</option>
+              <option value="-A">A-</option>
+              <option value="-BBB">BBB-</option>
+              <option value="-BB">BB-</option>
+              <option value="-B">B-</option>
               <option value="Not Rated">Not Rated</option>
             </select>
           </div>

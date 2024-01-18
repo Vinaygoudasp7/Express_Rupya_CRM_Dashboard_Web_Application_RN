@@ -153,19 +153,19 @@ td {
 .lcontaint th:nth-child(2),
 .lcontaint td:nth-child(2) {
   position: sticky;
-  left: 159px;
+  left: 320px;
 }
 
 .lcontaint th:nth-child(3),
 .lcontaint td:nth-child(3) {
   position: sticky;
-  left: 255px;
+  left: 418px;
 }
 
 .lcontaint th:nth-child(4),
 .lcontaint td:nth-child(4) {
   position: sticky;
-  left: 372px;
+  left: 530px;
 }
 
 .lcontaint td:nth-child(1),
@@ -173,7 +173,7 @@ td {
 .lcontaint td:nth-child(3),
 .lcontaint td:nth-child(4) {
   background-color: aliceblue;
-  z-index: 999;
+  z-index: 99;
 }
 
 .lcontaint th:nth-child(1),
@@ -181,5 +181,5 @@ td {
 .lcontaint th:nth-child(3),
 .lcontaint th:nth-child(4) {
   background-color: #06aaff;
-  z-index: 9999;
+  z-index: 999;
 }

@@ -103,7 +103,7 @@ const Editabletorow = ({ editTableRow, handeleditrowchange, handelEditrowsave, h
             <td><input type='text' name='updated_by' onChange={handeleditrowchange} value={editTableRow.updated_by} readOnly></input></td>
             <td><input type='date' htmlFor='Next_followup_Date' min={editTableRow.lastupdate} name='Next_followup_Date' onChange={handeleditrowchange} value={editTableRow.Next_followup_Date} /></td>
             <td>
-                <button type='button' className='approvals' onClick={handelEditrowsave}>Save</button>
+                <button type='button' className='deletebtn' onClick={handelEditrowsave}>Save</button>
                 <button type='button' className='cancel' onClick={handelCancel}>Cancel</button>
             </td>
         </tr>

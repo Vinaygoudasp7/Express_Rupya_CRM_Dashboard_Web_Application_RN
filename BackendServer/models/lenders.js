@@ -73,10 +73,6 @@ const lenders = sequelize.define('lenders', {
         allowNull: true,
         defaultValue: 0.00
     },
-    mfiGrading: {
-        type: DataTypes.STRING,
-        allowNull: true
-    },
     Borrowerregion: {
         type: DataTypes.STRING,
         allowNull: false
@@ -84,7 +80,11 @@ const lenders = sequelize.define('lenders', {
     lendercomment: {
         type: DataTypes.STRING,
         allowNull: false
-    }
+    }, isDeleted: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+        defaultValue: false
+    },
 });
 
 export default lenders;

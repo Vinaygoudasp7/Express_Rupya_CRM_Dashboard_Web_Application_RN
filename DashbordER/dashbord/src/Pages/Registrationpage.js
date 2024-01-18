@@ -10,6 +10,7 @@ import Select from 'react-select';
 
 import axios from 'axios';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import BACKEND_API_END_POINT from '../config';
 
 function Registrationpage() {
   const navigate = useNavigate();
@@ -43,7 +44,7 @@ function Registrationpage() {
       const id = teammemberId
       console.log(id)
       const pass = password;
-      const responce = await axios.put(`http://192.168.29.250:4306/attachPassword/${id}`, {
+      const responce = await axios.put(`${BACKEND_API_END_POINT}/attachPassword/${id}`, {
         password: pass,
         secret_key: adminSecretKey,
         userType: usertype,

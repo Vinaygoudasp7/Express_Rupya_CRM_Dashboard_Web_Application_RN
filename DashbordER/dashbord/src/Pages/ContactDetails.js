@@ -6,6 +6,7 @@ import { RegionsData } from './Borrower';
 import AleartDailog from './Dailogs/AleartDailog';
 import ConfiromDailog from './Dailogs/ConfiromDailog';
 import { ToastContainer, toast } from 'react-toastify';
+import BACKEND_API_END_POINT from '../config';
 
 const Contactdetailes = () => {
   const [borrowers, setBorrowers] = useState([]);
@@ -53,7 +54,7 @@ const Contactdetailes = () => {
       handelOpenAlert();
     } else {
       try {
-        Axios.post("http://192.168.29.250:4306/contactsborrower", {
+        Axios.post(`${BACKEND_API_END_POINT}/contactsborrower`, {
           id: selectedBorrower,
           name: name,
           emailAddress: emailAddress,
@@ -94,7 +95,7 @@ const Contactdetailes = () => {
 
 
   useEffect(() => {
-    Axios.get("http://192.168.29.250:4306/List_borrowers")
+    Axios.get(`${BACKEND_API_END_POINT}/List_borrowers`)
       .then(response => {
         setBorrowers(response.data);
         console.log(response.data);
@@ -108,7 +109,7 @@ const Contactdetailes = () => {
     // Fetch contact details for the specific borrowerId
     const fetchData = async () => {
       try {
-        const response = await Axios.get(`http://192.168.29.250:4306/contact-details-borrower/${selectedBorrower}`);
+        const response = await Axios.get(`${BACKEND_API_END_POINT}/contact-details-borrower/${selectedBorrower}`);
         setContactDetails(response.data);
         console.log(response.data);
         console.log(selectedBorrower);
@@ -124,7 +125,7 @@ const Contactdetailes = () => {
 
   const handleDeleteContact = (id) => {
     // Send a DELETE request to the backend API to delete the contact detail
-    Axios.delete(`http://192.168.29.250:4306/contactdetailsborrower/${id}`)
+    Axios.delete(`${BACKEND_API_END_POINT}/contactdetailsborrower/${id}`)
       .then((response) => {
         // Remove the deleted contact detail from the state
 

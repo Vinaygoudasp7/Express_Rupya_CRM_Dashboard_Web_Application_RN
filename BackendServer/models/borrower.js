@@ -106,6 +106,11 @@ const borrowers = sequelize.define('borrowers', {
         allowNull: true,
         defaultValue: 0.00
     },
+    isDeleted: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+        defaultValue:false
+    },
 });
 
 export default borrowers;

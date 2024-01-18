@@ -8,9 +8,13 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { showToast } from './ReminderNotification';
 import moment from 'moment'
+import BACKEND_API_END_POINT from '../config';
+import { FaSortAlphaDown, FaSortAlphaUp } from 'react-icons/fa';
+import { IconContext } from 'react-icons/lib';
 
 const StatusUpdate = () => {
   const [data, setData] = useState([]);
+  const [sortConfig, setSortConfig] = useState({ key: '', direction: 'asc' });
 
   //for setting editable row
   const [editStatusId, setEditstatusId] = useState(null);
@@ -33,8 +37,9 @@ const StatusUpdate = () => {
   useEffect(() => {
     const featchdata = async () => {
       try {
-        const responce = await axios.get("http://192.168.29.250:4306/retrivestatus");
-        setData(responce.data);
+        const responce = await axios.get(`${BACKEND_API_END_POINT}/retrivestatus`);
+        const statusUpdateData = responce.data
+        setData(statusUpdateData);
         console.log(responce.data)
       } catch (error) {
         console.log("error while retriving data", error);
@@ -144,156 +149,156 @@ const StatusUpdate = () => {
     }))
   }
 
-  const [specificteammember, setSpecificteammember] = useState('');
+  // const [specificteammember, setSpecificteammember] = useState('');
 
-  useEffect(() => {
-    const specificteammemberdetaile = data.find(
-      (statusupdates) => statusupdates.St_id === editStatusId
-    );
+  // useEffect(() => {
+  //   const specificteammemberdetaile = data.find(
+  //     (statusupdates) => statusupdates.St_id === editStatusId
+  //   );
 
-    setSpecificteammember(specificteammemberdetaile);
-    console.log(specificteammember);
+  //   setSpecificteammember(specificteammemberdetaile);
+  //   console.log(specificteammember);
 
-  }, [editStatusId, data])
-
-
-  const filterteammemberData = data.filter((teammember) => {
-    const currentDate = new Date();
-    const nextFollowupDate = new Date(teammember.Next_followup_Date);
-    if (specificteammember && specificteammember.teammember_id === teammember.teammember_id
-      && nextFollowupDate <= currentDate
-    ) {
-      return true;
-    }
-    return false;
-  })
-
-  const table =
-    (<table border="1" style={{ borderSpacing: "0" }}>
-      <thead style={{ backgroundColor: 'aquamarine', border: "2px solid rgb(0, 204, 255)" }}>
-        <tr >
-          <th style={{ padding: "5px" }}>Date of creation</th>
-          <th style={{ padding: "5px" }}>Last update</th>
-          <th style={{ padding: "5px" }}>Borrower Name </th>
-          <th style={{ padding: "5px" }}>Lender Name </th>
-          <th style={{ padding: "5px" }}>Action Taken </th>
-          <th style={{ padding: "5px" }}>Pending with </th>
-          <th style={{ padding: "5px" }}>Praposal Status </th>
-          <th style={{ padding: "5px" }}>Comment/Query </th>
-          <th style={{ padding: "5px" }}>Updated By  </th>
-          <th style={{ padding: "5px" }}>Next followup Date </th>
-        </tr>
-      </thead>
-      <tbody style={{ border: "2px solid rgb(0, 204, 255)", padding: "5px" }}>
-        {filterteammemberData.map((statusdetailes) => {
-          return (
-            <tr key={statusdetailes.St_id}>
-              <td style={{ padding: "5px" }}>{statusdetailes.Date_of_Creation}</td>
-              <td style={{ padding: "5px" }}>{statusdetailes.lastupdate}</td>
-              <td style={{ padding: "5px" }}>{statusdetailes.borrower_name}</td>
-              <td style={{ padding: "5px" }}>{statusdetailes.lender_name}</td>
-              <td style={{ padding: "5px" }}>{statusdetailes.action_Taken}</td>
-              <td style={{ padding: "5px" }}>{statusdetailes.Pending_with}</td>
-              <td style={{ padding: "5px" }}>{statusdetailes.Praposal_status}</td>
-              <td style={{ padding: "5px" }}>"please refer status table"</td>
-              <td style={{ padding: "5px" }}>{statusdetailes.updated_by}</td>
-              <td style={{ padding: "5px" }}>{statusdetailes.Next_followup_Date}</td>
-            </tr>
-          )
-        })}
-      </tbody>
-    </table>
-    );
-  const tableHtml = ReactDOMServer.renderToString(table);
+  // }, [editStatusId, data])
 
 
-  const sendReminderMail = async () => {
-    const loadingToastId = toast.info('Sending email...', { autoClose: false });
+  // const filterteammemberData = data.filter((teammember) => {
+  //   const currentDate = new Date();
+  //   const nextFollowupDate = new Date(teammember.Next_followup_Date);
+  //   if (specificteammember && specificteammember.teammember_id === teammember.teammember_id
+  //     && nextFollowupDate <= currentDate
+  //   ) {
+  //     return true;
+  //   }
+  //   return false;
+  // })
 
-    //const emaillist = "expressrupya@gmail.com";
-    const emaillist = "vinaysp254@gmail.com"
-
-    const cclist = [];
-    cclist.push(specificteammember.teammember.Email_address);
-    cclist.push("statusexpressrupya@gmail.com")
-    cclist.push("vinaysp254@gmail.com");
-    const message = `${tableHtml}`;
-    const subject = "Regarding status updates";
-
-    // Log the values before sending the email
-    console.log("emaillist:", emaillist);
-    console.log("cclist:", cclist);
-    console.log("message:", message);
-    console.log("subject:", subject);
-    try {
-      const response = await fetch("http://192.168.29.250:4306/sendEmailreminder", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          emaillist,
-          cclist,
-          subject,
-          message,
-        })
-      });
-      // Handle the response here
-
-      console.log("email sent...", response);
-
-      toast.update(loadingToastId, {
-        render: 'Reminder is sent to your Email',
-        type: toast.TYPE.SUCCESS,
-        position: 'top-right',
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined
-      })
-    } catch (error) {
-      // Handle errors here
-
-      toast.error('Failed to send reminder email!', {
-        position: toast.POSITION.TOP_RIGHT,
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
-    }
-  }
-
-  const setReminder = (nextFollwupUpDate) => {
-    const checkReminder = () => {
-      //set reminder based on the next followup date
-      const currentDate = new Date()
-      const nextFollupdate = new Date(nextFollwupUpDate)
-
-      if (nextFollupdate <= currentDate) {
-        sendReminderMail();
-      }
-    }
-
-    // Check the reminder every hour
-    const reminderInterval = setInterval(checkReminder, 60 * 60 * 1000); // 60 minutes * 60 seconds * 1000 milliseconds
-
-    // Stop checking when nextFollupdate is reached
-    const stopReminder = () => {
-      clearInterval(reminderInterval);
-    };
+  // const table =
+  //   (<table border="1" style={{ borderSpacing: "0" }}>
+  //     <thead style={{ backgroundColor: 'aquamarine', border: "2px solid rgb(0, 204, 255)" }}>
+  //       <tr >
+  //         <th style={{ padding: "5px" }}>Date of creation</th>
+  //         <th style={{ padding: "5px" }}>Last update</th>
+  //         <th style={{ padding: "5px" }}>Borrower Name </th>
+  //         <th style={{ padding: "5px" }}>Lender Name </th>
+  //         <th style={{ padding: "5px" }}>Action Taken </th>
+  //         <th style={{ padding: "5px" }}>Pending with </th>
+  //         <th style={{ padding: "5px" }}>Praposal Status </th>
+  //         <th style={{ padding: "5px" }}>Comment/Query </th>
+  //         <th style={{ padding: "5px" }}>Updated By  </th>
+  //         <th style={{ padding: "5px" }}>Next followup Date </th>
+  //       </tr>
+  //     </thead>
+  //     <tbody style={{ border: "2px solid rgb(0, 204, 255)", padding: "5px" }}>
+  //       {filterteammemberData.map((statusdetailes) => {
+  //         return (
+  //           <tr key={statusdetailes.St_id}>
+  //             <td style={{ padding: "5px" }}>{statusdetailes.Date_of_Creation}</td>
+  //             <td style={{ padding: "5px" }}>{statusdetailes.lastupdate}</td>
+  //             <td style={{ padding: "5px" }}>{statusdetailes.borrower_name}</td>
+  //             <td style={{ padding: "5px" }}>{statusdetailes.lender_name}</td>
+  //             <td style={{ padding: "5px" }}>{statusdetailes.action_Taken}</td>
+  //             <td style={{ padding: "5px" }}>{statusdetailes.Pending_with}</td>
+  //             <td style={{ padding: "5px" }}>{statusdetailes.Praposal_status}</td>
+  //             <td style={{ padding: "5px" }}>"please refer status table"</td>
+  //             <td style={{ padding: "5px" }}>{statusdetailes.updated_by}</td>
+  //             <td style={{ padding: "5px" }}>{statusdetailes.Next_followup_Date}</td>
+  //           </tr>
+  //         )
+  //       })}
+  //     </tbody>
+  //   </table>
+  //   );
+  // const tableHtml = ReactDOMServer.renderToString(table);
 
 
-    // Calculate the duration until nextFollupdate
-    const timeUntilNextFollupdate = new Date(nextFollwupUpDate) - new Date();
+  // const sendReminderMail = async () => {
+  //   const loadingToastId = toast.info('Sending email...', { autoClose: false });
 
-    // Schedule stopReminder when nextFollupdate is reached
-    setTimeout(stopReminder, timeUntilNextFollupdate);
+  //   //const emaillist = "expressrupya@gmail.com";
+  //   const emaillist = "vinaysp254@gmail.com"
 
-  }
+  //   const cclist = [];
+  //   cclist.push(specificteammember.teammember.Email_address);
+  //   cclist.push("statusexpressrupya@gmail.com")
+  //   cclist.push("vinaysp254@gmail.com");
+  //   const message = `${tableHtml}`;
+  //   const subject = "Regarding status updates";
+
+  //   // Log the values before sending the email
+  //   console.log("emaillist:", emaillist);
+  //   console.log("cclist:", cclist);
+  //   console.log("message:", message);
+  //   console.log("subject:", subject);
+  //   try {
+  //     const response = await fetch(`${BACKEND_API_END_POINT}/sendEmailreminder`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json"
+  //       },
+  //       body: JSON.stringify({
+  //         emaillist,
+  //         cclist,
+  //         subject,
+  //         message,
+  //       })
+  //     });
+  //     // Handle the response here
+
+  //     console.log("email sent...", response);
+
+  //     toast.update(loadingToastId, {
+  //       render: 'Reminder is sent to your Email',
+  //       type: toast.TYPE.SUCCESS,
+  //       position: 'top-right',
+  //       autoClose: 4000,
+  //       hideProgressBar: true,
+  //       closeOnClick: true,
+  //       pauseOnHover: true,
+  //       draggable: true,
+  //       progress: undefined
+  //     })
+  //   } catch (error) {
+  //     // Handle errors here
+
+  //     toast.error('Failed to send reminder email!', {
+  //       position: toast.POSITION.TOP_RIGHT,
+  //       autoClose: 5000,
+  //       hideProgressBar: false,
+  //       closeOnClick: true,
+  //       pauseOnHover: true,
+  //       draggable: true,
+  //     });
+  //   }
+  // }
+
+  // const setReminder = (nextFollwupUpDate) => {
+  //   const checkReminder = () => {
+  //     //set reminder based on the next followup date
+  //     const currentDate = new Date()
+  //     const nextFollupdate = new Date(nextFollwupUpDate)
+
+  //     if (nextFollupdate <= currentDate) {
+  //       sendReminderMail();
+  //     }
+  //   }
+
+  //   // Check the reminder every hour
+  //   const reminderInterval = setInterval(checkReminder, 60 * 60 * 1000); // 60 minutes * 60 seconds * 1000 milliseconds
+
+  //   // Stop checking when nextFollupdate is reached
+  //   const stopReminder = () => {
+  //     clearInterval(reminderInterval);
+  //   };
+
+
+  //   // Calculate the duration until nextFollupdate
+  //   const timeUntilNextFollupdate = new Date(nextFollwupUpDate) - new Date();
+
+  //   // Schedule stopReminder when nextFollupdate is reached
+  //   setTimeout(stopReminder, timeUntilNextFollupdate);
+
+  // }
 
   const handelEditrowsave = async (event) => {
     event.preventDefault();
@@ -314,7 +319,7 @@ const StatusUpdate = () => {
     console.log(editRow);
 
     try {
-      const responce = await axios.post(`http://192.168.29.250:4306/statusupdateData/${editStatusId}`, editRow);
+      const responce = await axios.post(`${BACKEND_API_END_POINT}/statusupdateData/${editStatusId}`, editRow);
       console.log(responce.data);
 
       //update the data in the local state
@@ -331,8 +336,8 @@ const StatusUpdate = () => {
       setEditstatusId(null);
       const responcedata = responce.data
       if ('message' in responcedata) {
-        sendReminderMail()
-        setReminder(editTableRow.Next_followup_Date)
+        // sendReminderMail()
+        // setReminder(editTableRow.Next_followup_Date)
         toast.success('Status updated', {
           autoClose: 4000,
           hideProgressBar: true,
@@ -378,23 +383,31 @@ const StatusUpdate = () => {
     })
   }
 
-  // useEffect(() => {
-  //   const featchdata = async () => {
-  //     const response = await axios.get('http://192.168.29.250:4306/getreminderdetails')
-  //     console.log(response.data)
-  //     const relatedEmailReminder = response.data.filter((reminder) => {
-  //       // Define your conditions to filter 'updatedStatusData' based on EmailReminder data
-  //       const curentDate = new Date();
-  //       curentDate.setHours(0, 0, 0, 0)
-  //       const reminderDate = new Date(reminder.updatedAt);
-  //       reminderDate.setHours(0, 0, 0, 0); // Set time part to midnight for comparison
+  const handelSort = (key) => {
+    let direction = sortConfig.key === key ? (sortConfig.direction === 'asc' ? 'desc' : 'asc') : '';
 
-  //       return reminderDate.getTime() === curentDate.getTime();
-  //     });
-  //     console.log('relatedEmailreminder', relatedEmailReminder)
-  //   }
-  //   featchdata()
-  // }, [])
+    setSortConfig({ key, direction });
+
+    const sortedData = [...filterData].sort((a, b) => {
+      if (key === 'aum' || key === 'maxInterestRate' || key === 'minLoanAmount') {
+        return direction === 'asc' ? a[key] - b[key] : b[key] - a[key];
+      } else if (a[key] === undefined || b[key] === undefined) {
+        return 0; // Treat undefined values as equal
+      } else if (typeof a[key] === 'string' && typeof b[key] === 'string') {
+        // For case-insensitive string comparison
+        const strA = a[key].toUpperCase(); // Convert to uppercase for comparison
+        const strB = b[key].toUpperCase(); // Convert to uppercase for comparison
+        const comparison = strA < strB ? -1 : strA > strB ? 1 : 0;
+        return direction === 'asc' ? comparison : -comparison;
+      } else {
+        // For other types of data comparison (assuming numbers), handling ascending and descending orders
+        return direction === 'asc' ? a[key] - b[key] : b[key] - a[key];
+      }
+    });
+
+    setData(sortedData);
+  };
+
 
   return (
     <div className='Statuspage'>
@@ -407,21 +420,90 @@ const StatusUpdate = () => {
           <thead>
             <tr>
               {/* <th>Status Id <input type='text' value={queryStID} onChange={handelFilterId} className='search'/></th>*/}
-              <th>Date of Creation<input type='text' value={querydateofcreation} onChange={handelFilterDate} className='search'></input></th>
-              <th>Last Updated <input type='text' value={querylastupDate} onChange={handelFilterLastDate} className='search' /></th>
-              <th>Borrower Name  <input type='text' value={queryborrower} onChange={handelFilterborrower} className='search' /></th>
-              <th>Lender Name  <input type='text' value={querylender} onChange={handelFilterLender} className='search' /></th>
-              <th>Action Taken  <input type='text' value={queryaction} onChange={handelaction} className='search' /></th>
-              <th>Pending with  <input type='text' value={querypending} onChange={handelFilterpendings} className='search' /></th>
-              <th>Praposal Status  <input type='text' value={querypraposal} onChange={handelFilterpraposal} className='search' /></th>
-              <th>Comment/Query </th>
-              <th>Updated By  <input type='text' value={queryupdatedby} onChange={handelFilterupdatedby} className='search' /></th>
-              <th>Next Follow Up Date<input type='text' value={queryNextfollowup} onChange={handelNextFollowupDate} className='search' /></th>
-              <th><button className='approvals' onClick={clear}>Clear</button></th>
+              <th >
+                <div className='row w-100 py-1'>
+                  <div className='col-9' style={{ fontSize: '18px' }}>Date of Creation</div>
+                  <IconContext.Provider value={{ size: '1.3rem' }}>
+                    <div className='col-3 px-2'>
+                      <button className='btn btn-sm' onClick={() => handelSort('Date_of_Creation')}>{sortConfig.direction === 'asc' ? <FaSortAlphaDown /> : <FaSortAlphaUp />}</button>
+                    </div>
+                  </IconContext.Provider>
+                </div>
+                <input type='text' style={{ width: "140px" }} value={querydateofcreation} onChange={handelFilterDate} className='search'></input></th>
+              <th >
+                <div className='row w-100 py-1'>
+                  <div className='col-9' style={{ fontSize: '18px' }}>Last Update</div>
+                  <IconContext.Provider value={{ size: '1.3rem' }}>
+                    <div className='col-3 px-2'>
+                      <button className='btn btn-sm' onClick={() => handelSort('lastupdate')}>{sortConfig.direction === 'asc' ? <FaSortAlphaDown /> : <FaSortAlphaUp />}</button>
+                    </div>
+                  </IconContext.Provider>
+                </div> <input type='text' style={{ width: "140px" }} value={querylastupDate} onChange={handelFilterLastDate} className='search' /></th>
+              <th>
+                <div className='row py-1'>
+                  <div className='col-9' style={{ fontSize: '18px' }}>Borrower Name </div>
+                  <IconContext.Provider value={{ size: '1.3rem' }}>
+                    <div className='col-3 px-2'>
+                      <button className='btn btn-sm' onClick={() => handelSort('borrower_name')}>{sortConfig.direction === 'asc' ? <FaSortAlphaDown /> : <FaSortAlphaUp />}</button>
+                    </div>
+                  </IconContext.Provider>
+                </div> <input type='text' style={{ width: "250px" }} value={queryborrower} onChange={handelFilterborrower} className='search' /></th>
+              <th><div className='row py-1'>
+                <div className='col-9' style={{ fontSize: '18px' }}>Lender Name</div>
+                <IconContext.Provider value={{ size: '1.3rem' }}>
+                  <div className='col-3 px-2'>
+                    <button className='btn btn-sm' onClick={() => handelSort('lender_name')}>{sortConfig.direction === 'asc' ? <FaSortAlphaDown /> : <FaSortAlphaUp />}</button>
+                  </div>
+                </IconContext.Provider>
+              </div>  <input type='text' style={{ width: "250px" }} value={querylender} onChange={handelFilterLender} className='search' /></th>
+              <th><div className='row py-1'>
+                <div className='col-9' style={{ fontSize: '18px' }}>Action Taken</div>
+                <IconContext.Provider value={{ size: '1.3rem' }}>
+                  <div className='col-3 px-2'>
+                    <button className='btn btn-sm' onClick={() => handelSort('action_Taken')}>{sortConfig.direction === 'asc' ? <FaSortAlphaDown /> : <FaSortAlphaUp />}</button>
+                  </div>
+                </IconContext.Provider>
+              </div>  <input type='text' value={queryaction} onChange={handelaction} className='search' /></th>
+              <th> <div className='row py-1'>
+                <div className='col-9' style={{ fontSize: '18px' }}>Pending with</div>
+                <IconContext.Provider value={{ size: '1.3rem' }}>
+                  <div className='col-3 px-2'>
+                    <button className='btn btn-sm' onClick={() => handelSort('Pending_with')}>{sortConfig.direction === 'asc' ? <FaSortAlphaDown /> : <FaSortAlphaUp />}</button>
+                  </div>
+                </IconContext.Provider>
+              </div>  <input type='text' value={querypending} onChange={handelFilterpendings} className='search' /></th>
+              <th>  <div className='row py-1'>
+                <div className='col-9' style={{ fontSize: '18px' }}>Praposal Status</div>
+                <IconContext.Provider value={{ size: '1.3rem' }}>
+                  <div className='col-3 px-2'>
+                    <button className='btn btn-sm' onClick={() => handelSort('Praposal_status')}>{sortConfig.direction === 'asc' ? <FaSortAlphaDown /> : <FaSortAlphaUp />}</button>
+                  </div>
+                </IconContext.Provider>
+              </div> <input type='text' value={querypraposal} onChange={handelFilterpraposal} className='search' /></th>
+              <th style={{ width: '450px', minWidth: '450px', maxWidth: '500px' }}>Comment/Query </th>
+              <th>
+                <div className='row py-1'>
+                  <div className='col-9' style={{ fontSize: '18px' }}>Updated By</div>
+                  <IconContext.Provider value={{ size: '1.3rem' }}>
+                    <div className='col-3 px-2'>
+                      <button className='btn btn-sm' onClick={() => handelSort('updated_by')}>{sortConfig.direction === 'asc' ? <FaSortAlphaDown /> : <FaSortAlphaUp />}</button>
+                    </div>
+                  </IconContext.Provider>
+                </div>   <input type='text' style={{width:'140px'}} value={queryupdatedby} onChange={handelFilterupdatedby} className='search' /></th>
+              <th>
+                <div className='row py-1'>
+                  <div className='col-9' style={{ fontSize: '18px' }}>Next Follow Up Date</div>
+                  <IconContext.Provider value={{ size: '1.3rem' }}>
+                    <div className='col-3 px-2'>
+                      <button className='btn btn-sm' onClick={() => handelSort('Next_followup_Date')}>{sortConfig.direction === 'asc' ? <FaSortAlphaDown /> : <FaSortAlphaUp />}</button>
+                    </div>
+                  </IconContext.Provider>
+                </div>   <input type='text' style={{width:'230px'}}  value={queryNextfollowup} onChange={handelNextFollowupDate} className='search' /></th>
+              <th><button className='deletebtn' onClick={clear}>Clear</button></th>
             </tr>
           </thead>
           <tbody>
-            {filterData.map((statusupdates) => {
+            {data.map((statusupdates) => {
               return (
                 <Fragment key={statusupdates.St_id}>
                   {editStatusId === statusupdates.St_id ? (

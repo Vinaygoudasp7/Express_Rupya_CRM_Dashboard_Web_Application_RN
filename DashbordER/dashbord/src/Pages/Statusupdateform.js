@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import AleartDailog from './Dailogs/AleartDailog';
 import ConfiromDailog from './Dailogs/ConfiromDailog';
+import BACKEND_API_END_POINT from '../config';
 
 const Statusupdateform = () => {
 
@@ -25,7 +26,7 @@ const Statusupdateform = () => {
   useEffect(() => {
     const featchdata = async () => {
       try {
-        const response = await axios.get("http://192.168.29.250:4306/List_borrowers");
+        const response = await axios.get(`${BACKEND_API_END_POINT}/List_borrowers`);
 
         const borrowers = response.data;
         borrowers.sort((a, b) => {
@@ -59,7 +60,7 @@ const Statusupdateform = () => {
   useEffect(() => {
     const featchdata = async () => {
       try {
-        const response = await axios.get("http://192.168.29.250:4306/List_Lenders");
+        const response = await axios.get(`${BACKEND_API_END_POINT}/List_Lenders`);
         const lenders = response.data;
 
         lenders.sort((a, b) => {
@@ -95,7 +96,7 @@ const Statusupdateform = () => {
   useEffect(() => {
     const featchdata = async () => {
       try {
-        await axios.get("http://192.168.29.250:4306/teammembers").then(responce => {
+        await axios.get(`${BACKEND_API_END_POINT}/teammembers`).then(responce => {
           const teammembers = responce.data;
 
           teammembers.sort((a, b) => {
@@ -237,14 +238,14 @@ const Statusupdateform = () => {
       handelOpenAlert();
     } else {
       try {
-        const response = await axios.post("http://192.168.29.250:4306/checkforstatusupdatetable", {
+        const response = await axios.post(`${BACKEND_API_END_POINT}/checkforstatusupdatetable`, {
           borrowerId: borroweridtoupdate,
           lenderId: lenderidtoupdate,
         });
 
         const borrowerandlenderExists = response.data;
         if (!borrowerandlenderExists) {
-          const response = await axios.post("http://192.168.29.250:4306/assignStatusupdate", {
+          const response = await axios.post(`${BACKEND_API_END_POINT}/assignStatusupdate`, {
             borrowerId: borroweridtoupdate,
             borrowerName: borrowernametoupdate,
             lenderId: lenderidtoupdate,
@@ -275,7 +276,7 @@ const Statusupdateform = () => {
             position: 'top-right',
           })
           // const handelUpdateStatus = async () => {
-          //   const response = await axios.post("http://192.168.29.250:4306/assignStatusupdate", {
+          //   const response = await axios.post("${BACKEND_API_END_POINT}/assignStatusupdate", {
           //     borrowerId: borroweridtoupdate,
           //     borrowerName: borrowernametoupdate,
           //     lenderId: lenderidtoupdate,
